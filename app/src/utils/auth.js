@@ -1,10 +1,9 @@
 import { Auth } from 'aws-amplify'
 
-export const isSignedIn = () => {
-    console.log("Check isSignedIn")
+export async function isSignedIn() {
     let loggedIn = false
     
-    Auth.currentAuthenticatedUser()
+    await Auth.currentAuthenticatedUser()
         .then(user => {
             console.log("Signed in: ", user)
             loggedIn = true
@@ -13,17 +12,23 @@ export const isSignedIn = () => {
             console.log("error with fetching currentAuthenticatedUser: ", err)
             loggedIn = false
         })
-
-    console.log("Signed in = ", loggedIn)
-
+    console.log("logged in: ", loggedIn)
     return loggedIn
 }
 
-export const getUser = () => {
+export function saveJwtTokenToStorage(jwtToken) {
+    sessionStorage.setItem('jwtToken', jwtToken)
+}
+
+export function getJwtTokenFromStorage() {
+    return sessionStorage.getItem('jwtToken')
+}
+
+export async function getUser() {
     console.log("Getting user")
     let user;
 
-    Auth.currentAuthenticatedUser()
+    await Auth.currentAuthenticatedUser()
         .then(user => user = user)
         .catch(err => {
             user = undefined
