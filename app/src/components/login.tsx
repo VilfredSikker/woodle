@@ -15,7 +15,7 @@ const Login = () => {
     function handleSubmit(e:React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         const { username, password, signedIn } = state
-
+        console.log("state: ", state)
         if (!signedIn) {
             Auth.signIn({
                 username: username,
