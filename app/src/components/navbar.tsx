@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAuthDataContext } from "./auth-data-context";
+import { useAuthDataContext } from "./context/auth-data-context";
 import { logout } from '../utils/auth'
 
 const Navbar = () => {

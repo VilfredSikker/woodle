@@ -1,12 +1,11 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import { isSignedIn } from "../../utils/auth";
+import { getJwtTokenFromStorage } from "../../utils/auth";
 
 export default WrappedComponent => props => {
-  const signedIn = isSignedIn()
+  const jwtToken = getJwtTokenFromStorage()
 
-  if (!signedIn) {
-    console.log("Not signed in, redirecting")
+  if (!jwtToken) {
     return (
       <Redirect
         to={{
@@ -16,5 +15,5 @@ export default WrappedComponent => props => {
       />
     );
   }
-  return <WrappedComponent signedIn={signedIn} {...props} />;
+  return <WrappedComponent jwtToken={jwtToken} {...props} />;
 };
