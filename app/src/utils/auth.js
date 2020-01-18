@@ -26,19 +26,20 @@ export function getJwtTokenFromStorage() {
 
 export async function getUser() {
     console.log("Getting user")
-    let user;
+    let currentUser;
 
     await Auth.currentAuthenticatedUser()
-        .then(user => user = user)
+        .then(user => currentUser=user)
         .catch(err => {
-            user = undefined
+            currentUser = undefined
             console.log("getUser error: ", err)
         })
 
-    return user
+    return currentUser
 }
 
 export const logout = () => {
     console.log("Signing out")
+    saveJwtTokenToStorage(null)
     Auth.signOut().then(data => console.log("Logout successful, data: ", data)).catch(err => console.log("Sign out failed: ", err))
 }

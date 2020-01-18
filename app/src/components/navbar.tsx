@@ -1,17 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAuthDataContext } from "./context/auth-data-context";
-import { logout } from '../utils/auth'
+import { isNullOrUndefined } from "util";
+import { logout } from '../utils/auth';
+import { useJwtTokenContext } from "./context/data-context";
 
 const Navbar = () => {
-  const AuthData = useAuthDataContext();
-  const loggedIn = Object.values(AuthData)[0]
-  const username = Object.values(AuthData)[0]
+  const jwtToken = useJwtTokenContext()
+
+  console.log("jwt Token: ",jwtToken)
+  const loggedIn = isNullOrUndefined(jwtToken)
+  console.log("Navbar check logged in: ", loggedIn)
   const content = { message: "", login: true };
   
   if (loggedIn) {
-    console.log("Auth Data: ", username);
-    content.message = `Hello ${username}`;
+    content.message = `Hello`;
   } else {
     content.message = "You are not logged in";
   }

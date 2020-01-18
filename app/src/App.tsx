@@ -9,18 +9,22 @@ import Login from "./components/login";
 import Profile from './components/profile';
 import SignUp from "./components/sign-up";
 import Welcome from "./components/welcome";
-
+import JwtTokenProvider from './components/context/data-context'
 Amplify.configure(aws_exports);
 
 const App: React.FC = () => {
+
+  console.log("re render app")
   return (
     <Router>
+      <JwtTokenProvider>
         <Layout>
           <Route path="/" component={Welcome} />
           <Route path="/login" component={Login} />
           <Route path="/sign-up" component={SignUp} />
           <Route path="/profile" component={requireAuth(Profile)} />
         </Layout>
+      </JwtTokenProvider>
     </Router>
   );
 };
