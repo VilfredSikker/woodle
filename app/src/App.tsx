@@ -17,14 +17,14 @@ const App: React.FC = () => {
   console.log("re render app")
   return (
     <Router>
-      <JwtTokenProvider>
+
         <Layout>
           <Route path="/" component={Welcome} />
           <Route path="/login" component={Login} />
           <Route path="/sign-up" component={SignUp} />
           <Route path="/profile" component={requireAuth(Profile)} />
         </Layout>
-      </JwtTokenProvider>
+
     </Router>
   );
 };
