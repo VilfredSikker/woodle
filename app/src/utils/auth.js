@@ -1,19 +1,7 @@
 import { Auth } from 'aws-amplify'
 
-export async function isSignedIn() {
-    let loggedIn = false
-    
-    await Auth.currentAuthenticatedUser()
-        .then(user => {
-            console.log("Signed in: ", user)
-            loggedIn = true
-        })
-        .catch(err => {
-            console.log("error with fetching currentAuthenticatedUser: ", err)
-            loggedIn = false
-        })
-    console.log("logged in: ", loggedIn)
-    return loggedIn
+export function isSignedIn(jwtToken) {
+    return (jwtToken === "" || jwtToken === "null") ? false : true
 }
 
 export function saveJwtTokenToStorage(jwtToken) {
@@ -21,7 +9,9 @@ export function saveJwtTokenToStorage(jwtToken) {
 }
 
 export function getJwtTokenFromStorage() {
-    return sessionStorage.getItem('jwtToken')
+    const token = sessionStorage.getItem('jwtToken')
+    console.log("returning token: ", token)
+    return token
 }
 
 export async function getUser() {
@@ -40,6 +30,6 @@ export async function getUser() {
 
 export const logout = () => {
     console.log("Signing out")
-    saveJwtTokenToStorage(null)
+    saveJwtTokenToStorage("")
     Auth.signOut().then(data => console.log("Logout successful, data: ", data)).catch(err => console.log("Sign out failed: ", err))
 }

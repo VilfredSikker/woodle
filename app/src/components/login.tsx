@@ -1,8 +1,11 @@
 import { Auth } from "aws-amplify";
 import React, { useState } from "react";
-import { saveJwtTokenToStorage } from "./../utils/auth";
+import { saveJwtTokenToStorage, isSignedIn } from "./../utils/auth";
+import { useAppContextProvider } from "./context/app-context";
+import { isNullOrUndefined } from "util";
 
 const Login = () => {
+  const { jwtToken, lang, theme,  updateAppContext } = useAppContextProvider()
   const [state, setState] = useState(() => {
     const defaultState = {
       username: "",
@@ -13,17 +16,21 @@ const Login = () => {
     return defaultState;
   });
 
-  function saveJwtOnLogin() {
-    Auth.currentSession()
+  async function saveJwtOnLogin() {
+    await Auth.currentSession()
       .then(data => {
         let accessToken = data.getAccessToken();
-        let jwt: any = accessToken.getJwtToken();
+        let jwt: string = accessToken.getJwtToken();
 
-        console.log("access token: ", accessToken);
-        console.log("jwt token: ", jwt);
+        updateAppContext({
+          jwtToken:jwt, lang, theme
+        })
+
         saveJwtTokenToStorage(jwt);
       })
       .catch(err => console.log("Current session error: ", err));
+
+      console.log(jwtToken)
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {

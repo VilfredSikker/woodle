@@ -1,14 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { isNullOrUndefined } from "util";
-import { logout } from '../utils/auth';
-import { useJwtTokenContext } from "./context/data-context";
+import { logout, isSignedIn } from '../utils/auth';
+import { useAppContextProvider } from "./context/app-context";
 
 const Navbar = () => {
-  const jwtToken = useJwtTokenContext()
-
-  console.log("jwt Token: ",jwtToken)
-  const loggedIn = isNullOrUndefined(jwtToken)
+  const { jwtToken , theme, lang, updateAppContext } = useAppContextProvider()
+  console.log("jwtToken: ", jwtToken, isSignedIn(jwtToken))
+  const loggedIn = isSignedIn(jwtToken)
   console.log("Navbar check logged in: ", loggedIn)
   const content = { message: "", login: true };
   
@@ -37,6 +35,7 @@ const Navbar = () => {
         {loggedIn ? (
           <button
             onClick={e => {
+              updateAppContext({jwtToken: "", theme, lang})
               logout()
             }}
           >
