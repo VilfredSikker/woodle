@@ -12,7 +12,7 @@ const FormikConfirmSignUp = (props:any) => {
     onSubmit: values => {
       Auth.confirmSignUp(values.username, values.confirmationCode)
             .then(() => {
-              props.history.push("/profile")
+              props.history.push("/app/profile")
             })
             .catch(err => console.log("error with confirm: ", err))
       

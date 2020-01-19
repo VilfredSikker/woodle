@@ -1,11 +1,12 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import { getJwtTokenFromStorage } from "../../utils/auth";
+import { getJwtTokenFromStorage, isSignedIn } from "../../utils/auth";
+import { useAppContextProvider } from "../context/app-context";
 
 export default WrappedComponent => props => {
-  const jwtToken = getJwtTokenFromStorage()
+  const { jwtToken } = useAppContextProvider()
 
-  if (!jwtToken) {
+  if (!isSignedIn(jwtToken)) {
     return (
       <Redirect
         to={{

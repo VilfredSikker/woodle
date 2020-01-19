@@ -1,13 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { logout, isSignedIn } from '../utils/auth';
 import { useAppContextProvider } from "./context/app-context";
 
 const Navbar = () => {
   const { jwtToken , theme, lang, updateAppContext } = useAppContextProvider()
-  console.log("jwtToken: ", jwtToken, isSignedIn(jwtToken))
+
   const loggedIn = isSignedIn(jwtToken)
-  console.log("Navbar check logged in: ", loggedIn)
   const content = { message: "", login: true };
   
   if (loggedIn) {
@@ -30,7 +29,7 @@ const Navbar = () => {
         {` `}
         <Link to="/login">Login</Link>
         <Link to="/sign-up">Sign Up</Link>
-        <Link to="/profile">Profile</Link>
+        <Link to="/app/profile">Profile</Link>
         {` `}
         {loggedIn ? (
           <button
@@ -42,7 +41,7 @@ const Navbar = () => {
             <Link to="/" >Logout</Link>
           </button>
         ) : (
-          <Link to="/">Sign In</Link>
+          <Link to="/login">Sign In</Link>
         )}
       </nav>
     </div>

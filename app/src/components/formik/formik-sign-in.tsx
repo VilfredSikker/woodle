@@ -3,8 +3,10 @@ import { useFormik } from "formik";
 import React, { useState } from "react";
 import { saveJwtTokenToStorage } from "../../utils/auth";
 import { Redirect } from "react-router-dom";
+import { useAppContextProvider } from "../context/app-context";
 
 const FormikSignIn = (props:any) => {
+  const { jwtToken, lang, theme,  updateAppContext } = useAppContextProvider()
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -16,14 +18,30 @@ const FormikSignIn = (props:any) => {
         password: values.password,
       })
       .then(() => {
-        saveJwtTokenToStorage()
+        saveJwtOnLogin()
         props.history.push("/profile")
       })
       .catch(err => console.log("error with sign up ", err));
-       
-      alert(JSON.stringify(values, null, 2));
     }
   });
+
+  async function saveJwtOnLogin() {
+    await Auth.currentSession()
+      .then(data => {
+        let accessToken = data.getAccessToken();
+        let jwt: string = accessToken.getJwtToken();
+  
+        updateAppContext({
+          jwtToken:jwt, lang, theme
+        })
+  
+        saveJwtTokenToStorage(jwt);
+        props.history.push("/profile")
+      })
+      .catch(err => console.log("Current session error: ", err));
+  
+      console.log(jwtToken)
+  }
   return (
     <form onSubmit={formik.handleSubmit}>
       <label htmlFor="username">Username</label>
