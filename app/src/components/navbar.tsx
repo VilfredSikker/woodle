@@ -39,7 +39,7 @@ const Navbar = () => {
               logout()
             }}
           >
-            <Link to="login" >Logout</Link>
+            <Link to="/" >Logout</Link>
           </button>
         ) : (
           <Link to="/">Sign In</Link>
