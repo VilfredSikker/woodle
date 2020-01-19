@@ -11,6 +11,9 @@ import Profile from "./components/profile";
 import SignUp from "./components/sign-up";
 import Welcome from "./components/welcome";
 import { AppContextProvider } from "./components/context/app-context";
+import FormikSignUp from "./components/formik/formik-sign-up";
+import FormikSignIn from "./components/formik/formik-sign-in";
+import FormikConfirmSignUp from './components/formik/formik-confirm-sign-up'
 
 Amplify.configure(aws_exports);
 
@@ -21,8 +24,10 @@ const App: React.FC = () => {
         <Layout>
           <Route path="/" component={Welcome} />
           <Route path="/login" component={Login} />
-          <Route path="/new-login" component={NewLogin} />
+          <Route path="/new-login" component={FormikSignIn} />
           <Route path="/sign-up" component={SignUp} />
+          <Route path="/new-sign-up" component={FormikSignUp} />
+          <Route path="/confirm-sign-up" component={FormikConfirmSignUp} />
           <Route path="/profile" component={requireAuth(Profile)} />
         </Layout>
       </AppContextProvider>
