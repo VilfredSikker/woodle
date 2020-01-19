@@ -1,8 +1,8 @@
 import { Auth } from "aws-amplify";
 import React, { useState } from "react";
-import { saveJwtTokenToStorage, isSignedIn } from "./../utils/auth";
+import { saveJwtTokenToStorage } from "./../utils/auth";
 import { useAppContextProvider } from "./context/app-context";
-import { isNullOrUndefined } from "util";
+import TextField from '@material-ui/core/TextField'
 
 const Login = () => {
   const { jwtToken, lang, theme,  updateAppContext } = useAppContextProvider()
@@ -44,7 +44,6 @@ const Login = () => {
       })
         .then(() => {
           setState({ ...state, signedIn: true });
-          console.log("Signed in");
           saveJwtOnLogin();
         })
         .catch(err => {
@@ -54,8 +53,6 @@ const Login = () => {
     } else {
       console.log("Already signed in");
     }
-
-    console.log("state: ", state);
   }
 
   return (
@@ -65,6 +62,13 @@ const Login = () => {
       ) : (
         <form onSubmit={e => handleSubmit(e)}>
           <label>Username</label>
+          <TextField 
+            id="username" 
+            error
+            label="Error"
+            defaultValue="Hello World"
+            helperText="Incorrect entry."
+          />
           <input
             type="text"
             name="username"

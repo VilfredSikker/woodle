@@ -6,6 +6,7 @@ import aws_exports from "./aws-exports";
 import requireAuth from "./components/hoc/authenticate-route";
 import Layout from "./components/layout";
 import Login from "./components/login";
+import NewLogin from "./components/newLogin";
 import Profile from "./components/profile";
 import SignUp from "./components/sign-up";
 import Welcome from "./components/welcome";
@@ -20,6 +21,7 @@ const App: React.FC = () => {
         <Layout>
           <Route path="/" component={Welcome} />
           <Route path="/login" component={Login} />
+          <Route path="/new-login" component={NewLogin} />
           <Route path="/sign-up" component={SignUp} />
           <Route path="/profile" component={requireAuth(Profile)} />
         </Layout>
