@@ -15,8 +15,6 @@ const FormikConfirmSignUp = (props:any) => {
               props.history.push("/app/profile")
             })
             .catch(err => console.log("error with confirm: ", err))
-      
-      alert(JSON.stringify(values, null, 2));
     }
   });
   return (

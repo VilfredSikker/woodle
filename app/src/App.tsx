@@ -8,7 +8,7 @@ import FormikConfirmSignUp from './components/formik/formik-confirm-sign-up';
 import FormikSignIn from "./components/formik/formik-sign-in";
 import FormikSignUp from "./components/formik/formik-sign-up";
 import requireAuth from "./components/hoc/authenticate-route";
-import Layout from "./components/layout";
+import Layout from "./components/layout/layout";
 import Profile from "./components/profile";
 import Welcome from "./components/welcome";
 
