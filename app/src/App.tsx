@@ -24,6 +24,7 @@ const App: React.FC = () => {
           <Route path="/sign-up" exact component={FormikSignUp} />
           <Route path="/confirm-sign-up" exact component={FormikConfirmSignUp} />
           <Route path="/app/profile" exact component={requireAuth(Profile)} />
+          <Route path="/profile" exact component={Profile} />
         </Layout>
       </AppContextProvider>
     </Router>

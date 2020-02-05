@@ -31,5 +31,6 @@ export async function getUser() {
 export const logout = () => {
     console.log("Signing out")
     saveJwtTokenToStorage("")
+    
     Auth.signOut().then(data => console.log("Logout successful, data: ", data)).catch(err => console.log("Sign out failed: ", err))
 }
