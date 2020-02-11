@@ -1,11 +1,10 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode } from "react"
 
 import styles from "./layout.module.scss"
-import Navbar from "../navbar/navbar";
-
+import Navbar from "../navbar/navbar"
 
 interface Props {
-  children: ReactNode;
+  children: ReactNode
 }
 
 const Layout = (props: Props) => {
@@ -14,7 +13,7 @@ const Layout = (props: Props) => {
       <Navbar />
       {props.children}
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout
