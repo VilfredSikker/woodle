@@ -1,5 +1,9 @@
+@import "../../variables.module.scss";
+
 body {
   margin: 0;
+  background-color: $midnight-black;
+  color: $white;
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;

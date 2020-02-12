@@ -2,7 +2,6 @@ import { Auth } from "aws-amplify"
 
 export function isSignedIn(jwtToken) {
   const loggedIn = jwtToken === "" || jwtToken === "null" ? false : true
-  console.log("is signed in? ", jwtToken, loggedIn)
   return loggedIn
 }
 
@@ -12,7 +11,7 @@ export function saveJwtTokenToStorage(jwtToken) {
 
 export function getJwtTokenFromStorage() {
   const token = sessionStorage.getItem("jwtToken")
-  console.log("returning token: ", token)
+  console.log("getJwtTokenFromStorage ", token)
   return token
 }
 

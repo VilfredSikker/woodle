@@ -22,7 +22,6 @@ const FormikSignIn = (props: any) => {
       })
         .then(() => {
           saveJwtOnLogin()
-          props.history.push("/app/profile")
         })
         .catch(err => console.log("error with sign up ", err))
     }
@@ -41,7 +40,7 @@ const FormikSignIn = (props: any) => {
         })
 
         saveJwtTokenToStorage(jwt)
-        props.history.push("/app/profile")
+        props.history.push("/app/map")
       })
       .catch(err => console.log("Current session error: ", err))
 

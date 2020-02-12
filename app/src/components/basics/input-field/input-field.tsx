@@ -1,8 +1,30 @@
 import React from "react"
-import { TextField } from "@material-ui/core"
+import { TextField, makeStyles } from "@material-ui/core"
+import "../../../variables.module.scss"
+
+const useStyles = makeStyles({
+  inputLabel: {
+    color: "white"
+  },
+
+  inputField: {
+    paddingLeft: "5px"
+  }
+})
 
 const InputField = (props: any) => {
-  return <TextField {...props} />
+  const classes = useStyles()
+  return (
+    <TextField
+      {...props}
+      InputLabelProps={{
+        className: classes.inputLabel
+      }}
+      inputProps={{
+        className: classes.inputField
+      }}
+    />
+  )
 }
 
 export default InputField

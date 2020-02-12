@@ -11,6 +11,7 @@ import requireAuth from "./components/hoc/authenticate-route"
 import Layout from "./components/layout/layout"
 import Profile from "./components/profile"
 import Welcome from "./components/welcome"
+import GoogleMaps from "./components/google-maps"
 
 Amplify.configure(aws_exports)
 
@@ -28,6 +29,7 @@ const App: React.FC = () => {
             component={FormikConfirmSignUp}
           />
           <Route path="/app/profile" exact component={requireAuth(Profile)} />
+          <Route path="/app/map" exact component={requireAuth(GoogleMaps)} />
         </Layout>
       </AppContextProvider>
     </Router>

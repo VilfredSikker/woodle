@@ -9,9 +9,9 @@ interface Props {
 
 const Layout = (props: Props) => {
   return (
-    <div className={styles.container}>
+    <div>
       <Navbar />
-      {props.children}
+      <div className={styles.container}>{props.children}</div>
     </div>
   )
 }
