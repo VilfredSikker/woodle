@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react"
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api"
+import {
+  GoogleMap,
+  LoadScript,
+  Marker,
+  DrawingManager,
+  Circle
+} from "@react-google-maps/api"
 
 interface Position {
   lat: number
@@ -23,6 +29,10 @@ const GoogleMaps = () => {
     }
     return defaultState
   })
+
+  const options = {
+    disableDefaultUI: true
+  }
 
   useEffect(() => {
     currentPosition()
@@ -72,11 +82,13 @@ const GoogleMaps = () => {
         mapContainerStyle={{
           position: "absolute",
           width: "100%",
-          height: "92%"
+          height: "100%"
         }}
         zoom={16}
         center={position}
+        options={options}
       >
+        <Circle center={position} radius={2} />
         <Marker position={markerPosition} />
       </GoogleMap>
     </LoadScript>
