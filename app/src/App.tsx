@@ -11,7 +11,7 @@ import requireAuth from "./components/hoc/authenticate-route"
 import Layout from "./components/layout/layout"
 import Profile from "./components/profile"
 import Welcome from "./components/welcome"
-import GoogleMaps from "./components/google-maps"
+import GoogleMaps from "./components/google-maps/google-maps"
 
 Amplify.configure(aws_exports)
 

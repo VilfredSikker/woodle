@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react"
 import {
+  Circle,
   GoogleMap,
   LoadScript,
-  Marker,
-  DrawingManager,
-  Circle
+  OverlayView
 } from "@react-google-maps/api"
+import React, { useEffect, useState } from "react"
+
+import PlayButton from "./play-button"
+import StopButton from "./stop-button"
 
 interface Position {
   lat: number
@@ -13,35 +15,22 @@ interface Position {
 }
 
 const GoogleMaps = () => {
-  const [showMarker, setShowMarker] = useState(false)
-  const [zoom, setZoom] = useState(() => {
-    const defaultState: number = 18
-
-    return defaultState
-  })
-  const [position, setPosition] = useState(() => {
+  const [playerPosition, setPlayerPosition] = useState(() => {
     const defaultState: Position = {
       lat: 55.672,
       lng: 12.562
     }
     return defaultState
   })
-
-  const [markerPosition, setMarkerPosition] = useState(() => {
-    const defaultState: Position = {
-      lat: 55.672,
-      lng: 12.562
-    }
-    return defaultState
-  })
-
-  const options = {
-    disableDefaultUI: true
-  }
 
   useEffect(() => {
-    currentPosition()
+    initiateMap()
   }, [])
+
+  function initiateMap() {
+    currentPosition()
+    navigator.geolocation.watchPosition(success, errorCallback)
+  }
 
   const currentPosition = () => {
     if (!navigator.geolocation) {
@@ -59,23 +48,22 @@ const GoogleMaps = () => {
       lat: latitude,
       lng: longitude
     }
-    setPosition(myPosition)
-    setMarkerPosition(myPosition)
+
+    setPlayerPosition(myPosition)
   }
 
   function errorCallback(error: any) {
     alert("ERROR(" + error.code + "): " + error.message)
   }
 
-  const delayedShowMarker = () => {
-    setTimeout(() => {
-      setShowMarker(true)
-    }, 3000)
+  const onClick = () => {
+    console.info("I have been clicked!")
   }
 
-  const handleMarkerClick = () => {
-    setShowMarker(!showMarker)
-  }
+  const getPixelPositionOffset = (width: number, height: number) => ({
+    x: width - 100,
+    y: -(height / 4)
+  })
 
   return (
     <LoadScript
@@ -89,12 +77,27 @@ const GoogleMaps = () => {
           width: "100%",
           height: "100%"
         }}
-        zoom={zoom}
-        center={position}
-        options={options}
+        zoom={18}
+        center={playerPosition}
+        options={{
+          disableDefaultUI: true
+        }}
       >
+        <OverlayView
+          position={playerPosition}
+          getPixelPositionOffset={(width: number, height: number) => ({
+            x: -50,
+            y: 150
+          })}
+          mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+        >
+          <>
+            <PlayButton onClick={() => alert("Clicked play")} />
+            <StopButton onClick={onClick} />
+          </>
+        </OverlayView>
         <Circle
-          center={position}
+          center={playerPosition}
           radius={4}
           options={{
             strokeColor: "#FE6B8B",
@@ -105,6 +108,7 @@ const GoogleMaps = () => {
           }}
         />
       </GoogleMap>
+      <button>Hej</button>
     </LoadScript>
   )
 }
