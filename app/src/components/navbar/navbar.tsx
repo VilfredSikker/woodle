@@ -69,7 +69,9 @@ const Navbar = () => {
           <Paper>
             <ClickAwayListener onClickAway={handleCloseBurger}>
               <MenuList autoFocusItem={openBurger} id="menu-list-grow">
-                <MenuItem onClick={handleCloseBurger}>Profile</MenuItem>
+                <MenuItem onClick={handleCloseBurger}>
+                  <Link to="/app/profile">Profile</Link>
+                </MenuItem>
                 <MenuItem onClick={handleCloseBurger}>My account</MenuItem>
                 <MenuItem onClick={handleCloseBurger}>Logout</MenuItem>
               </MenuList>
@@ -77,6 +79,9 @@ const Navbar = () => {
           </Paper>
         </Grow>
       </Popper>
+      <Button>
+        <Link to="/app/map">Map</Link>
+      </Button>
       <Button
         onClick={e => {
           updateAppContext({ jwtToken: "", theme, lang })
