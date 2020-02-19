@@ -14,6 +14,11 @@ interface Position {
 
 const GoogleMaps = () => {
   const [showMarker, setShowMarker] = useState(false)
+  const [zoom, setZoom] = useState(() => {
+    const defaultState: number = 18
+
+    return defaultState
+  })
   const [position, setPosition] = useState(() => {
     const defaultState: Position = {
       lat: 55.672,
@@ -84,12 +89,21 @@ const GoogleMaps = () => {
           width: "100%",
           height: "100%"
         }}
-        zoom={16}
+        zoom={zoom}
         center={position}
         options={options}
       >
-        <Circle center={position} radius={2} />
-        <Marker position={markerPosition} />
+        <Circle
+          center={position}
+          radius={4}
+          options={{
+            strokeColor: "#FE6B8B",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#FF8E53",
+            fillOpacity: 0.8
+          }}
+        />
       </GoogleMap>
     </LoadScript>
   )
