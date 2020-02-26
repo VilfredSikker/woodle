@@ -1,15 +1,15 @@
 {
     "dev": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-app-dev-05847-authRole",
-            "UnauthRoleArn": "arn:aws:iam::064004056688:role/amplify-app-dev-05847-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::064004056688:role/amplify-app-dev-05847-authRole",
+            "AuthRoleName": "amplify-woodle-dev-195619-authRole",
+            "UnauthRoleArn": "arn:aws:iam::064004056688:role/amplify-woodle-dev-195619-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::064004056688:role/amplify-woodle-dev-195619-authRole",
             "Region": "eu-central-1",
-            "DeploymentBucketName": "amplify-app-dev-05847-deployment",
-            "UnauthRoleName": "amplify-app-dev-05847-unauthRole",
-            "StackName": "amplify-app-dev-05847",
-            "StackId": "arn:aws:cloudformation:eu-central-1:064004056688:stack/amplify-app-dev-05847/f96c0240-37f2-11ea-a996-06a85d409ac4",
-            "AmplifyAppId": "dqfctag7keth7"
+            "DeploymentBucketName": "amplify-woodle-dev-195619-deployment",
+            "UnauthRoleName": "amplify-woodle-dev-195619-unauthRole",
+            "StackName": "amplify-woodle-dev-195619",
+            "StackId": "arn:aws:cloudformation:eu-central-1:064004056688:stack/amplify-woodle-dev-195619/ad8ad890-58c9-11ea-a015-0a24e2904074",
+            "AmplifyAppId": "d34d0jwvf2odkg"
         }
     }
 }
