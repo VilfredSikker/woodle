@@ -8,7 +8,13 @@ import { useAppContextProvider } from "../context/app-context"
 import LoginLayout from "../layout/login-layout/login-layout"
 
 const FormikSignIn = (props: any) => {
-  const { jwtToken, lang, theme, updateAppContext } = useAppContextProvider()
+  const {
+    jwtToken,
+    lang,
+    theme,
+    user,
+    updateAppContext
+  } = useAppContextProvider()
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -31,10 +37,12 @@ const FormikSignIn = (props: any) => {
       .then(data => {
         let accessToken = data.getAccessToken()
         let jwt: string = accessToken.getJwtToken()
+        let username: string = accessToken.payload.username
 
         updateAppContext({
           jwtToken: jwt,
           lang,
+          user: username,
           theme
         })
 
@@ -42,8 +50,6 @@ const FormikSignIn = (props: any) => {
         props.history.push("/app/map")
       })
       .catch(err => console.log("Current session error: ", err))
-
-    console.log(jwtToken)
   }
   return (
     <LoginLayout>

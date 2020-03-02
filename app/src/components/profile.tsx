@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
 import { getUser } from "../utils/auth"
+import { useAppContextProvider } from "./context/app-context"
 const Profile = () => {
-  const [user, setUser] = useState()
+  const { user } = useAppContextProvider()
 
   useEffect(() => {
-    const newUser = getUser()
-    console.log(newUser)
+    console.log(user)
   })
 
   return (

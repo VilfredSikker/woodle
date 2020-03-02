@@ -25,7 +25,12 @@ const GoogleMaps = () => {
 
   useEffect(() => {
     initiateMap()
-  }, [])
+
+    return () => {
+      let id = navigator.geolocation.watchPosition(success, errorCallback)
+      navigator.geolocation.clearWatch(id)
+    }
+  })
 
   function initiateMap() {
     currentPosition()
@@ -108,7 +113,6 @@ const GoogleMaps = () => {
           }}
         />
       </GoogleMap>
-      <button>Hej</button>
     </LoadScript>
   )
 }

@@ -5,12 +5,14 @@ interface StateValues {
   jwtToken: string
   theme: string
   lang: string
+  user: string
 }
 
 interface AppContextValues {
   jwtToken: string
   theme: string
   lang: string
+  user: string
   updateAppContext: (newState: StateValues) => void
 }
 
@@ -18,6 +20,7 @@ const appContextValues: AppContextValues = {
   jwtToken: "",
   theme: "light",
   lang: "dk",
+  user: "",
   updateAppContext: () => {}
 }
 
@@ -27,15 +30,19 @@ export const AppContextProvider = (props: any) => {
   const [state, setState] = useState<StateValues>(() => appContextValues)
 
   function updateAppContext(newState: StateValues) {
-    console.log("updateAppContext is called", newState)
     setState(newState)
   }
 
-  const { jwtToken, theme, lang } = state
-  const values: AppContextValues = { jwtToken, theme, lang, updateAppContext }
+  const { jwtToken, theme, lang, user } = state
+  const values: AppContextValues = {
+    jwtToken,
+    theme,
+    lang,
+    user,
+    updateAppContext
+  }
 
   useEffect(() => {
-    console.log("Getting JWT token")
     var storageJwt: string | null = ""
 
     if (state.jwtToken === "") {
