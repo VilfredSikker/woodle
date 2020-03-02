@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "woodle",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": "false",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authwoodle954a6558",
+            "Outputs.UserPoolId"
+        ]
+    }
+}

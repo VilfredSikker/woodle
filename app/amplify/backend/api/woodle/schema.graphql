@@ -1,0 +1,21 @@
+type Activity
+  @model
+  @key(fields: ["id"])
+  @auth(rules: [{ allow: owner, operations: [create, read, delete] }]) {
+  id: ID!
+  name: String!
+  type: String
+  length: Float
+  duration: Float
+  calories: Float
+  steps: Int
+}
+
+type User
+  @model
+  @key(fields: ["id"])
+  @auth(rules: [{ allow: owner, operations: [create, read, update, delete] }]) {
+  id: ID!
+  name: String!
+  activities: [Activity]
+}
