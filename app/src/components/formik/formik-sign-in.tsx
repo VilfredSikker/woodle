@@ -1,12 +1,11 @@
 import { Auth } from "aws-amplify"
 import { useFormik } from "formik"
-import React, { useState } from "react"
+import React from "react"
 import { saveJwtTokenToStorage } from "../../utils/auth"
-import { Redirect } from "react-router-dom"
-import LoginLayout from "../layout/login-layout/login-layout"
-import { useAppContextProvider } from "../context/app-context"
-import InputField from "../basics/input-field/input-field"
 import StyledButton from "../basics/button/button"
+import InputField from "../basics/input-field/input-field"
+import { useAppContextProvider } from "../context/app-context"
+import LoginLayout from "../layout/login-layout/login-layout"
 
 const FormikSignIn = (props: any) => {
   const { jwtToken, lang, theme, updateAppContext } = useAppContextProvider()

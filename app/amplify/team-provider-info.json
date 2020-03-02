@@ -10,6 +10,11 @@
             "StackName": "amplify-woodle-dev-195619",
             "StackId": "arn:aws:cloudformation:eu-central-1:064004056688:stack/amplify-woodle-dev-195619/ad8ad890-58c9-11ea-a015-0a24e2904074",
             "AmplifyAppId": "d34d0jwvf2odkg"
+        },
+        "categories": {
+            "auth": {
+                "woodle954a6558": {}
+            }
         }
     }
 }

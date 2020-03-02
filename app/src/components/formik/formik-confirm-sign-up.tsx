@@ -1,9 +1,12 @@
-import { Auth } from "aws-amplify";
-import { useFormik } from "formik";
-import React from "react";
-import { Redirect } from "react-router-dom";
+import { Auth } from "aws-amplify"
+import { useFormik } from "formik"
+import React from "react"
+import { Redirect } from "react-router-dom"
+import LoginLayout from "../layout/login-layout/login-layout"
+import InputField from "../basics/input-field/input-field"
+import StyledButton from "../basics/button/button"
 
-const FormikConfirmSignUp = (props:any) => {
+const FormikConfirmSignUp = (props: any) => {
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -11,31 +14,31 @@ const FormikConfirmSignUp = (props:any) => {
     },
     onSubmit: values => {
       Auth.confirmSignUp(values.username, values.confirmationCode)
-            .then(() => {
-              props.history.push("/app/profile")
-            })
-            .catch(err => console.log("error with confirm: ", err))
+        .then(() => {
+          props.history.push("/app/profile")
+        })
+        .catch(err => console.log("error with confirm: ", err))
     }
-  });
+  })
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <label htmlFor="username">Username</label>
-      <input
-        type="text"
-        name="username"
-        onChange={formik.handleChange}
-        value={formik.values.username}
-      />
-      <label htmlFor="confirmationCode">Confirmation Code</label>
-      <input
-        type="text"
-        name="confirmation_code"
-        onChange={formik.handleChange}
-        value={formik.values.confirmationCode}
-      />
-      <button type="submit">Sign Up</button>
-    </form>
-  );
-};
+    <LoginLayout>
+      <form onSubmit={formik.handleSubmit}>
+        <InputField
+          name="username"
+          label="Username"
+          onChange={formik.handleChange}
+          value={formik.values.username}
+        />
+        <InputField
+          name="confirmationCode"
+          label="Confirmation Code"
+          onChange={formik.handleChange}
+          value={formik.values.confirmationCode}
+        />
+        <StyledButton type="submit">Sign Up Now</StyledButton>
+      </form>
+    </LoginLayout>
+  )
+}
 
-export default FormikConfirmSignUp;
+export default FormikConfirmSignUp

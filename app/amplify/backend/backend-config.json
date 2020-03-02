@@ -1,1 +1,9 @@
-{}
+{
+	"auth": {
+		"woodle954a6558": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	}
+}

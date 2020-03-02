@@ -10,9 +10,9 @@ import LoginLayout from "../layout/login-layout/login-layout"
 const FormikSignUp = (props: any) => {
   const formik = useFormik({
     initialValues: {
-      email: "",
       username: "",
-      password: ""
+      password: "",
+      email: ""
     },
     validationSchema: Yup.object({
       username: Yup.string()
@@ -38,8 +38,6 @@ const FormikSignUp = (props: any) => {
           props.history.push("/confirm-sign-up")
         })
         .catch(err => console.log("error with sign up ", err))
-
-      alert(JSON.stringify(values, null, 2))
     }
   })
   return (
