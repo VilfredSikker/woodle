@@ -11,11 +11,8 @@ type Activity
   steps: Int
 }
 
-type User
-  @model
-  @key(fields: ["id"])
-  @auth(rules: [{ allow: owner, operations: [create, read, update, delete] }]) {
+type User @model {
   id: ID!
-  name: String!
+  username: String!
   activities: [Activity]
 }
