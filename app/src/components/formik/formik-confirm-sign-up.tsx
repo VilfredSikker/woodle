@@ -19,8 +19,6 @@ const FormikConfirmSignUp = (props: any) => {
           props.history.push("/app/profile")
         })
         .catch(err => console.log("error with confirm: ", err))
-
-      createUser(values.username)
     }
   })
   return (

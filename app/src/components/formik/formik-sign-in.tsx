@@ -6,6 +6,7 @@ import StyledButton from "../basics/button/button"
 import InputField from "../basics/input-field/input-field"
 import { useAppContextProvider } from "../context/app-context"
 import LoginLayout from "../layout/login-layout/login-layout"
+import { createUser } from "../../graphql/usersAPI"
 
 const FormikSignIn = (props: any) => {
   const {
@@ -26,6 +27,7 @@ const FormikSignIn = (props: any) => {
         password: values.password
       })
         .then(() => {
+          createUser(values.username)
           saveJwtOnLogin()
         })
         .catch(err => console.log("error with sign up ", err))

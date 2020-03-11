@@ -6,6 +6,7 @@ import { Redirect } from "react-router-dom"
 import InputField from "../basics/input-field/input-field"
 import StyledButton from "../basics/button/button"
 import LoginLayout from "../layout/login-layout/login-layout"
+import { createUser } from "../../graphql/usersAPI"
 
 const FormikSignUp = (props: any) => {
   const formik = useFormik({
@@ -34,7 +35,6 @@ const FormikSignUp = (props: any) => {
         }
       })
         .then(() => {
-          console.log("Signed up")
           props.history.push("/confirm-sign-up")
         })
         .catch(err => console.log("error with sign up ", err))

@@ -13,7 +13,8 @@ const useStyles = makeStyles({
   },
 
   inputField: {
-    paddingLeft: "5px"
+    paddingLeft: "5px",
+    color: "white"
   }
 })
 

@@ -6,6 +6,7 @@ export const createUser = `mutation CreateUser(
   $condition: ModelUserConditionInput
 ) {
   createUser(input: $input, condition: $condition) {
+    id
     username
     activities {
       id
@@ -17,6 +18,7 @@ export const createUser = `mutation CreateUser(
       steps
     }
     friends {
+      id
       username
       activities {
         id
@@ -28,6 +30,7 @@ export const createUser = `mutation CreateUser(
         steps
       }
       friends {
+        id
         username
       }
     }
@@ -39,6 +42,7 @@ export const updateUser = `mutation UpdateUser(
   $condition: ModelUserConditionInput
 ) {
   updateUser(input: $input, condition: $condition) {
+    id
     username
     activities {
       id
@@ -50,6 +54,7 @@ export const updateUser = `mutation UpdateUser(
       steps
     }
     friends {
+      id
       username
       activities {
         id
@@ -61,6 +66,7 @@ export const updateUser = `mutation UpdateUser(
         steps
       }
       friends {
+        id
         username
       }
     }
@@ -72,6 +78,7 @@ export const deleteUser = `mutation DeleteUser(
   $condition: ModelUserConditionInput
 ) {
   deleteUser(input: $input, condition: $condition) {
+    id
     username
     activities {
       id
@@ -83,6 +90,7 @@ export const deleteUser = `mutation DeleteUser(
       steps
     }
     friends {
+      id
       username
       activities {
         id
@@ -94,6 +102,7 @@ export const deleteUser = `mutation DeleteUser(
         steps
       }
       friends {
+        id
         username
       }
     }

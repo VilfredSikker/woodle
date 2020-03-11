@@ -3,6 +3,7 @@
 
 export const getUser = `query GetUser($id: ID!) {
   getUser(id: $id) {
+    id
     username
     activities {
       id
@@ -14,6 +15,7 @@ export const getUser = `query GetUser($id: ID!) {
       steps
     }
     friends {
+      id
       username
       activities {
         id
@@ -25,6 +27,7 @@ export const getUser = `query GetUser($id: ID!) {
         steps
       }
       friends {
+        id
         username
       }
     }
@@ -38,6 +41,7 @@ export const listUsers = `query ListUsers(
 ) {
   listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+      id
       username
       activities {
         id
@@ -49,6 +53,7 @@ export const listUsers = `query ListUsers(
         steps
       }
       friends {
+        id
         username
       }
     }

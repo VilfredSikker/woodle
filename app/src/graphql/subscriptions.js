@@ -3,6 +3,7 @@
 
 export const onCreateUser = `subscription OnCreateUser($owner: String!) {
   onCreateUser(owner: $owner) {
+    id
     username
     activities {
       id
@@ -14,6 +15,7 @@ export const onCreateUser = `subscription OnCreateUser($owner: String!) {
       steps
     }
     friends {
+      id
       username
       activities {
         id
@@ -25,6 +27,7 @@ export const onCreateUser = `subscription OnCreateUser($owner: String!) {
         steps
       }
       friends {
+        id
         username
       }
     }
@@ -33,6 +36,7 @@ export const onCreateUser = `subscription OnCreateUser($owner: String!) {
 `;
 export const onUpdateUser = `subscription OnUpdateUser($owner: String!) {
   onUpdateUser(owner: $owner) {
+    id
     username
     activities {
       id
@@ -44,6 +48,7 @@ export const onUpdateUser = `subscription OnUpdateUser($owner: String!) {
       steps
     }
     friends {
+      id
       username
       activities {
         id
@@ -55,6 +60,7 @@ export const onUpdateUser = `subscription OnUpdateUser($owner: String!) {
         steps
       }
       friends {
+        id
         username
       }
     }
@@ -63,6 +69,7 @@ export const onUpdateUser = `subscription OnUpdateUser($owner: String!) {
 `;
 export const onDeleteUser = `subscription OnDeleteUser($owner: String!) {
   onDeleteUser(owner: $owner) {
+    id
     username
     activities {
       id
@@ -74,6 +81,7 @@ export const onDeleteUser = `subscription OnDeleteUser($owner: String!) {
       steps
     }
     friends {
+      id
       username
       activities {
         id
@@ -85,6 +93,7 @@ export const onDeleteUser = `subscription OnDeleteUser($owner: String!) {
         steps
       }
       friends {
+        id
         username
       }
     }
