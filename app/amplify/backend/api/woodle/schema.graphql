@@ -1,18 +1,44 @@
-type Activity
+type User
   @model
-  @key(fields: ["id"])
-  @auth(rules: [{ allow: owner, operations: [create, read, delete] }]) {
-  id: ID!
-  name: String!
-  type: String
-  length: Float
-  duration: Float
-  calories: Float
-  steps: Int
-}
-
-type User @model {
+  @auth(
+    rules: [
+      {
+        allow: owner
+        ownerField: "owner"
+        operations: [create, update, delete, read]
+      }
+      { allow: private, operations: [read] }
+    ]
+  ) {
   id: ID!
   username: String!
   activities: [Activity]
+  friends: [User]
+}
+
+type Activity
+  @model
+  @auth(
+    rules: [
+      {
+        allow: owner
+        ownerField: "owner"
+        operations: [create, update, delete, read]
+      }
+      { allow: private, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  type: ActivityType
+  length: Float
+  calories: Int
+  duration: Float
+  steps: Int
+}
+
+enum ActivityType {
+  SOLO
+  GROUP
+  SPONSORED
 }

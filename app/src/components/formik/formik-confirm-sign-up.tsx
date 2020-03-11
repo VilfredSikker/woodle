@@ -5,6 +5,7 @@ import { Redirect } from "react-router-dom"
 import LoginLayout from "../layout/login-layout/login-layout"
 import InputField from "../basics/input-field/input-field"
 import StyledButton from "../basics/button/button"
+import { createUser } from "../../graphql/usersAPI"
 
 const FormikConfirmSignUp = (props: any) => {
   const formik = useFormik({
@@ -18,6 +19,8 @@ const FormikConfirmSignUp = (props: any) => {
           props.history.push("/app/profile")
         })
         .catch(err => console.log("error with confirm: ", err))
+
+      createUser(values.username)
     }
   })
   return (

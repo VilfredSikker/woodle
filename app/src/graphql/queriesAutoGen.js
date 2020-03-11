@@ -3,8 +3,8 @@
 
 export const getUser = `query GetUser($id: ID!) {
   getUser(id: $id) {
-    username
-    activities {
+    name
+    activites {
       id
       name
       type
@@ -14,8 +14,8 @@ export const getUser = `query GetUser($id: ID!) {
       steps
     }
     friends {
-      username
-      activities {
+      name
+      activites {
         id
         name
         type
@@ -25,7 +25,7 @@ export const getUser = `query GetUser($id: ID!) {
         steps
       }
       friends {
-        username
+        name
       }
     }
   }
@@ -38,8 +38,8 @@ export const listUsers = `query ListUsers(
 ) {
   listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
-      username
-      activities {
+      name
+      activites {
         id
         name
         type
@@ -49,7 +49,7 @@ export const listUsers = `query ListUsers(
         steps
       }
       friends {
-        username
+        name
       }
     }
     nextToken

@@ -1,8 +1,0 @@
-
-export query GetUsers {
-  getUsers {
-    users {
-      username
-    }
-  }
-}
