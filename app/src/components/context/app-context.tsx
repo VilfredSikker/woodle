@@ -5,26 +5,25 @@ interface StateValues {
   jwtToken: string
   theme: string
   lang: string
-  user: string
-  userId?: string
+  user: object
 }
 
 interface AppContextValues {
   jwtToken: string
   theme: string
   lang: string
-  user: string
-  userId?: string
-  updateAppContext: (newState: StateValues) => void
+  user: object
+  updateAppUser: (user: object) => void
+  updateAppJwt: (jwt: string) => void
 }
 
 const appContextValues: AppContextValues = {
   jwtToken: "",
   theme: "light",
   lang: "dk",
-  user: "",
-  userId: "",
-  updateAppContext: () => {}
+  user: {},
+  updateAppUser: () => {},
+  updateAppJwt: () => {}
 }
 
 export const AppContext = createContext(appContextValues)
@@ -32,19 +31,26 @@ export const AppContext = createContext(appContextValues)
 export const AppContextProvider = (props: any) => {
   const [state, setState] = useState<StateValues>(() => appContextValues)
 
-  function updateAppContext(newState: StateValues) {
-    console.log("update context new state: ", newState)
-    setState(newState)
+  function updateAppUser(user: object) {
+    console.log("current state: ", state)
+    console.log("Updating app user: ", user)
+    setState({ ...state, user: user })
   }
 
-  const { jwtToken, theme, lang, user, userId } = state
+  function updateAppJwt(jwt: string) {
+    console.log("current state: ", state)
+    console.log("Updating app jwt", jwt)
+    setState({ ...state, jwtToken: jwt })
+  }
+
+  const { jwtToken, theme, lang, user } = state
   const values: AppContextValues = {
     jwtToken,
     theme,
     lang,
     user,
-    userId,
-    updateAppContext
+    updateAppUser,
+    updateAppJwt
   }
 
   useEffect(() => {
@@ -56,6 +62,7 @@ export const AppContextProvider = (props: any) => {
     }
 
     if (storageJwt != null) {
+      console.log("storageJwt != null")
       setState({ ...state, jwtToken: storageJwt })
     }
   }, [])

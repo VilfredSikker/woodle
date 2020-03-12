@@ -29,13 +29,7 @@ const useStyles = makeStyles({
 })
 
 const Navbar = () => {
-  const {
-    jwtToken,
-    theme,
-    lang,
-    user,
-    updateAppContext
-  } = useAppContextProvider()
+  const { jwtToken, updateAppJwt, updateAppUser } = useAppContextProvider()
   const styles = useStyles()
   const loggedIn = isSignedIn(jwtToken)
   const [openBurger, setOpenBurger] = useState(false)
@@ -90,11 +84,12 @@ const Navbar = () => {
       </Button>
       <Button
         onClick={e => {
-          updateAppContext({ jwtToken: "", theme, lang, user })
+          updateAppJwt("")
+          updateAppUser({})
           logout()
         }}
       >
-        <Link to="/">Logout</Link>
+        <Link to="/login">Logout</Link>
       </Button>
     </Toolbar>
   )

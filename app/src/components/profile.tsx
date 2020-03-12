@@ -15,18 +15,18 @@ interface User {
 
 const Profile = () => {
   const [users, setUsers] = useState<User[]>([])
-  const { user } = useAppContextProvider()
+  const { jwtToken, user } = useAppContextProvider()
 
   useEffect(() => {
-    const data = getListUsers()
-    console.log("Data: ", data)
+    getListUsers()
+
+    console.log("jwt: ", jwtToken)
+    console.log("user: ", user)
   }, [])
 
   const getListUsers = async () => {
     listUsers()
       .then(data => {
-        console.log("data: ", data)
-        console.log("data.listUsers.items: ", data.data.listUsers)
         createUsers(data.data.listUsers.items)
       })
       .catch(e => console.log("Error with getUsers: ", e))
@@ -56,8 +56,6 @@ const Profile = () => {
     getUser(username)
       .then(data => (user = data))
       .catch(e => console.log("Error with getUser: ", e))
-
-    console.log("getUser result:", user)
   }
 
   const addTestUser = async () => {

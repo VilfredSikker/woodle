@@ -11,13 +11,7 @@ import * as mutations from "../../graphql/mutations"
 import * as queries from "../../graphql/queries"
 
 const FormikSignIn = (props: any) => {
-  const {
-    jwtToken,
-    lang,
-    theme,
-    user,
-    updateAppContext
-  } = useAppContextProvider()
+  const { updateAppUser, updateAppJwt } = useAppContextProvider()
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -28,9 +22,18 @@ const FormikSignIn = (props: any) => {
         username: values.username,
         password: values.password
       })
-        .then(() => {
-          addUserToDB(values.username)
-          saveJwtOnLogin()
+        .then(e => {
+          console.log("step 1")
+          return addUserToDB(values.username)
+        })
+        .then(e => {
+          console.log("step 2")
+          return saveJwtOnLogin()
+        })
+        .then(e => {
+          console.log("step 3")
+          console.log("step 3")
+          props.history.push("/app/map")
         })
         .catch(err => console.log("error with sign up ", err))
     }
@@ -42,15 +45,15 @@ const FormikSignIn = (props: any) => {
         eq: username
       }
     }
-    var userId: string
-    console.log("add user to db")
 
     await API.graphql(graphqlOperation(queries.listUsers, { filter: filter }))
       .then((result: any) => {
         let items = result.data.listUsers.items
 
+        // username is a unique name, which is why this is safe
         if (items.length > 0) {
-          userId = items[0].id
+          let newUser = items[0]
+          updateAppUser(newUser)
         } else {
           const input = {
             username: username
@@ -59,23 +62,12 @@ const FormikSignIn = (props: any) => {
           console.log("no user found, creating user")
           API.graphql(graphqlOperation(mutations.createUser, { input: input }))
             .then((result: any) => {
-              console.log("Create user result: ", result)
-              let user = result.data.createUser
-              console.log("user: ", user)
-              userId = user.id
+              let newUser = result.data.createUser
+
+              updateAppUser(newUser)
             })
             .catch((e: any) => console.log("Couldn't create user: ", e))
         }
-      })
-      .then(() => {
-        console.log("User id: ", userId)
-        updateAppContext({
-          jwtToken,
-          lang,
-          user,
-          theme,
-          userId: userId
-        })
       })
       .catch((e: any) => console.log("Error when adding user to db: ", e))
   }
@@ -85,17 +77,10 @@ const FormikSignIn = (props: any) => {
       .then(data => {
         let accessToken = data.getAccessToken()
         let jwt: string = accessToken.getJwtToken()
-        let username: string = accessToken.payload.username
 
-        updateAppContext({
-          jwtToken: jwt,
-          lang,
-          user: username,
-          theme
-        })
+        updateAppJwt(jwt)
 
         saveJwtTokenToStorage(jwt)
-        props.history.push("/app/map")
       })
       .catch(err => console.log("Current session error: ", err))
   }
