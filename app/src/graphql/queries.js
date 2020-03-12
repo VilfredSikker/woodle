@@ -1,6 +1,39 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getUserByName = `query GetUserByName($username: String!) {
+  getUserByName(username: $username) {
+    id
+    username
+    activities {
+      id
+      name
+      type
+      length
+      calories
+      duration
+      steps
+    }
+    friends {
+      id
+      username
+      activities {
+        id
+        name
+        type
+        length
+        calories
+        duration
+        steps
+      }
+      friends {
+        id
+        username
+      }
+    }
+  }
+}
+`;
 export const getUser = `query GetUser($id: ID!) {
   getUser(id: $id) {
     id

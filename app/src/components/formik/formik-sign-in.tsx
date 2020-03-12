@@ -6,7 +6,9 @@ import StyledButton from "../basics/button/button"
 import InputField from "../basics/input-field/input-field"
 import { useAppContextProvider } from "../context/app-context"
 import LoginLayout from "../layout/login-layout/login-layout"
-import { createUser } from "../../graphql/usersAPI"
+import Amplify, { API, graphqlOperation } from "aws-amplify"
+import * as mutations from "../../graphql/mutations"
+import * as queries from "../../graphql/queries"
 
 const FormikSignIn = (props: any) => {
   const {
@@ -27,12 +29,56 @@ const FormikSignIn = (props: any) => {
         password: values.password
       })
         .then(() => {
-          createUser(values.username)
+          addUserToDB(values.username)
           saveJwtOnLogin()
         })
         .catch(err => console.log("error with sign up ", err))
     }
   })
+
+  async function addUserToDB(username: string) {
+    const filter = {
+      username: {
+        eq: username
+      }
+    }
+    var userId: string
+    console.log("add user to db")
+
+    await API.graphql(graphqlOperation(queries.listUsers, { filter: filter }))
+      .then((result: any) => {
+        let items = result.data.listUsers.items
+
+        if (items.length > 0) {
+          userId = items[0].id
+        } else {
+          const input = {
+            username: username
+          }
+
+          console.log("no user found, creating user")
+          API.graphql(graphqlOperation(mutations.createUser, { input: input }))
+            .then((result: any) => {
+              console.log("Create user result: ", result)
+              let user = result.data.createUser
+              console.log("user: ", user)
+              userId = user.id
+            })
+            .catch((e: any) => console.log("Couldn't create user: ", e))
+        }
+      })
+      .then(() => {
+        console.log("User id: ", userId)
+        updateAppContext({
+          jwtToken,
+          lang,
+          user,
+          theme,
+          userId: userId
+        })
+      })
+      .catch((e: any) => console.log("Error when adding user to db: ", e))
+  }
 
   async function saveJwtOnLogin() {
     await Auth.currentSession()

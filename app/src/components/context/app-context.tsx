@@ -6,6 +6,7 @@ interface StateValues {
   theme: string
   lang: string
   user: string
+  userId?: string
 }
 
 interface AppContextValues {
@@ -13,6 +14,7 @@ interface AppContextValues {
   theme: string
   lang: string
   user: string
+  userId?: string
   updateAppContext: (newState: StateValues) => void
 }
 
@@ -21,6 +23,7 @@ const appContextValues: AppContextValues = {
   theme: "light",
   lang: "dk",
   user: "",
+  userId: "",
   updateAppContext: () => {}
 }
 
@@ -30,15 +33,17 @@ export const AppContextProvider = (props: any) => {
   const [state, setState] = useState<StateValues>(() => appContextValues)
 
   function updateAppContext(newState: StateValues) {
+    console.log("update context new state: ", newState)
     setState(newState)
   }
 
-  const { jwtToken, theme, lang, user } = state
+  const { jwtToken, theme, lang, user, userId } = state
   const values: AppContextValues = {
     jwtToken,
     theme,
     lang,
     user,
+    userId,
     updateAppContext
   }
 

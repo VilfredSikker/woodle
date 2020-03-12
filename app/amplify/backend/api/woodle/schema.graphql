@@ -42,3 +42,7 @@ enum ActivityType {
   GROUP
   SPONSORED
 }
+
+type Query {
+  getUserByName(username: String!): User
+}

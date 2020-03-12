@@ -25,6 +25,8 @@ export const createUser = async userName => {
   )
     .then(data => console.log("createUser data: ", data))
     .catch(e => console.log("error with createUser: ", e))
+
+  return newUser
 }
 
 export const deleteUser = async id => {
