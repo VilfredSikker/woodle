@@ -1,56 +1,47 @@
 import React, { createContext, useContext, useState, useEffect } from "react"
 import { getJwtTokenFromStorage } from "../../utils/auth"
 
-interface StateValues {
+interface ContextValues {
   jwtToken: string
   theme: string
   lang: string
   user: object
 }
 
-interface AppContextValues {
+interface ContextState {
+  contextState: ContextValues
+  setContextState: (partial: Partial<ContextValues>) => void
+}
+
+export interface ContextStateValues {
   jwtToken: string
   theme: string
   lang: string
   user: object
-  updateAppUser: (user: object) => void
-  updateAppJwt: (jwt: string) => void
 }
 
-const appContextValues: AppContextValues = {
+const defaultState: ContextValues = {
   jwtToken: "",
   theme: "light",
   lang: "dk",
-  user: {},
-  updateAppUser: () => {},
-  updateAppJwt: () => {}
+  user: {}
 }
 
-export const AppContext = createContext(appContextValues)
+const initialValues: ContextState = {
+  contextState: defaultState,
+
+  setContextState: () => console.log("Remember to use the provider")
+}
+
+export const AppContext = createContext<ContextState>(initialValues)
 
 export const AppContextProvider = (props: any) => {
-  const [state, setState] = useState<StateValues>(() => appContextValues)
-
-  function updateAppUser(user: object) {
-    console.log("current state: ", state)
-    console.log("Updating app user: ", user)
-    setState({ ...state, user: user })
-  }
-
-  function updateAppJwt(jwt: string) {
-    console.log("current state: ", state)
-    console.log("Updating app jwt", jwt)
-    setState({ ...state, jwtToken: jwt })
-  }
-
-  const { jwtToken, theme, lang, user } = state
-  const values: AppContextValues = {
-    jwtToken,
-    theme,
-    lang,
-    user,
-    updateAppUser,
-    updateAppJwt
+  const [state, setState] = useState<ContextValues>(defaultState)
+  const setContextState = (partial: Partial<ContextValues>) => {
+    setState(prevState => ({
+      ...prevState,
+      ...partial
+    }))
   }
 
   useEffect(() => {
@@ -67,7 +58,11 @@ export const AppContextProvider = (props: any) => {
     }
   }, [])
 
-  return <AppContext.Provider value={values} {...props} />
+  return (
+    <AppContext.Provider value={{ contextState: state, setContextState }}>
+      {props.children}
+    </AppContext.Provider>
+  )
 }
 
-export const useAppContextProvider = () => useContext(AppContext)
+export const useAppContext = () => useContext(AppContext)

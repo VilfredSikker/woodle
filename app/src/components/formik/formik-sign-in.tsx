@@ -1,17 +1,22 @@
-import { Auth } from "aws-amplify"
+import { API, Auth, graphqlOperation } from "aws-amplify"
 import { useFormik } from "formik"
-import React from "react"
+import React, { useContext } from "react"
+import * as mutations from "../../graphql/mutations"
+import * as queries from "../../graphql/queries"
 import { saveJwtTokenToStorage } from "../../utils/auth"
 import StyledButton from "../basics/button/button"
 import InputField from "../basics/input-field/input-field"
-import { useAppContextProvider } from "../context/app-context"
+import {
+  useAppContext,
+  ContextStateValues,
+  AppContext
+} from "../context/app-context"
 import LoginLayout from "../layout/login-layout/login-layout"
-import Amplify, { API, graphqlOperation } from "aws-amplify"
-import * as mutations from "../../graphql/mutations"
-import * as queries from "../../graphql/queries"
+import { createContext } from "vm"
 
 const FormikSignIn = (props: any) => {
-  const { updateAppUser, updateAppJwt } = useAppContextProvider()
+  const { contextState, setContextState } = useContext(AppContext)
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -53,7 +58,7 @@ const FormikSignIn = (props: any) => {
         // username is a unique name, which is why this is safe
         if (items.length > 0) {
           let newUser = items[0]
-          updateAppUser(newUser)
+          setContextState({ user: newUser })
         } else {
           const input = {
             username: username
@@ -64,7 +69,7 @@ const FormikSignIn = (props: any) => {
             .then((result: any) => {
               let newUser = result.data.createUser
 
-              updateAppUser(newUser)
+              setContextState({ user: newUser })
             })
             .catch((e: any) => console.log("Couldn't create user: ", e))
         }
@@ -78,7 +83,7 @@ const FormikSignIn = (props: any) => {
         let accessToken = data.getAccessToken()
         let jwt: string = accessToken.getJwtToken()
 
-        updateAppJwt(jwt)
+        setContextState({ jwtToken: jwt })
 
         saveJwtTokenToStorage(jwt)
       })
