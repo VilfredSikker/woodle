@@ -55,6 +55,7 @@ export const AppContextProvider = (props: any) => {
       console.log("storageJwt != null")
       setState({ ...state, jwtToken: storageJwt })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

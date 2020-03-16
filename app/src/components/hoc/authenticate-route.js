@@ -4,7 +4,7 @@ import { isSignedIn } from "../../utils/auth"
 import { AppContext } from "../context/app-context"
 
 export default WrappedComponent => props => {
-  const { contextState, setContextState } = useContext(AppContext)
+  const { contextState } = useContext(AppContext)
   const { jwtToken } = contextState
   if (!isSignedIn(jwtToken)) {
     console.log("Not logged in: ", jwtToken)

@@ -1,11 +1,9 @@
 import { Auth } from "aws-amplify"
 import { useFormik } from "formik"
 import React from "react"
-import { Redirect } from "react-router-dom"
-import LoginLayout from "../layout/login-layout/login-layout"
-import InputField from "../basics/input-field/input-field"
 import StyledButton from "../basics/button/button"
-import { createUser } from "../../graphql/usersAPI"
+import InputField from "../basics/input-field/input-field"
+import LoginLayout from "../layout/login-layout/login-layout"
 
 const FormikConfirmSignUp = (props: any) => {
   const formik = useFormik({

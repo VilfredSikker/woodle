@@ -39,4 +39,5 @@ export const deleteUser = async id => {
   )
     .then(data => console.log("Deleting user: ", data))
     .catch(e => console.log("Error on deleing user: ", id, e))
+  console.log("deleted user", deletedUser)
 }

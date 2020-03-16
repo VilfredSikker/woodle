@@ -6,16 +6,11 @@ import * as queries from "../../graphql/queries"
 import { saveJwtTokenToStorage } from "../../utils/auth"
 import StyledButton from "../basics/button/button"
 import InputField from "../basics/input-field/input-field"
-import {
-  useAppContext,
-  ContextStateValues,
-  AppContext
-} from "../context/app-context"
+import { AppContext } from "../context/app-context"
 import LoginLayout from "../layout/login-layout/login-layout"
-import { createContext } from "vm"
 
 const FormikSignIn = (props: any) => {
-  const { contextState, setContextState } = useContext(AppContext)
+  const { setContextState } = useContext(AppContext)
 
   const formik = useFormik({
     initialValues: {
@@ -28,16 +23,12 @@ const FormikSignIn = (props: any) => {
         password: values.password
       })
         .then(e => {
-          console.log("step 1")
           return addUserToDB(values.username)
         })
         .then(e => {
-          console.log("step 2")
           return saveJwtOnLogin()
         })
         .then(e => {
-          console.log("step 3")
-          console.log("step 3")
           props.history.push("/app/map")
         })
         .catch(err => console.log("error with sign up ", err))

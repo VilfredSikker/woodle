@@ -23,6 +23,7 @@ const Profile = () => {
 
     console.log("jwt: ", jwtToken)
     console.log("user: ", user)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const getListUsers = async () => {
@@ -34,7 +35,6 @@ const Profile = () => {
   }
 
   const createUsers = (data: any) => {
-    console.log("Create users input: ", data)
     let users: User[] = data.map((item: any) => {
       let user: User = {
         id: item.id,
@@ -46,33 +46,7 @@ const Profile = () => {
       return user
     })
 
-    console.log("Create users output: ", users)
-
     setUsers(users)
-  }
-
-  const fetchUser = async (username: number) => {
-    let user
-
-    getUser(username)
-      .then(data => (user = data))
-      .catch(e => console.log("Error with getUser: ", e))
-  }
-
-  const addTestUser = async () => {
-    createUser("Another Test")
-  }
-
-  const handleButtonClicked = () => {
-    addTestUser()
-  }
-
-  const handleButtonClicked1 = () => {
-    fetchUser(1)
-  }
-
-  const handleDeleteUser = (id: string) => {
-    deleteUser(id)
   }
 
   return (
@@ -81,13 +55,11 @@ const Profile = () => {
       <ul>
         <li>Name: Your name will appear here</li>
         <li>E-mail: And here goes the mail</li>
-        <button onClick={handleButtonClicked}>Add test user</button>
-        <button onClick={handleButtonClicked1}>Get testUser</button>
       </ul>
 
       <div>
         {users.map((user, index) => (
-          <p key={index} onClick={() => handleDeleteUser(user.id)}>
+          <p key={index} onClick={() => console.log(user.username)}>
             {user.username}
           </p>
         ))}
