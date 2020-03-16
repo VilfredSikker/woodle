@@ -1,11 +1,11 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Redirect } from "react-router-dom"
 import { isSignedIn } from "../../utils/auth"
-import { useAppContextProvider } from "../context/app-context"
+import { AppContext } from "../context/app-context"
 
 export default WrappedComponent => props => {
-  const { jwtToken } = useAppContextProvider()
-
+  const { contextState, setContextState } = useContext(AppContext)
+  const { jwtToken } = contextState
   if (!isSignedIn(jwtToken)) {
     console.log("Not logged in: ", jwtToken)
     return (

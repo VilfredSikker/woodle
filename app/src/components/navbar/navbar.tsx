@@ -11,10 +11,10 @@ import {
   Toolbar
 } from "@material-ui/core"
 import MenuIcon from "@material-ui/icons/Menu"
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useContext } from "react"
 import { Link } from "react-router-dom"
 import { isSignedIn, logout } from "../../utils/auth"
-import { useAppContextProvider } from "../context/app-context"
+import { AppContext } from "../context/app-context"
 
 const useStyles = makeStyles({
   container: {
@@ -29,7 +29,8 @@ const useStyles = makeStyles({
 })
 
 const Navbar = () => {
-  const { jwtToken, updateAppJwt, updateAppUser } = useAppContextProvider()
+  const { contextState, setContextState } = useContext(AppContext)
+  const { jwtToken } = contextState
   const styles = useStyles()
   const loggedIn = isSignedIn(jwtToken)
   const [openBurger, setOpenBurger] = useState(false)
@@ -84,8 +85,7 @@ const Navbar = () => {
       </Button>
       <Button
         onClick={e => {
-          updateAppJwt("")
-          updateAppUser({})
+          setContextState({ jwtToken: "", user: {} })
           logout()
         }}
       >

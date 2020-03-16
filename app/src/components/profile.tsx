@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react"
-import aws_exports from "../aws-exports"
 import Amplify from "aws-amplify"
-import { useAppContextProvider } from "./context/app-context"
-import { listUsers, getUser, createUser, deleteUser } from "../graphql/usersAPI"
+import React, { useContext, useEffect, useState } from "react"
+import aws_exports from "../aws-exports"
+import { createUser, deleteUser, getUser, listUsers } from "../graphql/usersAPI"
+import { AppContext } from "./context/app-context"
 
 Amplify.configure(aws_exports)
 
@@ -15,7 +15,8 @@ interface User {
 
 const Profile = () => {
   const [users, setUsers] = useState<User[]>([])
-  const { jwtToken, user } = useAppContextProvider()
+  const { contextState, setContextState } = useContext(AppContext)
+  const { jwtToken, user } = contextState
 
   useEffect(() => {
     getListUsers()

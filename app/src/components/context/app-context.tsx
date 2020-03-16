@@ -29,7 +29,6 @@ const defaultState: ContextValues = {
 
 const initialValues: ContextState = {
   contextState: defaultState,
-
   setContextState: () => console.log("Remember to use the provider")
 }
 
