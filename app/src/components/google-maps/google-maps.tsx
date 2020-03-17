@@ -154,7 +154,7 @@ const GoogleMaps = () => {
     //const distance = calculateDistance(runCoords)
     const reducedPaths = reducePaths(runTracker.coordinates)
     console.log("run duration: ", runDuration)
-    console.log(reducePaths)
+    console.log("reducedPaths", reducedPaths)
 
     setRunTracker({ ...runTracker, active: false })
   }
@@ -236,7 +236,7 @@ const GoogleMaps = () => {
         }
       })
 
-    console.log("reduced paths: ", reducedPaths)
+    return reducedPaths
   }
 
   return (
