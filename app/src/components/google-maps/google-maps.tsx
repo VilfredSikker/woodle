@@ -152,7 +152,9 @@ const GoogleMaps = () => {
     const runDuration = startTime ? endTime - startTime : 0
 
     //const distance = calculateDistance(runCoords)
+    const reducedPaths = reducePaths(runTracker.coordinates)
     console.log("run duration: ", runDuration)
+    console.log(reducePaths)
 
     setRunTracker({ ...runTracker, active: false })
   }
@@ -217,6 +219,25 @@ const GoogleMaps = () => {
       </>
     </OverlayView>
   )
+
+  const reducePaths = (paths: Position[] | undefined) => {
+    var previousPath: Position = { lat: -99999999999, lng: -9999999999999 }
+    var reducedPaths: Position[] = []
+
+    paths &&
+      paths.forEach(element => {
+        if (
+          element.lat === previousPath.lat &&
+          element.lng === previousPath.lng
+        ) {
+        } else {
+          reducedPaths.push(element)
+          previousPath = element
+        }
+      })
+
+    console.log("reduced paths: ", reducedPaths)
+  }
 
   return (
     <>
