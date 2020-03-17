@@ -9,9 +9,11 @@ import React, { useEffect, useState } from "react"
 
 import PlayButton from "./play-button"
 import StopButton from "./stop-button"
-import { number } from "yup"
+import MapStyles from "./map-styles"
 
-interface TimeTracker {
+interface RunTracker {
+  coordinates?: Position[]
+  active?: boolean
   startTime?: number | null
   endTime?: number | null
 }
@@ -51,10 +53,10 @@ const GoogleMaps = () => {
     return defaultState
   })
 
-  const [runActive, setRunActive] = useState(false)
-  const [runCoordinates, setRunCoordinates] = useState<Position[]>([])
-  const [timeTracker, setTimeTracker] = useState<TimeTracker>(() => {
-    const defaultState: TimeTracker = {
+  const [runTracker, setRunTracker] = useState<RunTracker>(() => {
+    const defaultState: RunTracker = {
+      coordinates: [],
+      active: false,
       startTime: null,
       endTime: null
     }
@@ -62,17 +64,24 @@ const GoogleMaps = () => {
   })
 
   useEffect(() => {
+    console.log("Calling map useEffect")
     initiateMap()
+  }, [])
+
+  useEffect(() => {
+    console.log("Calling useEffect with active: ", runTracker.active)
+    navigator.geolocation.watchPosition(trackPath, errorCallback, {
+      enableHighAccuracy: true
+    })
 
     return () => {
       let id = navigator.geolocation.watchPosition(success, errorCallback)
       navigator.geolocation.clearWatch(id)
     }
-  })
+  }, [runTracker.active])
 
   function initiateMap() {
     currentPosition()
-    navigator.geolocation.watchPosition(trackPath, errorCallback)
   }
 
   const currentPosition = () => {
@@ -84,7 +93,6 @@ const GoogleMaps = () => {
   }
 
   function trackPath(position: any) {
-    console.log("track path")
     var latitude = position.coords.latitude
     var longitude = position.coords.longitude
 
@@ -93,12 +101,12 @@ const GoogleMaps = () => {
       lng: longitude
     }
 
-    if (runActive) {
+    if (runTracker.active) {
       console.log("Adding position: ", myPosition)
-      var coords = runCoordinates
-      coords.push(myPosition)
-      setRunCoordinates(coords)
-      console.log("Coordinates", coords)
+      var coords = runTracker.coordinates
+      coords?.push(myPosition)
+      console.log("Coords: ", coords)
+      setRunTracker({ ...runTracker, coordinates: coords })
     }
 
     setPlayerPosition(myPosition)
@@ -126,34 +134,30 @@ const GoogleMaps = () => {
     const today = new Date()
     const startTime = today.getHours() + today.getMinutes() + today.getSeconds()
 
-    setTimeTracker({ startTime: startTime })
-    setRunActive(true)
-    setRunCoordinates([])
+    setRunTracker({
+      ...runTracker,
+      coordinates: [],
+      startTime: startTime,
+      active: true
+    })
   }
 
   const onStopClicked = () => {
-    if (runActive) {
-      console.log("Ending run")
-      const today = new Date()
-      const endTime = today.getHours() + today.getMinutes() + today.getSeconds()
-      const startTime = timeTracker.startTime
-      console.log("Endtime and start time: ", endTime, startTime)
+    console.log("Ending run")
+    const today = new Date()
+    const endTime = today.getHours() + today.getMinutes() + today.getSeconds()
+    const startTime = runTracker.startTime
+    console.log("Endtime and start time: ", endTime, startTime)
 
-      const runDuration = startTime ? endTime - startTime : 0
-      const runCoords = runCoordinates
-      const distance = calculateDistance(runCoords)
-      console.log("run coordinates: ", runCoords)
-      console.log("run duration: ", runDuration)
-      console.log("run distance: ", distance)
-      alert("Distance: " + distance)
+    const runDuration = startTime ? endTime - startTime : 0
 
-      setRunCoordinates([])
-      setRunActive(false)
-    }
+    //const distance = calculateDistance(runCoords)
+    console.log("run duration: ", runDuration)
+
+    setRunTracker({ ...runTracker, active: false })
   }
 
   const calculateDistance = (paths: Position[]) => {
-    console.log("Calculating distance for: ", paths)
     var R = 6371e3 // metres
     var distance = 0
     if (paths.length > 2) {
@@ -181,7 +185,6 @@ const GoogleMaps = () => {
       }
     }
 
-    console.log("Distance:")
     return distance
   }
 
@@ -217,7 +220,12 @@ const GoogleMaps = () => {
 
   return (
     <>
-      {runCoordinates.map((item: Position, index: number) => {
+      <p>Run Coordinates: {runTracker.coordinates?.length}</p>
+      <p>
+        Run distance:{" "}
+        {runTracker.coordinates && calculateDistance(runTracker.coordinates)}
+      </p>
+      {runTracker.coordinates?.map((item: Position, index: number) => {
         return <p key={index}>{item.lat}</p>
       })}
       <LoadScript
@@ -234,11 +242,14 @@ const GoogleMaps = () => {
           zoom={18}
           center={playerPosition}
           options={{
-            disableDefaultUI: true
+            disableDefaultUI: true,
+            styles: MapStyles
           }}
         >
-          <Polyline options={runPathOptions} path={runCoordinates} />
-          {runActive ? pausedOverlay : activeOverlay}
+          {runTracker.active && (
+            <Polyline options={runPathOptions} path={runTracker.coordinates} />
+          )}
+          {runTracker.active ? pausedOverlay : activeOverlay}
           <Circle center={playerPosition} radius={4} options={circleOptions} />
         </GoogleMap>
       </LoadScript>
