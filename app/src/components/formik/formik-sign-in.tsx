@@ -10,7 +10,7 @@ import { AppContext } from "../context/app-context"
 import LoginLayout from "../layout/login-layout/login-layout"
 
 const FormikSignIn = (props: any) => {
-  const { setContextState } = useContext(AppContext)
+  const { contextState, setContextState } = useContext(AppContext)
 
   const formik = useFormik({
     initialValues: {
@@ -48,8 +48,9 @@ const FormikSignIn = (props: any) => {
 
         // username is a unique name, which is why this is safe
         if (items.length > 0) {
-          let newUser = items[0]
-          setContextState({ user: newUser })
+          let user = items[0]
+          console.log("User: ", user)
+          setContextState({ user: user })
         } else {
           const input = {
             username: username
@@ -59,7 +60,7 @@ const FormikSignIn = (props: any) => {
           API.graphql(graphqlOperation(mutations.createUser, { input: input }))
             .then((result: any) => {
               let newUser = result.data.createUser
-
+              console.log("New User: ", newUser)
               setContextState({ user: newUser })
             })
             .catch((e: any) => console.log("Couldn't create user: ", e))

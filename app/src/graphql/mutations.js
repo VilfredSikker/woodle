@@ -9,30 +9,11 @@ export const createUser = `mutation CreateUser(
     id
     username
     activities {
-      id
-      name
-      type
-      length
-      calories
-      duration
-      steps
+      nextToken
     }
     friends {
       id
       username
-      activities {
-        id
-        name
-        type
-        length
-        calories
-        duration
-        steps
-      }
-      friends {
-        id
-        username
-      }
     }
   }
 }
@@ -45,30 +26,11 @@ export const updateUser = `mutation UpdateUser(
     id
     username
     activities {
-      id
-      name
-      type
-      length
-      calories
-      duration
-      steps
+      nextToken
     }
     friends {
       id
       username
-      activities {
-        id
-        name
-        type
-        length
-        calories
-        duration
-        steps
-      }
-      friends {
-        id
-        username
-      }
     }
   }
 }
@@ -81,30 +43,11 @@ export const deleteUser = `mutation DeleteUser(
     id
     username
     activities {
-      id
-      name
-      type
-      length
-      calories
-      duration
-      steps
+      nextToken
     }
     friends {
       id
       username
-      activities {
-        id
-        name
-        type
-        length
-        calories
-        duration
-        steps
-      }
-      friends {
-        id
-        username
-      }
     }
   }
 }
@@ -115,6 +58,7 @@ export const createActivity = `mutation CreateActivity(
 ) {
   createActivity(input: $input, condition: $condition) {
     id
+    userID
     name
     type
     length
@@ -130,6 +74,7 @@ export const updateActivity = `mutation UpdateActivity(
 ) {
   updateActivity(input: $input, condition: $condition) {
     id
+    userID
     name
     type
     length
@@ -145,6 +90,7 @@ export const deleteActivity = `mutation DeleteActivity(
 ) {
   deleteActivity(input: $input, condition: $condition) {
     id
+    userID
     name
     type
     length

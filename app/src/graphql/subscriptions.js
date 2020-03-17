@@ -6,30 +6,11 @@ export const onCreateUser = `subscription OnCreateUser($owner: String!) {
     id
     username
     activities {
-      id
-      name
-      type
-      length
-      calories
-      duration
-      steps
+      nextToken
     }
     friends {
       id
       username
-      activities {
-        id
-        name
-        type
-        length
-        calories
-        duration
-        steps
-      }
-      friends {
-        id
-        username
-      }
     }
   }
 }
@@ -39,30 +20,11 @@ export const onUpdateUser = `subscription OnUpdateUser($owner: String!) {
     id
     username
     activities {
-      id
-      name
-      type
-      length
-      calories
-      duration
-      steps
+      nextToken
     }
     friends {
       id
       username
-      activities {
-        id
-        name
-        type
-        length
-        calories
-        duration
-        steps
-      }
-      friends {
-        id
-        username
-      }
     }
   }
 }
@@ -72,30 +34,11 @@ export const onDeleteUser = `subscription OnDeleteUser($owner: String!) {
     id
     username
     activities {
-      id
-      name
-      type
-      length
-      calories
-      duration
-      steps
+      nextToken
     }
     friends {
       id
       username
-      activities {
-        id
-        name
-        type
-        length
-        calories
-        duration
-        steps
-      }
-      friends {
-        id
-        username
-      }
     }
   }
 }
@@ -103,6 +46,7 @@ export const onDeleteUser = `subscription OnDeleteUser($owner: String!) {
 export const onCreateActivity = `subscription OnCreateActivity($owner: String!) {
   onCreateActivity(owner: $owner) {
     id
+    userID
     name
     type
     length
@@ -115,6 +59,7 @@ export const onCreateActivity = `subscription OnCreateActivity($owner: String!) 
 export const onUpdateActivity = `subscription OnUpdateActivity($owner: String!) {
   onUpdateActivity(owner: $owner) {
     id
+    userID
     name
     type
     length
@@ -127,6 +72,7 @@ export const onUpdateActivity = `subscription OnUpdateActivity($owner: String!) 
 export const onDeleteActivity = `subscription OnDeleteActivity($owner: String!) {
   onDeleteActivity(owner: $owner) {
     id
+    userID
     name
     type
     length

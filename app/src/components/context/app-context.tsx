@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from "react"
 import { getJwtTokenFromStorage } from "../../utils/auth"
+import { User } from "../../shared-interfaces"
 
 interface ContextValues {
   jwtToken: string
   theme: string
   lang: string
-  user: object
+  user: User
 }
 
 interface ContextState {
@@ -24,7 +25,7 @@ const defaultState: ContextValues = {
   jwtToken: "",
   theme: "light",
   lang: "dk",
-  user: {}
+  user: { id: "", username: "", friends: null, activities: null }
 }
 
 const initialValues: ContextState = {

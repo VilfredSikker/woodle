@@ -5,11 +5,15 @@ import {
   OverlayView,
   Polyline
 } from "@react-google-maps/api"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 
 import PlayButton from "./play-button"
 import StopButton from "./stop-button"
 import MapStyles from "./map-styles"
+import { AppContext } from "../context/app-context"
+import { Activity } from "../../shared-interfaces"
+import { API, graphqlOperation } from "aws-amplify"
+import * as mutations from "../../graphql/mutations"
 
 interface RunTracker {
   coordinates?: Position[]
@@ -45,6 +49,7 @@ const circleOptions = {
 }
 
 const GoogleMaps = () => {
+  const { contextState } = useContext(AppContext)
   const [playerPosition, setPlayerPosition] = useState(() => {
     const defaultState: Position = {
       lat: 55.672,
@@ -106,6 +111,7 @@ const GoogleMaps = () => {
       var coords = runTracker.coordinates
       coords?.push(myPosition)
       console.log("Coords: ", coords)
+      coords = reducePaths(coords)
       setRunTracker({ ...runTracker, coordinates: coords })
     }
 
@@ -146,6 +152,8 @@ const GoogleMaps = () => {
     console.log("Ending run")
     const today = new Date()
     const endTime = today.getHours() + today.getMinutes() + today.getSeconds()
+    const date =
+      today.getDay() + today.getMonth() + today.getFullYear() + endTime
     const startTime = runTracker.startTime
     console.log("Endtime and start time: ", endTime, startTime)
 
@@ -153,8 +161,22 @@ const GoogleMaps = () => {
 
     //const distance = calculateDistance(runCoords)
     const reducedPaths = reducePaths(runTracker.coordinates)
+    const length = calculateDistance(reducedPaths)
+    const calories = calculateCalories(length)
+    const steps = calculateSteps(length)
     console.log("run duration: ", runDuration)
     console.log("reducedPaths", reducedPaths)
+
+    const input: Activity = {
+      userID: contextState.user.id,
+      name: date.toString(),
+      duration: runDuration,
+      length: length,
+      calories: calories,
+      steps: steps
+    }
+
+    API.graphql(graphqlOperation(mutations.createActivity, { input: input }))
 
     setRunTracker({ ...runTracker, active: false })
   }
@@ -188,6 +210,19 @@ const GoogleMaps = () => {
     }
 
     return distance
+  }
+
+  const calculateCalories = (distance: number) => {
+    // https://www.runnersworld.com/training/a20801301/calories-burned-running-calculator/
+    // Took default number and multiplying. Don't want to deal with weight and other factors
+    const calories = distance * 0.0625
+    return Math.round(calories)
+  }
+
+  const calculateSteps = (distance: number) => {
+    // steps calculations from https://www.quora.com/On-average-how-many-steps-does-it-take-to-travel-100-meters
+    const steps = distance * 1.3
+    return Math.round(steps)
   }
 
   const activeOverlay = (

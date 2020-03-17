@@ -85,7 +85,11 @@ const Navbar = () => {
       </Button>
       <Button
         onClick={e => {
-          setContextState({ jwtToken: "", user: {} })
+          setContextState({
+            ...contextState,
+            jwtToken: "",
+            user: { id: "", username: "", friends: null, activities: null }
+          })
           logout()
         }}
       >

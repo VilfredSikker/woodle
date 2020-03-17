@@ -6,67 +6,29 @@ export const getUserByName = `query GetUserByName($username: String!) {
     id
     username
     activities {
-      id
-      name
-      type
-      length
-      calories
-      duration
-      steps
+      nextToken
     }
     friends {
       id
       username
-      activities {
-        id
-        name
-        type
-        length
-        calories
-        duration
-        steps
-      }
-      friends {
-        id
-        username
-      }
     }
   }
 }
-`;
+`
 export const getUser = `query GetUser($id: ID!) {
   getUser(id: $id) {
     id
     username
     activities {
-      id
-      name
-      type
-      length
-      calories
-      duration
-      steps
+      nextToken
     }
     friends {
       id
       username
-      activities {
-        id
-        name
-        type
-        length
-        calories
-        duration
-        steps
-      }
-      friends {
-        id
-        username
-      }
     }
   }
 }
-`;
+`
 export const listUsers = `query ListUsers(
   $filter: ModelUserFilterInput
   $limit: Int
@@ -76,27 +38,28 @@ export const listUsers = `query ListUsers(
     items {
       id
       username
-      activities {
-        id
-        name
-        type
-        length
-        calories
-        duration
-        steps
-      }
       friends {
-        id
         username
       }
+      activities {
+        items {
+          id
+          name
+          length
+          duration
+          calories
+          type
+          steps
+        }
+      }
     }
-    nextToken
   }
 }
-`;
+`
 export const getActivity = `query GetActivity($id: ID!) {
   getActivity(id: $id) {
     id
+    userID
     name
     type
     length
@@ -105,7 +68,7 @@ export const getActivity = `query GetActivity($id: ID!) {
     steps
   }
 }
-`;
+`
 export const listActivitys = `query ListActivitys(
   $filter: ModelActivityFilterInput
   $limit: Int
@@ -114,6 +77,7 @@ export const listActivitys = `query ListActivitys(
   listActivitys(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      userID
       name
       type
       length
@@ -124,4 +88,4 @@ export const listActivitys = `query ListActivitys(
     nextToken
   }
 }
-`;
+`

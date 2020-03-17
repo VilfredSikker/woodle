@@ -1,8 +1,9 @@
-import Amplify from "aws-amplify"
+import Amplify, { API, graphqlOperation } from "aws-amplify"
 import React, { useContext, useEffect, useState } from "react"
 import aws_exports from "../aws-exports"
 import { createUser, deleteUser, getUser, listUsers } from "../graphql/usersAPI"
 import { AppContext } from "./context/app-context"
+import * as queries from "../graphql/queries"
 
 Amplify.configure(aws_exports)
 
@@ -27,11 +28,8 @@ const Profile = () => {
   }, [])
 
   const getListUsers = async () => {
-    listUsers()
-      .then(data => {
-        createUsers(data.data.listUsers.items)
-      })
-      .catch(e => console.log("Error with getUsers: ", e))
+    const data = await API.graphql(graphqlOperation(queries.listUsers))
+    console.log("Get List Users Data: ", data)
   }
 
   const createUsers = (data: any) => {

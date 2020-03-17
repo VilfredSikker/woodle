@@ -12,12 +12,13 @@ type User
   ) {
   id: ID!
   username: String!
-  activities: [Activity]
+  activities: [Activity] @connection(keyName: "byActivity", fields: ["id"])
   friends: [User]
 }
 
 type Activity
   @model
+  @key(name: "byActivity", fields: ["userID", "name"])
   @auth(
     rules: [
       {
@@ -29,6 +30,7 @@ type Activity
     ]
   ) {
   id: ID!
+  userID: ID!
   name: String!
   type: ActivityType
   length: Float
