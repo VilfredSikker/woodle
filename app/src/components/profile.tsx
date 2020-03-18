@@ -1,68 +1,130 @@
+import { AppBar, Tab, Tabs } from "@material-ui/core"
 import Amplify, { API, graphqlOperation } from "aws-amplify"
 import React, { useContext, useEffect, useState } from "react"
 import aws_exports from "../aws-exports"
-import { AppContext } from "./context/app-context"
 import * as queries from "../graphql/queries"
-import { User, Activity } from "../shared-interfaces"
-import { Tabs, Tab, AppBar } from "@material-ui/core"
+import { Activity, Friend, User } from "../shared-interfaces"
 import TabPanel from "./basics/tabpanel/tabpanel"
+import { AppContext } from "./context/app-context"
 
 Amplify.configure(aws_exports)
 
+interface ReformedState {
+  activities: Activity[]
+  friends: Friend[]
+}
+
 const Profile = () => {
-  const [users, setUsers] = useState<User[]>([])
+  const [reformedState, setReformedState] = useState<ReformedState>(() => {
+    const defaultState = {
+      activities: [],
+      friends: []
+    }
+
+    return defaultState
+  })
+
   const [tabValue, setTabValue] = useState(0)
   const { contextState, setContextState } = useContext(AppContext)
   const { jwtToken, user } = contextState
-  const { activities, friends } = user
 
   useEffect(() => {
-    getListUsers()
+    getActivities()
+    getFriends()
 
     console.log("jwt: ", jwtToken)
     console.log("user: ", user)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const getListUsers = async () => {
-    const result = await API.graphql(graphqlOperation(queries.listUsers))
+  const getActivities = async () => {
+    const filter = {
+      userID: {
+        eq: user.id
+      }
+    }
+    const result = await API.graphql(
+      graphqlOperation(queries.listActivitys, { filter: filter })
+    )
 
-    createUsers(result.data)
+    createActivities(result)
   }
 
-  const createUsers = (data: any) => {
-    console.log(data)
-    let users: User[] = data.listUsers.items.map((item: any) => {
-      let user: User = {
+  const getFriends = async () => {
+    const filter = {
+      userID: {
+        eq: user.id
+      }
+    }
+    const result = await API.graphql(
+      graphqlOperation(queries.getUser, { id: filter })
+    )
+    createFriends(result)
+  }
+
+  const createActivities = (result: any) => {
+    const items = result.data.listActivitys.items
+
+    let activities: Activity[] = items.map((item: Activity) => {
+      let activity: Activity = {
         id: item.id,
-        username: item.username,
-        activities: item.activties,
-        friends: item.friends
+        userID: item.userID,
+        name: item.name,
+        length: item.length,
+        duration: item.duration,
+        calories: item.calories,
+        steps: item.steps,
+        type: item.type
+      }
+
+      return activity
+    })
+
+    setReformedState({ ...reformedState, activities: activities })
+  }
+
+  const createFriends = (result: any) => {
+    let items = result.data.listUsers.items
+
+    let friends: Friend[] = items.map((item: User) => {
+      let user: Friend = {
+        id: item.id,
+        username: item.username
       }
 
       return user
     })
 
-    setUsers(users)
+    setReformedState({ ...reformedState, friends: friends })
   }
 
-  const handleTabChange = (event: any, newValue: number) => {
+  const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setTabValue(newValue)
   }
 
-  const ActivityTab = activities ? (
+  const ActivityTab = (
     <div>
-      {contextState.user.activities?.map((item: Activity) => (
-        <div>
+      {reformedState.activities.map((item: Activity, index: number) => (
+        <div key={index}>
           <h2>{item.name}</h2>
           <p>{item.length}</p>
           <p>{item.duration}</p>
         </div>
       ))}
     </div>
-  ) : (
-    <div></div>
   )
+
+  const FriendsTab = (
+    <div>
+      {reformedState.friends.map((friend: Friend) => (
+        <div>
+          <h2>{friend.username}</h2>
+        </div>
+      ))}
+    </div>
+  )
+
+  const StatsTab = <div>StatsTab</div>
 
   return (
     <>
@@ -72,23 +134,16 @@ const Profile = () => {
         <li>E-mail: And here goes the mail</li>
       </ul>
 
-      <div>
-        {users.map((user, index) => (
-          <p key={index} onClick={() => console.log(user.username)}>
-            {user.username}
-          </p>
-        ))}
-      </div>
-      <AppBar position="static" color="default">
+      <AppBar position="sticky" color="default">
         <Tabs value={tabValue} onChange={handleTabChange}>
           <Tab label="Stats" />
           <Tab label="Activities" />
           <Tab label="Friends" />
         </Tabs>
       </AppBar>
-      <TabPanel index={0} value={tabValue}>
-        <div></div>
-      </TabPanel>
+      {0 === tabValue && StatsTab}
+      {1 === tabValue && ActivityTab}
+      {2 === tabValue && FriendsTab}
     </>
   )
 }

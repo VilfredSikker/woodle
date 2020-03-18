@@ -5,6 +5,11 @@ export interface User {
   activities: Activity[] | null
 }
 
+export interface Friend {
+  id: string
+  username: string
+}
+
 export interface Activity {
   userID: string
   name: string
