@@ -1,17 +1,27 @@
-import { AppBar, Tab, Tabs } from "@material-ui/core"
+import { AppBar, Tab, Tabs, Card, Paper } from "@material-ui/core"
 import Amplify, { API, graphqlOperation } from "aws-amplify"
 import React, { useContext, useEffect, useState } from "react"
-import aws_exports from "../aws-exports"
-import * as queries from "../graphql/queries"
-import { Activity, Friend, User } from "../shared-interfaces"
-import TabPanel from "./basics/tabpanel/tabpanel"
-import { AppContext } from "./context/app-context"
+import aws_exports from "../../../aws-exports"
+import * as queries from "../../../graphql/queries"
+import { Activity, Friend, User } from "../../../shared-interfaces"
+import TabPanel from "../../basics/tabpanel/tabpanel"
+import { AppContext } from "../../context/app-context"
+import styles from "./profile.module.scss"
+import StyledPaper from "./../../basics/paper/paper"
+import StyledCard from "./../../basics/card/card"
 
 Amplify.configure(aws_exports)
 
 interface ReformedState {
   activities: Activity[]
   friends: Friend[]
+}
+
+interface UserStats {
+  totalLength: number
+  totalDuration: number
+  totalCalories: number
+  totalSteps: number
 }
 
 const Profile = () => {
@@ -124,7 +134,14 @@ const Profile = () => {
     </div>
   )
 
-  const StatsTab = <div>StatsTab</div>
+  const StatsTab = (
+    <div className={styles.statsContainer}>
+      <StyledCard elevation={2}>Total Length</StyledCard>
+      <StyledCard>Total Duration</StyledCard>
+      <StyledCard>Total Calories</StyledCard>
+      <StyledCard>Total Steps</StyledCard>
+    </div>
+  )
 
   return (
     <>
@@ -134,13 +151,20 @@ const Profile = () => {
         <li>E-mail: And here goes the mail</li>
       </ul>
 
-      <AppBar position="sticky" color="default">
-        <Tabs value={tabValue} onChange={handleTabChange}>
+      <StyledPaper position="sticky" color="default">
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
+          centered
+          variant="fullWidth"
+          className={styles.statsTabs}
+        >
           <Tab label="Stats" />
           <Tab label="Activities" />
           <Tab label="Friends" />
         </Tabs>
-      </AppBar>
+      </StyledPaper>
+
       {0 === tabValue && StatsTab}
       {1 === tabValue && ActivityTab}
       {2 === tabValue && FriendsTab}

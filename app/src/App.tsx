@@ -9,7 +9,7 @@ import FormikSignIn from "./components/formik/formik-sign-in"
 import FormikSignUp from "./components/formik/formik-sign-up"
 import requireAuth from "./components/hoc/authenticate-route"
 import Layout from "./components/layout/layout"
-import Profile from "./components/profile"
+import Profile from "./components/pages/profile/profile"
 import Welcome from "./components/welcome"
 import GoogleMaps from "./components/google-maps/google-maps"
 

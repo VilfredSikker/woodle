@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   }
 })
 
-const StyledButton = (props: any, children: any) => {
+const StyledButton = (props: any) => {
   const styles = useStyles()
   return (
     <Button className={styles.button} {...props}>
