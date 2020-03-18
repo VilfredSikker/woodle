@@ -164,12 +164,13 @@ const GoogleMaps = () => {
     const length = calculateDistance(reducedPaths)
     const calories = calculateCalories(length)
     const steps = calculateSteps(length)
+    const name = `${today.getDay()}-${today.getMonth()}-${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
     console.log("run duration: ", runDuration)
     console.log("reducedPaths", reducedPaths)
 
     const input: Activity = {
       userID: contextState.user.id,
-      name: date.toString(),
+      name: name,
       duration: runDuration,
       length: length,
       calories: calories,
