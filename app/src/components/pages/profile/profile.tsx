@@ -127,13 +127,15 @@ const Profile = () => {
   }
 
   const ActivityTab = (
-    <div>
+    <div className={styles.activityContainer}>
       {reformedState.activities.map((item: Activity, index: number) => (
-        <div key={index}>
-          <h2>{item.name}</h2>
-          <p>{item.length}</p>
-          <p>{item.duration}</p>
-        </div>
+        <StyledPaper key={index} className={styles.activity}>
+          <p className={styles.activityName}>{item.name}</p>
+          <p className={styles.activityLength}>Length: {item.length}</p>
+          <p className={styles.activityDuration}>Duration: {item.duration}</p>
+          <p className={styles.activitySteps}>Steps: {item.steps}</p>
+          <p className={styles.activityCalories}>Calories: {item.calories}</p>
+        </StyledPaper>
       ))}
     </div>
   )
@@ -156,10 +158,7 @@ const Profile = () => {
       totalSteps: 0
     }
 
-    console.log("createStats with: ", activities)
-
     activities.forEach((element: Activity) => {
-      console.log("Activity: ", element)
       const cals = element.calories
         ? element.calories + stats.totalCalories
         : stats.totalCalories
@@ -172,7 +171,7 @@ const Profile = () => {
       const steps = element.steps
         ? element.steps + stats.totalSteps
         : stats.totalSteps
-      console.log("get stats: ", cals, duration, length, steps)
+
       stats = {
         totalCalories: cals,
         totalDuration: duration,

@@ -2,7 +2,10 @@ import React from "react"
 import { Card, makeStyles } from "@material-ui/core"
 
 const useStyles = makeStyles({
-  container: {}
+  container: {
+    marginTop: 10,
+    padding: 10
+  }
 })
 
 const StyledPaper = (props: any) => {

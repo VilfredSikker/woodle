@@ -1,13 +1,13 @@
 import { API, Auth, graphqlOperation } from "aws-amplify"
 import { useFormik } from "formik"
 import React, { useContext } from "react"
-import * as mutations from "../../graphql/mutations"
-import * as queries from "../../graphql/queries"
-import { saveJwtTokenToStorage } from "../../utils/auth"
-import StyledButton from "../basics/button/button"
-import InputField from "../basics/input-field/input-field"
-import { AppContext } from "../context/app-context"
-import LoginLayout from "../layout/login-layout/login-layout"
+import * as mutations from "../../../graphql/mutations"
+import * as queries from "../../../graphql/queries"
+import { saveJwtTokenToStorage } from "../../../utils/auth"
+import StyledButton from "../../basics/button/button"
+import InputField from "../../basics/input-field/input-field"
+import { AppContext } from "../../context/app-context"
+import LoginLayout from "../../layout/login-layout/login-layout"
 
 const FormikSignIn = (props: any) => {
   const { contextState, setContextState } = useContext(AppContext)

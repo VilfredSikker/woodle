@@ -2,9 +2,9 @@ import { Auth } from "aws-amplify"
 import { useFormik } from "formik"
 import React from "react"
 import * as Yup from "yup"
-import StyledButton from "../basics/button/button"
-import InputField from "../basics/input-field/input-field"
-import LoginLayout from "../layout/login-layout/login-layout"
+import StyledButton from "../../basics/button/button"
+import InputField from "../../basics/input-field/input-field"
+import LoginLayout from "../../layout/login-layout/login-layout"
 
 const FormikSignUp = (props: any) => {
   const formik = useFormik({

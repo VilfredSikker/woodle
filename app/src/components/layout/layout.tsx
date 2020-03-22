@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react"
 
 import styles from "./layout.module.scss"
-import Navbar from "../navbar/navbar"
+import Navbar from "../basics/navbar/navbar"
 
 interface Props {
   children: ReactNode
