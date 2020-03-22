@@ -9,6 +9,7 @@ import { AppContext } from "../../context/app-context"
 import styles from "./profile.module.scss"
 import StyledPaper from "./../../basics/paper/paper"
 import StyledCard from "./../../basics/card/card"
+import { statSync } from "fs"
 
 Amplify.configure(aws_exports)
 
@@ -34,13 +35,24 @@ const Profile = () => {
     return defaultState
   })
 
+  const [userStats, setUserStats] = useState<UserStats>(() => {
+    const stats: UserStats = {
+      totalCalories: 0,
+      totalDuration: 0,
+      totalLength: 0,
+      totalSteps: 0
+    }
+
+    return stats
+  })
+
   const [tabValue, setTabValue] = useState(0)
   const { contextState, setContextState } = useContext(AppContext)
   const { jwtToken, user } = contextState
 
   useEffect(() => {
     getActivities()
-    getFriends()
+    //getFriends()
 
     console.log("jwt: ", jwtToken)
     console.log("user: ", user)
@@ -56,6 +68,7 @@ const Profile = () => {
     const result = await API.graphql(
       graphqlOperation(queries.listActivitys, { filter: filter })
     )
+    console.log("act result: ", result)
 
     createActivities(result)
   }
@@ -89,6 +102,7 @@ const Profile = () => {
 
       return activity
     })
+    createStats(activities)
 
     setReformedState({ ...reformedState, activities: activities })
   }
@@ -134,12 +148,58 @@ const Profile = () => {
     </div>
   )
 
+  const createStats = (activities: Activity[]) => {
+    var stats: UserStats = {
+      totalCalories: 0,
+      totalDuration: 0,
+      totalLength: 0,
+      totalSteps: 0
+    }
+
+    console.log("createStats with: ", activities)
+
+    activities.forEach((element: Activity) => {
+      console.log("Activity: ", element)
+      const cals = element.calories
+        ? element.calories + stats.totalCalories
+        : stats.totalCalories
+      const duration = element.duration
+        ? element.duration + stats.totalDuration
+        : stats.totalDuration
+      const length = element.length
+        ? element.length + stats.totalLength
+        : stats.totalLength
+      const steps = element.steps
+        ? element.steps + stats.totalSteps
+        : stats.totalSteps
+      console.log("get stats: ", cals, duration, length, steps)
+      stats = {
+        totalCalories: cals,
+        totalDuration: duration,
+        totalLength: length,
+        totalSteps: steps
+      }
+    })
+
+    console.log("Stats: ", stats)
+
+    setUserStats(stats)
+  }
+
   const StatsTab = (
     <div className={styles.statsContainer}>
-      <StyledCard elevation={2}>Total Length</StyledCard>
-      <StyledCard>Total Duration</StyledCard>
-      <StyledCard>Total Calories</StyledCard>
-      <StyledCard>Total Steps</StyledCard>
+      <StyledCard elevation={2}>
+        Total Length: {userStats.totalLength}{" "}
+      </StyledCard>
+      <StyledCard elevation={2}>
+        Total Duration: {userStats.totalDuration}{" "}
+      </StyledCard>
+      <StyledCard elevation={2}>
+        Total Calories: {userStats.totalCalories}{" "}
+      </StyledCard>
+      <StyledCard elevation={2}>
+        Total Steps: {userStats.totalSteps}{" "}
+      </StyledCard>
     </div>
   )
 
