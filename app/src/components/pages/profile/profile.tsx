@@ -10,6 +10,8 @@ import styles from "./profile.module.scss"
 import StyledPaper from "./../../basics/paper/paper"
 import StyledCard from "./../../basics/card/card"
 import { statSync } from "fs"
+import MyActivity from "../../basics/activity/activity"
+import ActivityList from "../../basics/activity/activity-list"
 
 Amplify.configure(aws_exports)
 
@@ -126,20 +128,6 @@ const Profile = () => {
     setTabValue(newValue)
   }
 
-  const ActivityTab = (
-    <div className={styles.activityContainer}>
-      {reformedState.activities.map((item: Activity, index: number) => (
-        <StyledPaper key={index} className={styles.activity}>
-          <p className={styles.activityName}>{item.name}</p>
-          <p className={styles.activityLength}>Length: {item.length}</p>
-          <p className={styles.activityDuration}>Duration: {item.duration}</p>
-          <p className={styles.activitySteps}>Steps: {item.steps}</p>
-          <p className={styles.activityCalories}>Calories: {item.calories}</p>
-        </StyledPaper>
-      ))}
-    </div>
-  )
-
   const FriendsTab = (
     <div>
       {reformedState.friends.map((friend: Friend) => (
@@ -225,7 +213,7 @@ const Profile = () => {
       </StyledPaper>
 
       {0 === tabValue && StatsTab}
-      {1 === tabValue && ActivityTab}
+      {1 === tabValue && <ActivityList activities={reformedState.activities} />}
       {2 === tabValue && FriendsTab}
     </>
   )

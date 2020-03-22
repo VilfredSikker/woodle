@@ -170,6 +170,7 @@ const GoogleMaps = () => {
 
     const input: Activity = {
       userID: contextState.user.id,
+      id: name,
       name: name,
       duration: runDuration,
       length: length,

@@ -12,8 +12,8 @@ export interface Friend {
 
 export interface Activity {
   userID: string
+  id: string
   name: string
-  id?: string
   length?: number
   duration?: number
   calories?: number
