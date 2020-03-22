@@ -18,8 +18,8 @@ import * as mutations from "../../graphql/mutations"
 interface RunTracker {
   coordinates?: Position[]
   active?: boolean
-  startTime?: number | null
-  endTime?: number | null
+  startTime?: Date
+  endTime?: Date
 }
 
 interface Position {
@@ -61,20 +61,18 @@ const GoogleMaps = () => {
   const [runTracker, setRunTracker] = useState<RunTracker>(() => {
     const defaultState: RunTracker = {
       coordinates: [],
-      active: false,
-      startTime: null,
-      endTime: null
+      active: false
     }
     return defaultState
   })
 
   useEffect(() => {
-    console.log("Calling map useEffect")
     initiateMap()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    console.log("Calling useEffect with active: ", runTracker.active)
     navigator.geolocation.watchPosition(trackPath, errorCallback, {
       enableHighAccuracy: true
     })
@@ -83,6 +81,8 @@ const GoogleMaps = () => {
       let id = navigator.geolocation.watchPosition(success, errorCallback)
       navigator.geolocation.clearWatch(id)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [runTracker.active])
 
   function initiateMap() {
@@ -107,10 +107,9 @@ const GoogleMaps = () => {
     }
 
     if (runTracker.active) {
-      console.log("Adding position: ", myPosition)
       var coords = runTracker.coordinates
       coords?.push(myPosition)
-      console.log("Coords: ", coords)
+
       coords = reducePaths(coords)
       setRunTracker({ ...runTracker, coordinates: coords })
     }
@@ -119,7 +118,6 @@ const GoogleMaps = () => {
   }
 
   function success(position: any) {
-    console.log("Success")
     var latitude = position.coords.latitude
     var longitude = position.coords.longitude
 
@@ -136,37 +134,41 @@ const GoogleMaps = () => {
   }
 
   const onPlayClicked = () => {
-    console.log("Starting run")
     const today = new Date()
-    const startTime = today.getHours() + today.getMinutes() + today.getSeconds()
 
     setRunTracker({
       ...runTracker,
       coordinates: [],
-      startTime: startTime,
+      startTime: today,
       active: true
     })
   }
 
   const onStopClicked = () => {
-    console.log("Ending run")
-    const today = new Date()
-    const endTime = today.getHours() + today.getMinutes() + today.getSeconds()
-    const date =
-      today.getDay() + today.getMonth() + today.getFullYear() + endTime
     const startTime = runTracker.startTime
-    console.log("Endtime and start time: ", endTime, startTime)
+    const today = new Date()
+    const endTime = today
 
-    const runDuration = startTime ? endTime - startTime : 0
+    var options = {
+      weekday: "short",
+      year: "numeric",
+      month: "2-digit",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric"
+    }
+
+    const runDuration = startTime?.getTime()
+      ? (endTime.getTime() - startTime.getTime()) / 1000
+      : 0
 
     //const distance = calculateDistance(runCoords)
     const reducedPaths = reducePaths(runTracker.coordinates)
     const length = calculateDistance(reducedPaths)
     const calories = calculateCalories(length)
     const steps = calculateSteps(length)
-    const name = `${today.getDay()}-${today.getMonth()}-${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
-    console.log("run duration: ", runDuration)
-    console.log("reducedPaths", reducedPaths)
+    const name = today.toLocaleString("da", options)
 
     const input: Activity = {
       userID: contextState.user.id,
@@ -178,12 +180,14 @@ const GoogleMaps = () => {
       steps: steps
     }
 
-    API.graphql(graphqlOperation(mutations.createActivity, { input: input }))
+    if (reducePaths.length > 0) {
+      API.graphql(graphqlOperation(mutations.createActivity, { input: input }))
+    }
 
     setRunTracker({ ...runTracker, active: false })
   }
 
-  const calculateDistance = (paths: Position[]) => {
+  const calculateDistance = (paths: Position[]): number => {
     var R = 6371e3 // metres
     var distance = 0
     if (paths.length > 2) {
@@ -211,7 +215,8 @@ const GoogleMaps = () => {
       }
     }
 
-    return distance
+    // Limit decimals to 2
+    return +distance.toFixed(2)
   }
 
   const calculateCalories = (distance: number) => {
@@ -278,14 +283,6 @@ const GoogleMaps = () => {
 
   return (
     <>
-      <p>Run Coordinates: {runTracker.coordinates?.length}</p>
-      <p>
-        Run distance:{" "}
-        {runTracker.coordinates && calculateDistance(runTracker.coordinates)}
-      </p>
-      {runTracker.coordinates?.map((item: Position, index: number) => {
-        return <p key={index}>{item.lat}</p>
-      })}
       <LoadScript
         id="script-loader"
         googleMapsApiKey="AIzaSyDEKSGDimrHDb12-2kflJkrzAcRf3MECsQ"
