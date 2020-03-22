@@ -1,17 +1,15 @@
-import { AppBar, Tab, Tabs, Card, Paper } from "@material-ui/core"
+import { Tab, Tabs } from "@material-ui/core"
 import Amplify, { API, graphqlOperation } from "aws-amplify"
 import React, { useContext, useEffect, useState } from "react"
 import aws_exports from "../../../aws-exports"
+import { deleteActivity } from "../../../graphql/mutations"
 import * as queries from "../../../graphql/queries"
 import { Activity, Friend, User } from "../../../shared-interfaces"
-import TabPanel from "../../basics/tabpanel/tabpanel"
-import { AppContext } from "../../context/app-context"
-import styles from "./profile.module.scss"
-import StyledPaper from "./../../basics/paper/paper"
-import StyledCard from "./../../basics/card/card"
-import { statSync } from "fs"
-import MyActivity from "../../basics/activity/activity"
 import ActivityList from "../../basics/activity/activity-list"
+import { AppContext } from "../../context/app-context"
+import StyledCard from "./../../basics/card/card"
+import StyledPaper from "./../../basics/paper/paper"
+import styles from "./profile.module.scss"
 
 Amplify.configure(aws_exports)
 
@@ -168,8 +166,6 @@ const Profile = () => {
       }
     })
 
-    console.log("Stats: ", stats)
-
     setUserStats(stats)
   }
 
@@ -189,6 +185,16 @@ const Profile = () => {
       </StyledCard>
     </div>
   )
+
+  const handleDeleteActivity = (activityID: string) => {
+    const input = {
+      id: activityID
+    }
+
+    API.graphql(graphqlOperation(deleteActivity, { input: input }))
+
+    getActivities()
+  }
 
   return (
     <>
@@ -213,7 +219,12 @@ const Profile = () => {
       </StyledPaper>
 
       {0 === tabValue && StatsTab}
-      {1 === tabValue && <ActivityList activities={reformedState.activities} />}
+      {1 === tabValue && (
+        <ActivityList
+          activities={reformedState.activities}
+          handleDeleteActivity={(id: string) => handleDeleteActivity(id)}
+        />
+      )}
       {2 === tabValue && FriendsTab}
     </>
   )

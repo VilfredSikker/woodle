@@ -7,13 +7,14 @@ import { deleteActivity } from "../../../graphql/mutations"
 
 interface ActivityListProps {
   activities: Activity[]
+  handleDeleteActivity: (id: string) => void
 }
 
 const ActivityList = (props: ActivityListProps) => {
   const [openActivity, setOpenActivity] = useState<number | undefined>(
     undefined
   )
-  const { activities } = props
+  const { activities, handleDeleteActivity } = props
 
   const handleContainerClicked = (index: number) => {
     if (index === openActivity) {
@@ -21,17 +22,6 @@ const ActivityList = (props: ActivityListProps) => {
     } else {
       setOpenActivity(index)
     }
-  }
-
-  const handleDeleteActivity = (activityID: string) => {
-    const input = {
-      id: activityID
-    }
-
-    const result = API.graphql(
-      graphqlOperation(deleteActivity, { input: input })
-    )
-    console.log("Deleting activity: ", result)
   }
 
   const list = activities.map((item: Activity, index: number) => {
