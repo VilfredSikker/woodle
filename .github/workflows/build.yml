@@ -42,10 +42,10 @@ jobs:
         with:
           node-version: "12.x"
 
-      - name: yarn build
+      - name: npm build
         run: |
-          yarn
-          yarn build
+          npm install
+          npm run build
         env:
           CI: true
 
