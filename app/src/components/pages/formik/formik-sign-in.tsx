@@ -10,36 +10,36 @@ import { AppContext } from "../../context/app-context"
 import LoginLayout from "../../layout/login-layout/login-layout"
 
 const FormikSignIn = (props: any) => {
-  const { contextState, setContextState } = useContext(AppContext)
+  const { setContextState } = useContext(AppContext)
 
   const formik = useFormik({
     initialValues: {
       username: "",
-      password: ""
+      password: "",
     },
-    onSubmit: values => {
+    onSubmit: (values) => {
       Auth.signIn({
         username: values.username,
-        password: values.password
+        password: values.password,
       })
-        .then(e => {
+        .then((e) => {
           return addUserToDB(values.username)
         })
-        .then(e => {
+        .then((e) => {
           return saveJwtOnLogin()
         })
-        .then(e => {
+        .then((e) => {
           props.history.push("/app/map")
         })
-        .catch(err => console.log("error with sign up ", err))
-    }
+        .catch((err) => console.log("error with sign up ", err))
+    },
   })
 
   async function addUserToDB(username: string) {
     const filter = {
       username: {
-        eq: username
-      }
+        eq: username,
+      },
     }
 
     await API.graphql(graphqlOperation(queries.listUsers, { filter: filter }))
@@ -53,7 +53,7 @@ const FormikSignIn = (props: any) => {
           setContextState({ user: user })
         } else {
           const input = {
-            username: username
+            username: username,
           }
 
           console.log("no user found, creating user")
@@ -71,7 +71,7 @@ const FormikSignIn = (props: any) => {
 
   async function saveJwtOnLogin() {
     await Auth.currentSession()
-      .then(data => {
+      .then((data) => {
         let accessToken = data.getAccessToken()
         let jwt: string = accessToken.getJwtToken()
 
@@ -79,7 +79,7 @@ const FormikSignIn = (props: any) => {
 
         saveJwtTokenToStorage(jwt)
       })
-      .catch(err => console.log("Current session error: ", err))
+      .catch((err) => console.log("Current session error: ", err))
   }
   return (
     <LoginLayout>

@@ -2,8 +2,6 @@ import React, { useState } from "react"
 import { Activity } from "../../../shared-interfaces"
 import StyledPaper from "../paper/paper"
 import MyActivity from "./activity"
-import { API, graphqlOperation } from "aws-amplify"
-import { deleteActivity } from "../../../graphql/mutations"
 
 interface ActivityListProps {
   activities: Activity[]

@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react"
 import aws_exports from "../../../aws-exports"
 import { deleteActivity } from "../../../graphql/mutations"
 import * as queries from "../../../graphql/queries"
-import { Activity, Friend, User } from "../../../shared-interfaces"
+import { Activity, Friend } from "../../../shared-interfaces"
 import ActivityList from "../../basics/activity/activity-list"
 import { AppContext } from "../../context/app-context"
 import StyledCard from "./../../basics/card/card"
@@ -29,7 +29,7 @@ const Profile = () => {
   const [reformedState, setReformedState] = useState<ReformedState>(() => {
     const defaultState = {
       activities: [],
-      friends: []
+      friends: [],
     }
 
     return defaultState
@@ -40,14 +40,14 @@ const Profile = () => {
       totalCalories: 0,
       totalDuration: 0,
       totalLength: 0,
-      totalSteps: 0
+      totalSteps: 0,
     }
 
     return stats
   })
 
   const [tabValue, setTabValue] = useState(0)
-  const { contextState, setContextState } = useContext(AppContext)
+  const { contextState } = useContext(AppContext)
   const { jwtToken, user } = contextState
 
   useEffect(() => {
@@ -62,8 +62,8 @@ const Profile = () => {
   const getActivities = async () => {
     const filter = {
       userID: {
-        eq: user.id
-      }
+        eq: user.id,
+      },
     }
     const result = await API.graphql(
       graphqlOperation(queries.listActivitys, { filter: filter })
@@ -73,17 +73,17 @@ const Profile = () => {
     createActivities(result)
   }
 
-  const getFriends = async () => {
-    const filter = {
-      userID: {
-        eq: user.id
-      }
-    }
-    const result = await API.graphql(
-      graphqlOperation(queries.getUser, { id: filter })
-    )
-    createFriends(result)
-  }
+  // const getFriends = async () => {
+  //   const filter = {
+  //     userID: {
+  //       eq: user.id,
+  //     },
+  //   }
+  //   const result = await API.graphql(
+  //     graphqlOperation(queries.getUser, { id: filter })
+  //   )
+  //   createFriends(result)
+  // }
 
   const createActivities = (result: any) => {
     const items = result.data.listActivitys.items
@@ -97,7 +97,7 @@ const Profile = () => {
         duration: item.duration,
         calories: item.calories,
         steps: item.steps,
-        type: item.type
+        type: item.type,
       }
 
       return activity
@@ -107,20 +107,20 @@ const Profile = () => {
     setReformedState({ ...reformedState, activities: activities })
   }
 
-  const createFriends = (result: any) => {
-    let items = result.data.listUsers.items
+  // const createFriends = (result: any) => {
+  //   let items = result.data.listUsers.items
 
-    let friends: Friend[] = items.map((item: User) => {
-      let user: Friend = {
-        id: item.id,
-        username: item.username
-      }
+  //   let friends: Friend[] = items.map((item: User) => {
+  //     let user: Friend = {
+  //       id: item.id,
+  //       username: item.username,
+  //     }
 
-      return user
-    })
+  //     return user
+  //   })
 
-    setReformedState({ ...reformedState, friends: friends })
-  }
+  //   setReformedState({ ...reformedState, friends: friends })
+  // }
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setTabValue(newValue)
@@ -141,7 +141,7 @@ const Profile = () => {
       totalCalories: 0,
       totalDuration: 0,
       totalLength: 0,
-      totalSteps: 0
+      totalSteps: 0,
     }
 
     activities.forEach((element: Activity) => {
@@ -162,7 +162,7 @@ const Profile = () => {
         totalCalories: cals,
         totalDuration: duration,
         totalLength: length,
-        totalSteps: steps
+        totalSteps: steps,
       }
     })
 
@@ -188,7 +188,7 @@ const Profile = () => {
 
   const handleDeleteActivity = (activityID: string) => {
     const input = {
-      id: activityID
+      id: activityID,
     }
 
     API.graphql(graphqlOperation(deleteActivity, { input: input }))

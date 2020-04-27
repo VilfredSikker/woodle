@@ -1,6 +1,5 @@
 import React from "react"
 import { Activity } from "../../../shared-interfaces"
-import styles from "./activity.module.scss"
 
 interface ActivityProps {
   activity: Activity
