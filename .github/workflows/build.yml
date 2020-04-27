@@ -52,7 +52,7 @@ jobs:
 
       - name: Push to staging
         run: |
-          pwd
+          cd app
           aws s3 sync build s3://www.sikkersoftware.dk --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
