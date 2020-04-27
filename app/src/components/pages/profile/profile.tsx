@@ -10,6 +10,10 @@ import { AppContext } from "../../context/app-context"
 import StyledCard from "./../../basics/card/card"
 import StyledPaper from "./../../basics/paper/paper"
 import styles from "./profile.module.scss"
+import flame from "../../../icons/flame.svg"
+import steps from "../../../icons/steps.svg"
+import length from "../../../icons/length.svg"
+import duration from "../../../icons/duration.svg"
 
 Amplify.configure(aws_exports)
 
@@ -172,16 +176,24 @@ const Profile = () => {
   const StatsTab = (
     <div className={styles.statsContainer}>
       <StyledCard elevation={2}>
-        Total Length: {userStats.totalLength}{" "}
+        <img src={length} className={styles.icon} alt="length icon" />
+        <div>Total Length:</div>
+        <div className={styles.statValue}>{userStats.totalLength} </div>
       </StyledCard>
       <StyledCard elevation={2}>
-        Total Duration: {userStats.totalDuration}{" "}
+        <img src={duration} className={styles.icon} alt="duration icon" />
+        <div>Total Duration:</div>
+        <div className={styles.statValue}>{userStats.totalDuration} </div>
       </StyledCard>
       <StyledCard elevation={2}>
-        Total Calories: {userStats.totalCalories}{" "}
+        <img src={flame} className={styles.icon} alt="calories icon" />
+        <div>Total Calories:</div>
+        <div className={styles.statValue}>{userStats.totalCalories} </div>
       </StyledCard>
       <StyledCard elevation={2}>
-        Total Steps: {userStats.totalSteps}{" "}
+        <img src={steps} className={styles.icon} alt="steps icon" />
+        <div>Total Steps:</div>
+        <div className={styles.statValue}>{userStats.totalSteps} </div>
       </StyledCard>
     </div>
   )
@@ -198,12 +210,6 @@ const Profile = () => {
 
   return (
     <>
-      <h1>Your profile</h1>
-      <ul>
-        <li>Name: Your name will appear here</li>
-        <li>E-mail: And here goes the mail</li>
-      </ul>
-
       <StyledPaper position="sticky" color="default">
         <Tabs
           value={tabValue}

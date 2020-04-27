@@ -1,7 +1,8 @@
 .statsContainer {
   margin-top: 10px;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 }
@@ -16,4 +17,15 @@
   .activity {
     padding: 5px;
   }
+}
+
+.statValue {
+  padding: 0 5px;
+  overflow: scroll;
+}
+
+.icon {
+  width: 50px;
+  height: 30px;
+  margin: 0 auto;
 }

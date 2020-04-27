@@ -1,5 +1,6 @@
 import React from "react"
 import { Activity } from "../../../shared-interfaces"
+import { Button } from "@material-ui/core"
 
 interface ActivityProps {
   activity: Activity
@@ -21,7 +22,9 @@ const MyActivity = (props: ActivityProps) => {
         <p>Steps: {activity.steps}</p>
         <p>Calories: {activity.calories}</p>
       </div>
-      <button onClick={onDelete}>Delete Activity</button>
+      <Button onClick={onDelete} color="secondary">
+        Delete Activity
+      </Button>
     </div>
   )
 
