@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { Activity } from "../../../shared-interfaces"
 import StyledPaper from "../paper/paper"
 import MyActivity from "./activity"
+import styles from "./activity-list.module.scss"
 
 interface ActivityListProps {
   activities: Activity[]
@@ -36,7 +37,7 @@ const ActivityList = (props: ActivityListProps) => {
     )
   })
 
-  return <div>{list}</div>
+  return <div className={styles.list}>{list}</div>
 }
 
 export default ActivityList

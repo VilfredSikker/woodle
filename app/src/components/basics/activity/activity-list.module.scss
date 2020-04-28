@@ -1,0 +1,11 @@
+.list {
+  margin: 0 auto;
+  text-align: center;
+  width: 300px;
+}
+
+@media only screen and (min-width: 600px) {
+  .list {
+    width: 500px;
+  }
+}
