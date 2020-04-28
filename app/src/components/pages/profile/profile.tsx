@@ -178,22 +178,28 @@ const Profile = () => {
       <StyledCard elevation={2}>
         <img src={length} className={styles.icon} alt="length icon" />
         <div>Total Length:</div>
-        <div className={styles.statValue}>{userStats.totalLength} </div>
+        <div className={styles.statValue}>
+          {userStats.totalLength.toFixed(2)} meters
+        </div>
       </StyledCard>
       <StyledCard elevation={2}>
         <img src={duration} className={styles.icon} alt="duration icon" />
         <div>Total Duration:</div>
-        <div className={styles.statValue}>{userStats.totalDuration} </div>
+        <div className={styles.statValue}>
+          {userStats.totalDuration.toFixed(2)} seconds
+        </div>
       </StyledCard>
       <StyledCard elevation={2}>
         <img src={flame} className={styles.icon} alt="calories icon" />
         <div>Total Calories:</div>
-        <div className={styles.statValue}>{userStats.totalCalories} </div>
+        <div className={styles.statValue}>
+          {userStats.totalCalories} calories
+        </div>
       </StyledCard>
       <StyledCard elevation={2}>
         <img src={steps} className={styles.icon} alt="steps icon" />
         <div>Total Steps:</div>
-        <div className={styles.statValue}>{userStats.totalSteps} </div>
+        <div className={styles.statValue}>{userStats.totalSteps} steps</div>
       </StyledCard>
     </div>
   )
