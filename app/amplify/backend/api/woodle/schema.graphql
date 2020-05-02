@@ -37,12 +37,18 @@ type Activity
   calories: Int
   duration: Float
   steps: Int
+  path: [Coordinate]
 }
 
 enum ActivityType {
   SOLO
   GROUP
   SPONSORED
+}
+
+type Coordinate {
+  lat: Float
+  lng: Float
 }
 
 type Query {

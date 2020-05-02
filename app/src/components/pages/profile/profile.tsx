@@ -2,9 +2,9 @@ import { Tab, Tabs } from "@material-ui/core"
 import Amplify, { API, graphqlOperation } from "aws-amplify"
 import React, { useContext, useEffect, useState } from "react"
 import aws_exports from "../../../aws-exports"
-import { deleteActivity } from "../../../graphql/mutations"
+import { deleteActivity, updateUser } from "../../../graphql/mutations"
 import * as queries from "../../../graphql/queries"
-import { Activity, Friend } from "../../../shared-interfaces"
+import { Activity, User } from "../../../shared-interfaces"
 import ActivityList from "../../basics/activity/activity-list"
 import { AppContext } from "../../context/app-context"
 import StyledCard from "./../../basics/card/card"
@@ -14,12 +14,14 @@ import flame from "../../../icons/flame.svg"
 import steps from "../../../icons/steps.svg"
 import length from "../../../icons/length.svg"
 import duration from "../../../icons/duration.svg"
+import { UsersList } from "../../basics/friends/friends"
 
 Amplify.configure(aws_exports)
 
 interface ReformedState {
   activities: Activity[]
-  friends: Friend[]
+  friends: User[]
+  users: User[]
 }
 
 interface UserStats {
@@ -34,6 +36,7 @@ const Profile = () => {
     const defaultState = {
       activities: [],
       friends: [],
+      users: [],
     }
 
     return defaultState
@@ -56,6 +59,7 @@ const Profile = () => {
 
   useEffect(() => {
     getActivities()
+    getUsers()
     //getFriends()
 
     console.log("jwt: ", jwtToken)
@@ -72,9 +76,15 @@ const Profile = () => {
     const result = await API.graphql(
       graphqlOperation(queries.listActivitys, { filter: filter })
     )
-    console.log("act result: ", result)
 
     createActivities(result)
+  }
+
+  const getUsers = async () => {
+    const result = await API.graphql(graphqlOperation(queries.listUsers))
+    const users = result.data.listUsers.items
+
+    setReformedState({ ...reformedState, users: users })
   }
 
   // const getFriends = async () => {
@@ -132,7 +142,7 @@ const Profile = () => {
 
   const FriendsTab = (
     <div>
-      {reformedState.friends.map((friend: Friend) => (
+      {reformedState.friends.map((friend) => (
         <div>
           <h2>{friend.username}</h2>
         </div>
@@ -214,6 +224,14 @@ const Profile = () => {
     getActivities()
   }
 
+  const handleAddFriend = (userId: string) => {
+    const input = {
+      id: userId,
+    }
+
+    API.graphql(graphqlOperation(updateUser, { input: input }))
+  }
+
   return (
     <>
       <StyledPaper position="sticky" color="default">
@@ -227,6 +245,7 @@ const Profile = () => {
           <Tab label="Stats" />
           <Tab label="Activities" />
           <Tab label="Friends" />
+          <Tab label="All Users" />
         </Tabs>
       </StyledPaper>
 
@@ -238,6 +257,12 @@ const Profile = () => {
         />
       )}
       {2 === tabValue && FriendsTab}
+      {3 === tabValue && (
+        <UsersList
+          users={reformedState.users}
+          onAddUserClicked={(id: string) => handleAddFriend(id)}
+        />
+      )}
     </>
   )
 }

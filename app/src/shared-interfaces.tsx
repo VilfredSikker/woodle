@@ -5,11 +5,6 @@ export interface User {
   activities: Activity[] | null
 }
 
-export interface Friend {
-  id: string
-  username: string
-}
-
 export interface Activity {
   userID: string
   id: string
@@ -19,10 +14,16 @@ export interface Activity {
   calories?: number
   steps?: number
   type?: ActivityType
+  path?: Coordinate[]
+}
+
+export interface Coordinate {
+  lat: number
+  lng: number
 }
 
 export enum ActivityType {
   SOLO,
   GROUP,
-  SPONSORED
+  SPONSORED,
 }

@@ -1,4 +1,4 @@
-/* eslint-disable */
+// tslint:disable
 // this is an auto generated file. This will be overwritten
 
 export const getUserByName = `query GetUserByName($username: String!) {
@@ -53,6 +53,10 @@ export const getActivity = `query GetActivity($id: ID!) {
     calories
     duration
     steps
+    path {
+      lat
+      lng
+    }
   }
 }
 `;

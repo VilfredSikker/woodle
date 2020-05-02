@@ -3,7 +3,7 @@ import {
   GoogleMap,
   LoadScript,
   OverlayView,
-  Polyline
+  Polyline,
 } from "@react-google-maps/api"
 import React, { useEffect, useState, useContext } from "react"
 
@@ -37,7 +37,7 @@ const runPathOptions = {
   draggable: false,
   editable: false,
   geodesic: false,
-  zIndex: 1
+  zIndex: 1,
 }
 
 const circleOptions = {
@@ -45,7 +45,7 @@ const circleOptions = {
   strokeOpacity: 0.8,
   strokeWeight: 2,
   fillColor: "#FF8E53",
-  fillOpacity: 0.8
+  fillOpacity: 0.8,
 }
 
 const GoogleMaps = () => {
@@ -53,7 +53,7 @@ const GoogleMaps = () => {
   const [playerPosition, setPlayerPosition] = useState(() => {
     const defaultState: Position = {
       lat: 55.672,
-      lng: 12.562
+      lng: 12.562,
     }
     return defaultState
   })
@@ -61,7 +61,7 @@ const GoogleMaps = () => {
   const [runTracker, setRunTracker] = useState<RunTracker>(() => {
     const defaultState: RunTracker = {
       coordinates: [],
-      active: false
+      active: false,
     }
     return defaultState
   })
@@ -74,7 +74,7 @@ const GoogleMaps = () => {
 
   useEffect(() => {
     navigator.geolocation.watchPosition(trackPath, errorCallback, {
-      enableHighAccuracy: true
+      enableHighAccuracy: true,
     })
 
     return () => {
@@ -103,7 +103,7 @@ const GoogleMaps = () => {
 
     const myPosition = {
       lat: latitude,
-      lng: longitude
+      lng: longitude,
     }
 
     if (runTracker.active) {
@@ -123,7 +123,7 @@ const GoogleMaps = () => {
 
     const myPosition = {
       lat: latitude,
-      lng: longitude
+      lng: longitude,
     }
 
     setPlayerPosition(myPosition)
@@ -140,7 +140,7 @@ const GoogleMaps = () => {
       ...runTracker,
       coordinates: [],
       startTime: today,
-      active: true
+      active: true,
     })
   }
 
@@ -156,7 +156,7 @@ const GoogleMaps = () => {
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
-      second: "numeric"
+      second: "numeric",
     }
 
     const runDuration = startTime?.getTime()
@@ -177,7 +177,8 @@ const GoogleMaps = () => {
       duration: runDuration,
       length: length,
       calories: calories,
-      steps: steps
+      steps: steps,
+      path: reducedPaths,
     }
 
     if (reducePaths.length > 0) {
@@ -237,7 +238,7 @@ const GoogleMaps = () => {
       position={playerPosition}
       getPixelPositionOffset={() => ({
         x: 0,
-        y: 150
+        y: 150,
       })}
       mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
     >
@@ -252,7 +253,7 @@ const GoogleMaps = () => {
       position={playerPosition}
       getPixelPositionOffset={() => ({
         x: 0,
-        y: 150
+        y: 150,
       })}
       mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
     >
@@ -267,7 +268,7 @@ const GoogleMaps = () => {
     var reducedPaths: Position[] = []
 
     paths &&
-      paths.forEach(element => {
+      paths.forEach((element) => {
         if (
           element.lat === previousPath.lat &&
           element.lng === previousPath.lng
@@ -292,13 +293,13 @@ const GoogleMaps = () => {
           mapContainerStyle={{
             position: "absolute",
             width: "100%",
-            height: "100%"
+            height: "100%",
           }}
           zoom={18}
           center={playerPosition}
           options={{
             disableDefaultUI: true,
-            styles: MapStyles
+            styles: MapStyles,
           }}
         >
           {runTracker.active && (
