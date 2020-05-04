@@ -1,6 +1,7 @@
-import React from "react"
+import React, { useState } from "react"
 import { Activity } from "../../../shared-interfaces"
-import { Button } from "@material-ui/core"
+import { Button, Modal } from "@material-ui/core"
+import MiniMap from "../../google-maps/mini-map"
 
 interface ActivityProps {
   activity: Activity
@@ -12,11 +13,12 @@ interface ActivityProps {
 
 const MyActivity = (props: ActivityProps) => {
   const { activity, onDelete, onContainerClicked, open } = props
+  const [openModal, setOpenModal] = useState(false)
   console.log("My activity onDelete: ", onDelete)
   const openContainer = (
-    <div onClick={onContainerClicked}>
+    <div>
       <div>
-        <p>{activity.name}</p>
+        <p onClick={onContainerClicked}>{activity.name}</p>
         <p>Length: {activity.length !== undefined ? activity.length : 0}</p>
         <p>
           Duration: {activity.duration !== undefined ? activity.duration : 0}
@@ -25,7 +27,14 @@ const MyActivity = (props: ActivityProps) => {
         <p>
           Calories: {activity.calories !== undefined ? activity.calories : 0}
         </p>
+        <Button color="primary" onClick={() => setOpenModal(true)}>
+          Show Path
+        </Button>
+        <Modal open={openModal} onClose={() => setOpenModal(false)}>
+          {activity.path ? <MiniMap path={activity.path} /> : <p>No Path</p>}
+        </Modal>
       </div>
+
       {onDelete !== undefined ? (
         <Button onClick={onDelete} color="secondary">
           Delete Activity
@@ -37,8 +46,8 @@ const MyActivity = (props: ActivityProps) => {
   )
 
   const closedContainer = (
-    <div onClick={onContainerClicked}>
-      <p>{activity.name}</p>
+    <div>
+      <p onClick={onContainerClicked}>{activity.name}</p>
     </div>
   )
   return open ? openContainer : closedContainer
