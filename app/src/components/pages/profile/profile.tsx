@@ -1,4 +1,4 @@
-import { Paper, Tab, Tabs } from "@material-ui/core"
+import { Tab, Tabs } from "@material-ui/core"
 import Amplify, { API, graphqlOperation } from "aws-amplify"
 import React, { useContext, useEffect, useState } from "react"
 import aws_exports from "../../../aws-exports"
@@ -7,12 +7,7 @@ import {
   deleteActivity,
   deleteFriend,
 } from "../../../graphql/mutations"
-import {
-  getUser,
-  listActivitys,
-  listFriends,
-  listUsers,
-} from "../../../graphql/queries"
+import { listActivitys, listFriends, listUsers } from "../../../graphql/queries"
 import duration from "../../../icons/duration.svg"
 import flame from "../../../icons/flame.svg"
 import length from "../../../icons/length.svg"
@@ -20,12 +15,11 @@ import steps from "../../../icons/steps.svg"
 import { Activity, Friend, User } from "../../../shared-interfaces"
 import ActivityList from "../../basics/activity/activity-list"
 import { FriendsList, UsersList } from "../../basics/friends/friends"
-import StyledModal from "../../basics/modal/StyledModal"
+import FriendDetailsModal from "../../basics/modal/FriendDetailsModal"
 import { AppContext } from "../../context/app-context"
 import StyledCard from "./../../basics/card/card"
 import StyledPaper from "./../../basics/paper/paper"
 import styles from "./profile.module.scss"
-import FriendDetailsModal from "../../basics/modal/FriendDetailsModal"
 
 Amplify.configure(aws_exports)
 

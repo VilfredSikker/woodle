@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+import { Button } from "@material-ui/core"
+import React from "react"
 import { Activity } from "../../../shared-interfaces"
-import { Button, Modal } from "@material-ui/core"
 import MiniMap from "../../google-maps/mini-map"
 
 interface ActivityProps {
@@ -13,8 +13,7 @@ interface ActivityProps {
 
 const MyActivity = (props: ActivityProps) => {
   const { activity, onDelete, onContainerClicked, open } = props
-  const [openModal, setOpenModal] = useState(false)
-  console.log("My activity onDelete: ", onDelete)
+
   const openContainer = (
     <div>
       <div>
@@ -27,12 +26,9 @@ const MyActivity = (props: ActivityProps) => {
         <p>
           Calories: {activity.calories !== undefined ? activity.calories : 0}
         </p>
-        <Button color="primary" onClick={() => setOpenModal(true)}>
-          Show Path
-        </Button>
-        <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <div>
           {activity.path ? <MiniMap path={activity.path} /> : <p>No Path</p>}
-        </Modal>
+        </div>
       </div>
 
       {onDelete !== undefined ? (

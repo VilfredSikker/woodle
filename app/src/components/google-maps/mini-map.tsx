@@ -1,6 +1,7 @@
 import { GoogleMap, LoadScript, Polyline } from "@react-google-maps/api"
-import React from "react"
+import React, { useEffect } from "react"
 import MapStyles from "./map-styles"
+import styles from "./mini-map.module.scss"
 
 interface Position {
   lat: number
@@ -27,18 +28,26 @@ interface MiniMapProps {
 const MiniMap = (props: MiniMapProps) => {
   const { path } = props
 
+  useEffect(() => {
+    setListener()
+  })
+
+  const setListener = () => {
+    window.addEventListener("click", () => {})
+  }
+
   return (
-    <>
-      <LoadScript
-        id="script-loader"
-        googleMapsApiKey="AIzaSyDEKSGDimrHDb12-2kflJkrzAcRf3MECsQ"
-      >
+    <LoadScript
+      id="script-loader"
+      googleMapsApiKey="AIzaSyDEKSGDimrHDb12-2kflJkrzAcRf3MECsQ"
+    >
+      <div className={styles.miniMapContainer}>
         <GoogleMap
           id="mini-map"
           mapContainerStyle={{
             position: "relative",
-            width: "200px",
-            height: "200px",
+            width: "300px",
+            height: "300px",
           }}
           zoom={18}
           center={path[0]}
@@ -49,8 +58,8 @@ const MiniMap = (props: MiniMapProps) => {
         >
           <Polyline options={runPathOptions} path={path} />
         </GoogleMap>
-      </LoadScript>
-    </>
+      </div>
+    </LoadScript>
   )
 }
 

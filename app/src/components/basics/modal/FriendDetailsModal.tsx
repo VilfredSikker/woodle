@@ -1,9 +1,9 @@
-import React, { useState, ReactElement, useEffect } from "react"
-import { makeStyles, Modal, Fade, Backdrop, Paper } from "@material-ui/core"
-import { Activity, User } from "./../../../shared-interfaces"
+import { Backdrop, Fade, makeStyles, Modal, Paper } from "@material-ui/core"
 import { API, graphqlOperation } from "aws-amplify"
+import React, { useEffect, useState } from "react"
 import { getUser } from "../../../graphql/queries"
 import ActivityList from "../activity/activity-list"
+import { Activity } from "./../../../shared-interfaces"
 
 interface FriendDetailsModalProps {
   id: string
@@ -50,22 +50,16 @@ const FriendDetailsModal = (props: FriendDetailsModalProps) => {
 
   const getDetails = async () => {
     if (id !== null && id !== "") {
-      const input = {
-        id: id,
-      }
-      console.log("Details id: ", id, input)
       const detailsResult = await API.graphql(
         graphqlOperation(getUser, { id: id })
       )
       const result = detailsResult.data.getUser
-      console.log("detailsResult and details: ", detailsResult, id, result)
 
       const userDetails: UserDetails = {
         id: result.id,
         username: result.username,
         activities: result.activities.items,
       }
-      console.log("userDetails: ", userDetails)
 
       setUserDetails(userDetails)
     }
