@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom"
 import { isSignedIn } from "../../utils/auth"
 import { AppContext } from "../context/app-context"
 
-export default WrappedComponent => props => {
+export default (WrappedComponent) => (props) => {
   const { contextState } = useContext(AppContext)
   const { jwtToken } = contextState
   if (!isSignedIn(jwtToken)) {
@@ -12,7 +12,7 @@ export default WrappedComponent => props => {
       <Redirect
         to={{
           pathname: "/login",
-          state: props.location.pathname
+          state: props.location.pathname,
         }}
       />
     )

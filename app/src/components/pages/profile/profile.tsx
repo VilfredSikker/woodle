@@ -20,6 +20,7 @@ import { AppContext } from "../../context/app-context"
 import StyledCard from "./../../basics/card/card"
 import StyledPaper from "./../../basics/paper/paper"
 import styles from "./profile.module.scss"
+import { ToastsStore } from "react-toasts"
 
 Amplify.configure(aws_exports)
 
@@ -169,6 +170,7 @@ const Profile = () => {
         calories: item.calories,
         steps: item.steps,
         type: item.type,
+        path: item.path,
       }
 
       return activity
@@ -251,13 +253,14 @@ const Profile = () => {
     }
 
     API.graphql(graphqlOperation(deleteActivity, { input: input }))
+    ToastsStore.success("Removed activity")
 
     getActivities()
       .then((result: Activity[]) => {
         setReformedState({ ...reformedState, activities: result })
         createStats(result)
       })
-      .catch((err) => console.log("Error when getting activities: ", err))
+      .catch((err) => ToastsStore.error("Error when getting activities: ", err))
   }
 
   const handleAddFriend = async (id: string, username: string) => {
@@ -270,14 +273,12 @@ const Profile = () => {
     const friendsResult = await API.graphql(
       graphqlOperation(listFriends, { id: filter })
     )
-    console.log("friendsResult: ", friendsResult)
+
     const friends: Friend[] = friendsResult.data.listFriends.items
 
     const filteredFriends = friends.filter((friend: Friend) => friend.id === id)
-    console.log("Filtered friends: ", filteredFriends)
 
     if (filteredFriends.length === 0) {
-      console.log("Adding friend: ", username)
       const input: Friend = {
         id: id,
         username: username,
@@ -286,12 +287,13 @@ const Profile = () => {
 
       await API.graphql(graphqlOperation(createFriend, { input: input }))
       getFriends()
-        .then((result: Friend[]) =>
+        .then((result: Friend[]) => {
           setReformedState({ ...reformedState, friends: result })
-        )
-        .catch((err) => console.log("Error when getting friends: ", err))
+          ToastsStore.success("Added friend")
+        })
+        .catch((err) => ToastsStore.error("Error when getting friends: ", err))
     } else {
-      console.log("User is already a friend: ", username)
+      ToastsStore.info("User, '" + username + "', is already a friend: ")
     }
   }
 
@@ -302,10 +304,11 @@ const Profile = () => {
 
     await API.graphql(graphqlOperation(deleteFriend, { input: input }))
     getFriends()
-      .then((result: Friend[]) =>
+      .then((result: Friend[]) => {
         setReformedState({ ...reformedState, friends: result })
-      )
-      .catch((err) => console.log("Error when getting friends: ", err))
+        ToastsStore.success("Removed friend")
+      })
+      .catch((err) => ToastsStore.error("Couldn't refetch friends"))
   }
 
   const handleFriendDetails = (id: string) => {
@@ -332,7 +335,6 @@ const Profile = () => {
       {0 === tabValue && StatsTab}
       {1 === tabValue && (
         <>
-          <p>ActivityList</p>
           <ActivityList
             activities={reformedState.activities}
             handleDeleteActivity={(id: string) => handleDeleteActivity(id)}
@@ -341,8 +343,6 @@ const Profile = () => {
       )}
       {2 === tabValue && (
         <>
-          <p>Friends:</p>
-
           <FriendDetailsModal
             id={friendDetailsModal.id}
             open={friendDetailsModal.open}
@@ -360,7 +360,6 @@ const Profile = () => {
       )}
       {3 === tabValue && (
         <>
-          <p>All Users:</p>
           <UsersList
             users={reformedState.users}
             onAddUserClicked={(id: string, username: string) =>
