@@ -111,7 +111,14 @@ const Profile = () => {
   }
 
   const getUsers = async () => {
-    const result = await API.graphql(graphqlOperation(listUsers))
+    const filter = {
+      username: {
+        ne: user.username,
+      },
+    }
+    const result = await API.graphql(
+      graphqlOperation(listUsers, { filter: filter })
+    )
     const usersResult = result.data.listUsers.items
 
     const users = usersResult.map((item: User) => {
