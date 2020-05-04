@@ -4,20 +4,21 @@ import React from "react"
 import StyledButton from "../../basics/button/button"
 import InputField from "../../basics/input-field/input-field"
 import LoginLayout from "../../layout/login-layout/login-layout"
+import { ToastsStore } from "react-toasts"
 
 const FormikConfirmSignUp = (props: any) => {
   const formik = useFormik({
     initialValues: {
       username: "",
-      confirmationCode: ""
+      confirmationCode: "",
     },
-    onSubmit: values => {
+    onSubmit: (values) => {
       Auth.confirmSignUp(values.username, values.confirmationCode)
         .then(() => {
           props.history.push("/app/profile")
         })
-        .catch(err => console.log("error with confirm: ", err))
-    }
+        .catch((err) => ToastsStore.error("Can't sign up: ", err))
+    },
   })
   return (
     <LoginLayout>

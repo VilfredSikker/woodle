@@ -5,13 +5,14 @@ import * as Yup from "yup"
 import StyledButton from "../../basics/button/button"
 import InputField from "../../basics/input-field/input-field"
 import LoginLayout from "../../layout/login-layout/login-layout"
+import { ToastsStore } from "react-toasts"
 
 const FormikSignUp = (props: any) => {
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
-      email: ""
+      email: "",
     },
     validationSchema: Yup.object({
       username: Yup.string()
@@ -20,23 +21,21 @@ const FormikSignUp = (props: any) => {
       password: Yup.string()
         .min(8, "Password must be atleast 8 characters")
         .required(),
-      email: Yup.string()
-        .email("Invalid email address")
-        .required()
+      email: Yup.string().email("Invalid email address").required(),
     }),
-    onSubmit: values => {
+    onSubmit: (values) => {
       Auth.signUp({
         username: values.username,
         password: values.password,
         attributes: {
-          email: values.email
-        }
+          email: values.email,
+        },
       })
         .then(() => {
           props.history.push("/confirm-sign-up")
         })
-        .catch(err => console.log("error with sign up ", err))
-    }
+        .catch((err) => ToastsStore.error("error with sign up ", err))
+    },
   })
   return (
     <LoginLayout>

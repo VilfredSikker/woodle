@@ -8,6 +8,7 @@ import StyledButton from "../../basics/button/button"
 import InputField from "../../basics/input-field/input-field"
 import { AppContext } from "../../context/app-context"
 import LoginLayout from "../../layout/login-layout/login-layout"
+import { ToastsStore } from "react-toasts"
 
 const FormikSignIn = (props: any) => {
   const { setContextState } = useContext(AppContext)
@@ -31,7 +32,7 @@ const FormikSignIn = (props: any) => {
         .then((e) => {
           props.history.push("/app/map")
         })
-        .catch((err) => console.log("error with sign up ", err))
+        .catch((err) => ToastsStore.error("Error with sign in, try again"))
     },
   })
 
@@ -55,17 +56,15 @@ const FormikSignIn = (props: any) => {
             username: username,
           }
 
-          console.log("no user found, creating user")
           API.graphql(graphqlOperation(mutations.createUser, { input: input }))
             .then((result: any) => {
               let newUser = result.data.createUser
-              console.log("New User: ", newUser)
               setContextState({ user: newUser })
             })
-            .catch((e: any) => console.log("Couldn't create user: ", e))
+            .catch((e: any) => ToastsStore.error("Couldn't create user"))
         }
       })
-      .catch((e: any) => console.log("Error when adding user to db: ", e))
+      .catch((e: any) => ToastsStore.error("Username already exists"))
   }
 
   async function saveJwtOnLogin() {
@@ -78,7 +77,7 @@ const FormikSignIn = (props: any) => {
 
         saveJwtTokenToStorage(jwt)
       })
-      .catch((err) => console.log("Current session error: ", err))
+      .catch((err) => ToastsStore.error("Please login again"))
   }
   return (
     <LoginLayout>

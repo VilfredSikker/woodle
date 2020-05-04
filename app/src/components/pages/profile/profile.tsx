@@ -20,6 +20,7 @@ import { AppContext } from "../../context/app-context"
 import StyledCard from "./../../basics/card/card"
 import StyledPaper from "./../../basics/paper/paper"
 import styles from "./profile.module.scss"
+import { ToastsStore } from "react-toasts"
 
 Amplify.configure(aws_exports)
 
@@ -252,13 +253,14 @@ const Profile = () => {
     }
 
     API.graphql(graphqlOperation(deleteActivity, { input: input }))
+    ToastsStore.success("Removed activity")
 
     getActivities()
       .then((result: Activity[]) => {
         setReformedState({ ...reformedState, activities: result })
         createStats(result)
       })
-      .catch((err) => console.log("Error when getting activities: ", err))
+      .catch((err) => ToastsStore.error("Error when getting activities: ", err))
   }
 
   const handleAddFriend = async (id: string, username: string) => {
@@ -285,12 +287,13 @@ const Profile = () => {
 
       await API.graphql(graphqlOperation(createFriend, { input: input }))
       getFriends()
-        .then((result: Friend[]) =>
+        .then((result: Friend[]) => {
           setReformedState({ ...reformedState, friends: result })
-        )
-        .catch((err) => console.log("Error when getting friends: ", err))
+          ToastsStore.success("Added friend")
+        })
+        .catch((err) => ToastsStore.error("Error when getting friends: ", err))
     } else {
-      console.log("User is already a friend: ", username)
+      ToastsStore.info("User, '" + username + "', is already a friend: ")
     }
   }
 
@@ -301,10 +304,11 @@ const Profile = () => {
 
     await API.graphql(graphqlOperation(deleteFriend, { input: input }))
     getFriends()
-      .then((result: Friend[]) =>
+      .then((result: Friend[]) => {
         setReformedState({ ...reformedState, friends: result })
-      )
-      .catch((err) => console.log("Error when getting friends: ", err))
+        ToastsStore.success("Removed friend")
+      })
+      .catch((err) => ToastsStore.error("Couldn't refetch friends"))
   }
 
   const handleFriendDetails = (id: string) => {

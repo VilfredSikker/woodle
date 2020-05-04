@@ -11,9 +11,9 @@ import {
   Toolbar,
 } from "@material-ui/core"
 import MenuIcon from "@material-ui/icons/Menu"
-import React, { useRef, useState, useContext, useEffect } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
-import { isSignedIn, logout } from "../../../utils/auth"
+import { logout } from "../../../utils/auth"
 import { AppContext } from "../../context/app-context"
 
 const useStyles = makeStyles({

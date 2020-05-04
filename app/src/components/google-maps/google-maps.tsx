@@ -6,7 +6,6 @@ import {
   Polyline,
 } from "@react-google-maps/api"
 import React, { useEffect, useState, useContext } from "react"
-
 import PlayButton from "./play-button"
 import StopButton from "./stop-button"
 import MapStyles from "./map-styles"
@@ -14,6 +13,7 @@ import { AppContext } from "../context/app-context"
 import { Activity } from "../../shared-interfaces"
 import { API, graphqlOperation } from "aws-amplify"
 import * as mutations from "../../graphql/mutations"
+import { ToastsStore } from "react-toasts"
 
 interface RunTracker {
   coordinates?: Position[]
@@ -183,6 +183,9 @@ const GoogleMaps = () => {
 
     if (reducePaths.length > 0) {
       API.graphql(graphqlOperation(mutations.createActivity, { input: input }))
+      ToastsStore.success("Saved Path")
+    } else {
+      ToastsStore.error("Couldn't save path, might be too short")
     }
 
     setRunTracker({ ...runTracker, active: false })
