@@ -1,25 +1,31 @@
-import { Tab, Tabs } from "@material-ui/core"
+import { Paper, Tab, Tabs } from "@material-ui/core"
 import Amplify, { API, graphqlOperation } from "aws-amplify"
 import React, { useContext, useEffect, useState } from "react"
 import aws_exports from "../../../aws-exports"
 import {
-  deleteActivity,
-  updateUser,
   createFriend,
+  deleteActivity,
   deleteFriend,
 } from "../../../graphql/mutations"
-import { Activity, User, Friend } from "../../../shared-interfaces"
+import {
+  getUser,
+  listActivitys,
+  listFriends,
+  listUsers,
+} from "../../../graphql/queries"
+import duration from "../../../icons/duration.svg"
+import flame from "../../../icons/flame.svg"
+import length from "../../../icons/length.svg"
+import steps from "../../../icons/steps.svg"
+import { Activity, Friend, User } from "../../../shared-interfaces"
 import ActivityList from "../../basics/activity/activity-list"
+import { FriendsList, UsersList } from "../../basics/friends/friends"
+import StyledModal from "../../basics/modal/StyledModal"
 import { AppContext } from "../../context/app-context"
 import StyledCard from "./../../basics/card/card"
 import StyledPaper from "./../../basics/paper/paper"
 import styles from "./profile.module.scss"
-import flame from "../../../icons/flame.svg"
-import steps from "../../../icons/steps.svg"
-import length from "../../../icons/length.svg"
-import duration from "../../../icons/duration.svg"
-import { UsersList, FriendsList } from "../../basics/friends/friends"
-import { listActivitys, listUsers, listFriends } from "../../../graphql/queries"
+import FriendDetailsModal from "../../basics/modal/FriendDetailsModal"
 
 Amplify.configure(aws_exports)
 
@@ -58,9 +64,18 @@ const Profile = () => {
     return stats
   })
 
+  const [friendDetailsModal, setFriendDetailsModal] = useState(() => {
+    const defaultState = {
+      open: false,
+      id: "",
+    }
+
+    return defaultState
+  })
+
   const [tabValue, setTabValue] = useState(0)
   const { contextState } = useContext(AppContext)
-  const { jwtToken, user } = contextState
+  const { user } = contextState
 
   useEffect(() => {
     createData()
@@ -297,6 +312,10 @@ const Profile = () => {
       .catch((err) => console.log("Error when getting friends: ", err))
   }
 
+  const handleFriendDetails = (id: string) => {
+    setFriendDetailsModal({ id: id, open: true })
+  }
+
   return (
     <>
       <StyledPaper position="sticky" color="default">
@@ -327,8 +346,18 @@ const Profile = () => {
       {2 === tabValue && (
         <>
           <p>Friends:</p>
+
+          <FriendDetailsModal
+            id={friendDetailsModal.id}
+            open={friendDetailsModal.open}
+            handleClose={() =>
+              setFriendDetailsModal({ ...friendDetailsModal, open: false })
+            }
+          />
+
           <FriendsList
             friends={reformedState.friends}
+            onFriendDetailsClicked={(id: string) => handleFriendDetails(id)}
             onRemoveFriendClicked={(id: string) => handleRemoveFriend(id)}
           />
         </>

@@ -7,7 +7,7 @@ interface ActivityProps {
   open: boolean
   index: number
   onContainerClicked: (event: React.MouseEvent<HTMLDivElement>) => void
-  onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void
+  onDelete?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 const MyActivity = (props: ActivityProps) => {

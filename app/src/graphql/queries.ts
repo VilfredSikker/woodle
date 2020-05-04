@@ -19,10 +19,27 @@ export const getUser = `query GetUser($id: ID!) {
     id
     username
     activities {
-      nextToken
+      items {
+        id
+        userID
+        name
+        type
+        length
+        calories
+        duration
+        steps
+        path {
+          lat
+          lng
+        }
+      }
     }
     friends {
-      nextToken
+      items {
+        id
+        username
+        userID
+      }
     }
   }
 }

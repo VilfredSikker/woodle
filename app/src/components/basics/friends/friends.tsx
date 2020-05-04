@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react"
-import { User, Friend } from "../../../shared-interfaces"
-import { API, graphqlOperation } from "aws-amplify"
-import * as queries from "../../../graphql/queries"
 import { Button } from "@material-ui/core"
+import React from "react"
+import { Friend, User } from "../../../shared-interfaces"
 import StyledPaper from "../paper/paper"
+import styles from "./friends.module.scss"
 
 interface UsersListProps {
   users: User[]
@@ -12,6 +11,7 @@ interface UsersListProps {
 
 interface FriendsListProps {
   friends: Friend[]
+  onFriendDetailsClicked: (id: string) => void
   onRemoveFriendClicked: (id: string) => void
 }
 
@@ -22,35 +22,41 @@ export const UsersList = (props: UsersListProps) => {
       <StyledPaper>
         <div>
           <p>{user.username}</p>
-          <p>Total Friends: {user.friends ? user.friends.length : 0} </p>
-          <p>
-            Total Activities: {user.activities ? user.activities.length : 0}{" "}
-          </p>
         </div>
-        <Button onClick={() => onAddUserClicked(user.id, user.username)}>
+        <Button
+          color="primary"
+          onClick={() => onAddUserClicked(user.id, user.username)}
+        >
           Add User
         </Button>
       </StyledPaper>
     </li>
   ))
-  return <ul>{list}</ul>
+  return <ul className={styles.list}>{list}</ul>
 }
 
 export const FriendsList = (props: FriendsListProps) => {
-  const { friends, onRemoveFriendClicked } = props
+  const { friends, onRemoveFriendClicked, onFriendDetailsClicked } = props
   const list = friends.map((friend: Friend, index) => (
     <li key={index}>
       <StyledPaper>
         <div>
           <p>{friend.username}</p>
-          <p>Friends </p>
-          <p>Activities</p>
+          <Button
+            color="primary"
+            onClick={() => onFriendDetailsClicked(friend.id)}
+          >
+            See Activities
+          </Button>
         </div>
-        <Button onClick={() => onRemoveFriendClicked(friend.id)}>
+        <Button
+          color="secondary"
+          onClick={() => onRemoveFriendClicked(friend.id)}
+        >
           Remove Friend
         </Button>
       </StyledPaper>
     </li>
   ))
-  return <ul>{list}</ul>
+  return <ul className={styles.list}>{list}</ul>
 }
