@@ -279,24 +279,26 @@ const Profile = () => {
     console.log("friendsResult: ", friendsResult)
     const friends: Friend[] = friendsResult.data.listFriends.items
 
-    if (friends.filter((friend: Friend) => (friend.id = id)))
-      if (friends.length === 0) {
-        console.log("Adding friend: ", username)
-        const input: Friend = {
-          id: id,
-          username: username,
-          userID: user.id,
-        }
+    const filteredFriends = friends.filter((friend: Friend) => friend.id === id)
+    console.log("Filtered friends: ", filteredFriends)
 
-        await API.graphql(graphqlOperation(createFriend, { input: input }))
-        getFriends()
-          .then((result: Friend[]) =>
-            setReformedState({ ...reformedState, friends: result })
-          )
-          .catch((err) => console.log("Error when getting friends: ", err))
-      } else {
-        console.log("User is already a friend: ", username)
+    if (filteredFriends.length === 0) {
+      console.log("Adding friend: ", username)
+      const input: Friend = {
+        id: id,
+        username: username,
+        userID: user.id,
       }
+
+      await API.graphql(graphqlOperation(createFriend, { input: input }))
+      getFriends()
+        .then((result: Friend[]) =>
+          setReformedState({ ...reformedState, friends: result })
+        )
+        .catch((err) => console.log("Error when getting friends: ", err))
+    } else {
+      console.log("User is already a friend: ", username)
+    }
   }
 
   const handleRemoveFriend = async (id: string) => {
