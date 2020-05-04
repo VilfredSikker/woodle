@@ -169,6 +169,7 @@ const Profile = () => {
         calories: item.calories,
         steps: item.steps,
         type: item.type,
+        path: item.path,
       }
 
       return activity
@@ -332,7 +333,6 @@ const Profile = () => {
       {0 === tabValue && StatsTab}
       {1 === tabValue && (
         <>
-          <p>ActivityList</p>
           <ActivityList
             activities={reformedState.activities}
             handleDeleteActivity={(id: string) => handleDeleteActivity(id)}
@@ -341,8 +341,6 @@ const Profile = () => {
       )}
       {2 === tabValue && (
         <>
-          <p>Friends:</p>
-
           <FriendDetailsModal
             id={friendDetailsModal.id}
             open={friendDetailsModal.open}
@@ -360,7 +358,6 @@ const Profile = () => {
       )}
       {3 === tabValue && (
         <>
-          <p>All Users:</p>
           <UsersList
             users={reformedState.users}
             onAddUserClicked={(id: string, username: string) =>

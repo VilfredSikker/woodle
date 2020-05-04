@@ -116,6 +116,10 @@ export const listActivitys = `query ListActivitys(
       calories
       duration
       steps
+      path { 
+        lat
+        lng
+      }
     }
     nextToken
   }
