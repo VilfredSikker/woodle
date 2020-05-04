@@ -12,19 +12,27 @@ interface ActivityProps {
 
 const MyActivity = (props: ActivityProps) => {
   const { activity, onDelete, onContainerClicked, open } = props
-
+  console.log("My activity onDelete: ", onDelete)
   const openContainer = (
     <div onClick={onContainerClicked}>
       <div>
         <p>{activity.name}</p>
-        <p>Length: {activity.length}</p>
-        <p>Duration: {activity.duration}</p>
-        <p>Steps: {activity.steps}</p>
-        <p>Calories: {activity.calories}</p>
+        <p>Length: {activity.length !== undefined ? activity.length : 0}</p>
+        <p>
+          Duration: {activity.duration !== undefined ? activity.duration : 0}
+        </p>
+        <p>Steps: {activity.steps !== undefined ? activity.steps : 0}</p>
+        <p>
+          Calories: {activity.calories !== undefined ? activity.calories : 0}
+        </p>
       </div>
-      <Button onClick={onDelete} color="secondary">
-        Delete Activity
-      </Button>
+      {onDelete !== undefined ? (
+        <Button onClick={onDelete} color="secondary">
+          Delete Activity
+        </Button>
+      ) : (
+        <> </>
+      )}
     </div>
   )
 
