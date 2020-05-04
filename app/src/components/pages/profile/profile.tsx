@@ -2,9 +2,13 @@ import { Tab, Tabs } from "@material-ui/core"
 import Amplify, { API, graphqlOperation } from "aws-amplify"
 import React, { useContext, useEffect, useState } from "react"
 import aws_exports from "../../../aws-exports"
-import { deleteActivity, updateUser } from "../../../graphql/mutations"
-import * as queries from "../../../graphql/queries"
-import { Activity, User } from "../../../shared-interfaces"
+import {
+  deleteActivity,
+  updateUser,
+  createFriend,
+  deleteFriend,
+} from "../../../graphql/mutations"
+import { Activity, User, Friend } from "../../../shared-interfaces"
 import ActivityList from "../../basics/activity/activity-list"
 import { AppContext } from "../../context/app-context"
 import StyledCard from "./../../basics/card/card"
@@ -14,13 +18,14 @@ import flame from "../../../icons/flame.svg"
 import steps from "../../../icons/steps.svg"
 import length from "../../../icons/length.svg"
 import duration from "../../../icons/duration.svg"
-import { UsersList } from "../../basics/friends/friends"
+import { UsersList, FriendsList } from "../../basics/friends/friends"
+import { listActivitys, listUsers, listFriends } from "../../../graphql/queries"
 
 Amplify.configure(aws_exports)
 
 interface ReformedState {
   activities: Activity[]
-  friends: User[]
+  friends: Friend[]
   users: User[]
 }
 
@@ -58,14 +63,37 @@ const Profile = () => {
   const { jwtToken, user } = contextState
 
   useEffect(() => {
-    getActivities()
-    getUsers()
-    //getFriends()
-
-    console.log("jwt: ", jwtToken)
-    console.log("user: ", user)
+    createData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const createData = async () => {
+    let users: User[] = []
+    let activities: Activity[] = []
+    let friends: Friend[] = []
+    await getUsers()
+      .then((result) => (users = result))
+      .catch((err) => console.log("getUsers Error: ", err))
+
+    await getActivities()
+      .then((result) => {
+        activities = result
+        createStats(activities)
+      })
+      .catch((err) => console.log("getActivites Error: ", err))
+
+    await getFriends()
+      .then((result) => (friends = result))
+      .catch((err) => console.log("getFriends Error: ", err))
+
+    console.log("Create data: ", users, activities, friends)
+    setReformedState({
+      ...reformedState,
+      users: users,
+      activities: activities,
+      friends: friends,
+    })
+  }
 
   const getActivities = async () => {
     const filter = {
@@ -74,34 +102,49 @@ const Profile = () => {
       },
     }
     const result = await API.graphql(
-      graphqlOperation(queries.listActivitys, { filter: filter })
+      graphqlOperation(listActivitys, { filter: filter })
     )
-    console.log("getActivitesResult: ", result)
-    createActivities(result)
+    const activitiesResult = result.data.listActivitys.items
+    const activities = createActivities(activitiesResult)
+    console.log("Activities: ", activities)
+
+    return activities
   }
 
   const getUsers = async () => {
-    const result = await API.graphql(graphqlOperation(queries.listUsers))
-    const users = result.data.listUsers.items
+    const result = await API.graphql(graphqlOperation(listUsers))
+    const usersResult = result.data.listUsers.items
+    console.log("users: ", usersResult)
 
-    setReformedState({ ...reformedState, users: users })
+    const users = usersResult.map((item: User) => {
+      return {
+        id: item.id,
+        username: item.username,
+        friends: item.friends,
+        activities: item.activities,
+      }
+    })
+
+    return users
   }
 
-  // const getFriends = async () => {
-  //   const filter = {
-  //     userID: {
-  //       eq: user.id,
-  //     },
-  //   }
-  //   const result = await API.graphql(
-  //     graphqlOperation(queries.getUser, { id: filter })
-  //   )
-  //   createFriends(result)
-  // }
+  const getFriends = async () => {
+    const filter = {
+      userID: {
+        eq: user.id,
+      },
+    }
+    const result = await API.graphql(
+      graphqlOperation(listFriends, { id: filter })
+    )
+    const friends = result.data.listFriends.items
+    console.log("getFriendsResult: ", friends)
+    return friends
+  }
 
   const createActivities = (result: any) => {
-    const items = result.data.listActivitys.items
-    console.log("Items: ", items)
+    const items = result
+
     let activities: Activity[] = items.map((item: Activity) => {
       let activity: Activity = {
         id: item.id,
@@ -116,39 +159,29 @@ const Profile = () => {
 
       return activity
     })
-    createStats(activities)
 
-    setReformedState({ ...reformedState, activities: activities })
+    return activities
   }
 
-  // const createFriends = (result: any) => {
-  //   let items = result.data.listUsers.items
+  const createFriends = (result: any) => {
+    let items = result.data.listFriends.items
 
-  //   let friends: Friend[] = items.map((item: User) => {
-  //     let user: Friend = {
-  //       id: item.id,
-  //       username: item.username,
-  //     }
+    let friends: Friend[] = items.map((item: Friend) => {
+      let friend: Friend = {
+        id: item.id,
+        username: item.username,
+        userID: item.userID,
+      }
 
-  //     return user
-  //   })
+      return friend
+    })
 
-  //   setReformedState({ ...reformedState, friends: friends })
-  // }
+    setReformedState({ ...reformedState, friends: friends })
+  }
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setTabValue(newValue)
   }
-
-  const FriendsTab = (
-    <div>
-      {reformedState.friends.map((friend) => (
-        <div>
-          <h2>{friend.username}</h2>
-        </div>
-      ))}
-    </div>
-  )
 
   const createStats = (activities: Activity[]) => {
     var stats: UserStats = {
@@ -224,12 +257,22 @@ const Profile = () => {
     getActivities()
   }
 
-  const handleAddFriend = (userId: string) => {
-    const input = {
-      id: userId,
+  const handleAddFriend = (id: string, username: string) => {
+    const input: Friend = {
+      id: id,
+      username: username,
+      userID: user.id,
     }
 
-    API.graphql(graphqlOperation(updateUser, { input: input }))
+    API.graphql(graphqlOperation(createFriend, { input: input }))
+  }
+
+  const handleRemoveFriend = (id: string) => {
+    const input = {
+      id: id,
+    }
+
+    API.graphql(graphqlOperation(deleteFriend, { input: input }))
   }
 
   return (
@@ -251,17 +294,33 @@ const Profile = () => {
 
       {0 === tabValue && StatsTab}
       {1 === tabValue && (
-        <ActivityList
-          activities={reformedState.activities}
-          handleDeleteActivity={(id: string) => handleDeleteActivity(id)}
-        />
+        <>
+          <p>ActivityList</p>
+          <ActivityList
+            activities={reformedState.activities}
+            handleDeleteActivity={(id: string) => handleDeleteActivity(id)}
+          />
+        </>
       )}
-      {2 === tabValue && FriendsTab}
+      {2 === tabValue && (
+        <>
+          <p>Friends:</p>
+          <FriendsList
+            friends={reformedState.friends}
+            onRemoveFriendClicked={(id: string) => handleRemoveFriend(id)}
+          />
+        </>
+      )}
       {3 === tabValue && (
-        <UsersList
-          users={reformedState.users}
-          onAddUserClicked={(id: string) => handleAddFriend(id)}
-        />
+        <>
+          <p>All Users:</p>
+          <UsersList
+            users={reformedState.users}
+            onAddUserClicked={(id: string, username: string) =>
+              handleAddFriend(id, username)
+            }
+          />
+        </>
       )}
     </>
   )

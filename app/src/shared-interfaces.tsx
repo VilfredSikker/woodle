@@ -17,6 +17,12 @@ export interface Activity {
   path?: Coordinate[]
 }
 
+export interface Friend {
+  id: string
+  username: string
+  userID: string
+}
+
 export interface Coordinate {
   lat: number
   lng: number

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { User } from "../../../shared-interfaces"
+import { User, Friend } from "../../../shared-interfaces"
 import { API, graphqlOperation } from "aws-amplify"
 import * as queries from "../../../graphql/queries"
 import { Button } from "@material-ui/core"
@@ -7,11 +7,11 @@ import StyledPaper from "../paper/paper"
 
 interface UsersListProps {
   users: User[]
-  onAddUserClicked: (id: string) => void
+  onAddUserClicked: (id: string, username: string) => void
 }
 
 interface FriendsListProps {
-  friends: User[]
+  friends: Friend[]
   onRemoveFriendClicked: (id: string) => void
 }
 
@@ -28,7 +28,9 @@ export const UsersList = (props: UsersListProps) => {
               Total Activities: {user.activities ? user.activities.length : 0}{" "}
             </p>
           </div>
-          <Button onClick={() => onAddUserClicked(user.id)}>Add Users</Button>
+          <Button onClick={() => onAddUserClicked(user.id, user.username)}>
+            Add User
+          </Button>
         </StyledPaper>
       ))}
     </li>
