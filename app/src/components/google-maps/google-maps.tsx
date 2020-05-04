@@ -224,13 +224,13 @@ const GoogleMaps = () => {
     // https://www.runnersworld.com/training/a20801301/calories-burned-running-calculator/
     // Took default number and multiplying. Don't want to deal with weight and other factors
     const calories = distance * 0.0625
-    return Math.round(calories)
+    return parseFloat(calories.toFixed(2))
   }
 
   const calculateSteps = (distance: number) => {
     // steps calculations from https://www.quora.com/On-average-how-many-steps-does-it-take-to-travel-100-meters
     const steps = distance * 1.3
-    return Math.round(steps)
+    return Math.ceil(steps)
   }
 
   const activeOverlay = (

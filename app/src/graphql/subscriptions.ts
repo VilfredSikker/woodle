@@ -9,8 +9,7 @@ export const onCreateUser = `subscription OnCreateUser($owner: String!) {
       nextToken
     }
     friends {
-      id
-      username
+      nextToken
     }
   }
 }
@@ -23,8 +22,7 @@ export const onUpdateUser = `subscription OnUpdateUser($owner: String!) {
       nextToken
     }
     friends {
-      id
-      username
+      nextToken
     }
   }
 }
@@ -37,8 +35,40 @@ export const onDeleteUser = `subscription OnDeleteUser($owner: String!) {
       nextToken
     }
     friends {
-      id
-      username
+      nextToken
+    }
+  }
+}
+`;
+export const onCreateFriend = `subscription OnCreateFriend($owner: String!) {
+  onCreateFriend(owner: $owner) {
+    id
+    userID
+    username
+    activities {
+      nextToken
+    }
+  }
+}
+`;
+export const onUpdateFriend = `subscription OnUpdateFriend($owner: String!) {
+  onUpdateFriend(owner: $owner) {
+    id
+    userID
+    username
+    activities {
+      nextToken
+    }
+  }
+}
+`;
+export const onDeleteFriend = `subscription OnDeleteFriend($owner: String!) {
+  onDeleteFriend(owner: $owner) {
+    id
+    userID
+    username
+    activities {
+      nextToken
     }
   }
 }

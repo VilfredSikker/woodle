@@ -62,6 +62,46 @@ export type DeleteUserInput = {
   id?: string | null,
 };
 
+export type CreateFriendInput = {
+  id?: string | null,
+  userID: string,
+  username: string,
+};
+
+export type ModelFriendConditionInput = {
+  userID?: ModelIDInput | null,
+  username?: ModelStringInput | null,
+  and?: Array< ModelFriendConditionInput | null > | null,
+  or?: Array< ModelFriendConditionInput | null > | null,
+  not?: ModelFriendConditionInput | null,
+};
+
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
+export type UpdateFriendInput = {
+  id: string,
+  userID?: string | null,
+  username?: string | null,
+};
+
+export type DeleteFriendInput = {
+  id?: string | null,
+};
+
 export type CreateActivityInput = {
   id?: string | null,
   userID: string,
@@ -91,28 +131,12 @@ export type ModelActivityConditionInput = {
   name?: ModelStringInput | null,
   type?: ModelActivityTypeInput | null,
   length?: ModelFloatInput | null,
-  calories?: ModelIntInput | null,
+  calories?: ModelFloatInput | null,
   duration?: ModelFloatInput | null,
   steps?: ModelIntInput | null,
   and?: Array< ModelActivityConditionInput | null > | null,
   or?: Array< ModelActivityConditionInput | null > | null,
   not?: ModelActivityConditionInput | null,
-};
-
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
 };
 
 export type ModelActivityTypeInput = {
@@ -168,13 +192,22 @@ export type ModelUserFilterInput = {
   not?: ModelUserFilterInput | null,
 };
 
+export type ModelFriendFilterInput = {
+  id?: ModelIDInput | null,
+  userID?: ModelIDInput | null,
+  username?: ModelStringInput | null,
+  and?: Array< ModelFriendFilterInput | null > | null,
+  or?: Array< ModelFriendFilterInput | null > | null,
+  not?: ModelFriendFilterInput | null,
+};
+
 export type ModelActivityFilterInput = {
   id?: ModelIDInput | null,
   userID?: ModelIDInput | null,
   name?: ModelStringInput | null,
   type?: ModelActivityTypeInput | null,
   length?: ModelFloatInput | null,
-  calories?: ModelIntInput | null,
+  calories?: ModelFloatInput | null,
   duration?: ModelFloatInput | null,
   steps?: ModelIntInput | null,
   and?: Array< ModelActivityFilterInput | null > | null,
@@ -196,11 +229,10 @@ export type CreateUserMutation = {
       __typename: "ModelActivityConnection",
       nextToken: string | null,
     } | null,
-    friends:  Array< {
-      __typename: "User",
-      id: string,
-      username: string,
-    } | null > | null,
+    friends:  {
+      __typename: "ModelFriendConnection",
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -218,11 +250,10 @@ export type UpdateUserMutation = {
       __typename: "ModelActivityConnection",
       nextToken: string | null,
     } | null,
-    friends:  Array< {
-      __typename: "User",
-      id: string,
-      username: string,
-    } | null > | null,
+    friends:  {
+      __typename: "ModelFriendConnection",
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -240,11 +271,64 @@ export type DeleteUserMutation = {
       __typename: "ModelActivityConnection",
       nextToken: string | null,
     } | null,
-    friends:  Array< {
-      __typename: "User",
-      id: string,
-      username: string,
-    } | null > | null,
+    friends:  {
+      __typename: "ModelFriendConnection",
+      nextToken: string | null,
+    } | null,
+  } | null,
+};
+
+export type CreateFriendMutationVariables = {
+  input: CreateFriendInput,
+  condition?: ModelFriendConditionInput | null,
+};
+
+export type CreateFriendMutation = {
+  createFriend:  {
+    __typename: "Friend",
+    id: string,
+    userID: string,
+    username: string,
+    activities:  {
+      __typename: "ModelActivityConnection",
+      nextToken: string | null,
+    } | null,
+  } | null,
+};
+
+export type UpdateFriendMutationVariables = {
+  input: UpdateFriendInput,
+  condition?: ModelFriendConditionInput | null,
+};
+
+export type UpdateFriendMutation = {
+  updateFriend:  {
+    __typename: "Friend",
+    id: string,
+    userID: string,
+    username: string,
+    activities:  {
+      __typename: "ModelActivityConnection",
+      nextToken: string | null,
+    } | null,
+  } | null,
+};
+
+export type DeleteFriendMutationVariables = {
+  input: DeleteFriendInput,
+  condition?: ModelFriendConditionInput | null,
+};
+
+export type DeleteFriendMutation = {
+  deleteFriend:  {
+    __typename: "Friend",
+    id: string,
+    userID: string,
+    username: string,
+    activities:  {
+      __typename: "ModelActivityConnection",
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -333,11 +417,10 @@ export type GetUserByNameQuery = {
       __typename: "ModelActivityConnection",
       nextToken: string | null,
     } | null,
-    friends:  Array< {
-      __typename: "User",
-      id: string,
-      username: string,
-    } | null > | null,
+    friends:  {
+      __typename: "ModelFriendConnection",
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -354,11 +437,10 @@ export type GetUserQuery = {
       __typename: "ModelActivityConnection",
       nextToken: string | null,
     } | null,
-    friends:  Array< {
-      __typename: "User",
-      id: string,
-      username: string,
-    } | null > | null,
+    friends:  {
+      __typename: "ModelFriendConnection",
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -374,6 +456,42 @@ export type ListUsersQuery = {
     items:  Array< {
       __typename: "User",
       id: string,
+      username: string,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
+export type GetFriendQueryVariables = {
+  id: string,
+};
+
+export type GetFriendQuery = {
+  getFriend:  {
+    __typename: "Friend",
+    id: string,
+    userID: string,
+    username: string,
+    activities:  {
+      __typename: "ModelActivityConnection",
+      nextToken: string | null,
+    } | null,
+  } | null,
+};
+
+export type ListFriendsQueryVariables = {
+  filter?: ModelFriendFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListFriendsQuery = {
+  listFriends:  {
+    __typename: "ModelFriendConnection",
+    items:  Array< {
+      __typename: "Friend",
+      id: string,
+      userID: string,
       username: string,
     } | null > | null,
     nextToken: string | null,
@@ -440,11 +558,10 @@ export type OnCreateUserSubscription = {
       __typename: "ModelActivityConnection",
       nextToken: string | null,
     } | null,
-    friends:  Array< {
-      __typename: "User",
-      id: string,
-      username: string,
-    } | null > | null,
+    friends:  {
+      __typename: "ModelFriendConnection",
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -461,11 +578,10 @@ export type OnUpdateUserSubscription = {
       __typename: "ModelActivityConnection",
       nextToken: string | null,
     } | null,
-    friends:  Array< {
-      __typename: "User",
-      id: string,
-      username: string,
-    } | null > | null,
+    friends:  {
+      __typename: "ModelFriendConnection",
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 
@@ -482,11 +598,61 @@ export type OnDeleteUserSubscription = {
       __typename: "ModelActivityConnection",
       nextToken: string | null,
     } | null,
-    friends:  Array< {
-      __typename: "User",
-      id: string,
-      username: string,
-    } | null > | null,
+    friends:  {
+      __typename: "ModelFriendConnection",
+      nextToken: string | null,
+    } | null,
+  } | null,
+};
+
+export type OnCreateFriendSubscriptionVariables = {
+  owner: string,
+};
+
+export type OnCreateFriendSubscription = {
+  onCreateFriend:  {
+    __typename: "Friend",
+    id: string,
+    userID: string,
+    username: string,
+    activities:  {
+      __typename: "ModelActivityConnection",
+      nextToken: string | null,
+    } | null,
+  } | null,
+};
+
+export type OnUpdateFriendSubscriptionVariables = {
+  owner: string,
+};
+
+export type OnUpdateFriendSubscription = {
+  onUpdateFriend:  {
+    __typename: "Friend",
+    id: string,
+    userID: string,
+    username: string,
+    activities:  {
+      __typename: "ModelActivityConnection",
+      nextToken: string | null,
+    } | null,
+  } | null,
+};
+
+export type OnDeleteFriendSubscriptionVariables = {
+  owner: string,
+};
+
+export type OnDeleteFriendSubscription = {
+  onDeleteFriend:  {
+    __typename: "Friend",
+    id: string,
+    userID: string,
+    username: string,
+    activities:  {
+      __typename: "ModelActivityConnection",
+      nextToken: string | null,
+    } | null,
   } | null,
 };
 

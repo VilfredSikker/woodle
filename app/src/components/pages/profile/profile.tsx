@@ -76,7 +76,7 @@ const Profile = () => {
     const result = await API.graphql(
       graphqlOperation(queries.listActivitys, { filter: filter })
     )
-
+    console.log("getActivitesResult: ", result)
     createActivities(result)
   }
 
@@ -101,7 +101,7 @@ const Profile = () => {
 
   const createActivities = (result: any) => {
     const items = result.data.listActivitys.items
-
+    console.log("Items: ", items)
     let activities: Activity[] = items.map((item: Activity) => {
       let activity: Activity = {
         id: item.id,

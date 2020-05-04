@@ -12,8 +12,7 @@ export const createUser = `mutation CreateUser(
       nextToken
     }
     friends {
-      id
-      username
+      nextToken
     }
   }
 }
@@ -29,8 +28,7 @@ export const updateUser = `mutation UpdateUser(
       nextToken
     }
     friends {
-      id
-      username
+      nextToken
     }
   }
 }
@@ -46,8 +44,49 @@ export const deleteUser = `mutation DeleteUser(
       nextToken
     }
     friends {
-      id
-      username
+      nextToken
+    }
+  }
+}
+`;
+export const createFriend = `mutation CreateFriend(
+  $input: CreateFriendInput!
+  $condition: ModelFriendConditionInput
+) {
+  createFriend(input: $input, condition: $condition) {
+    id
+    userID
+    username
+    activities {
+      nextToken
+    }
+  }
+}
+`;
+export const updateFriend = `mutation UpdateFriend(
+  $input: UpdateFriendInput!
+  $condition: ModelFriendConditionInput
+) {
+  updateFriend(input: $input, condition: $condition) {
+    id
+    userID
+    username
+    activities {
+      nextToken
+    }
+  }
+}
+`;
+export const deleteFriend = `mutation DeleteFriend(
+  $input: DeleteFriendInput!
+  $condition: ModelFriendConditionInput
+) {
+  deleteFriend(input: $input, condition: $condition) {
+    id
+    userID
+    username
+    activities {
+      nextToken
     }
   }
 }

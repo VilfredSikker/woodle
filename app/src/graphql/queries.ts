@@ -9,8 +9,7 @@ export const getUserByName = `query GetUserByName($username: String!) {
       nextToken
     }
     friends {
-      id
-      username
+      nextToken
     }
   }
 }
@@ -23,8 +22,7 @@ export const getUser = `query GetUser($id: ID!) {
       nextToken
     }
     friends {
-      id
-      username
+      nextToken
     }
   }
 }
@@ -37,6 +35,32 @@ export const listUsers = `query ListUsers(
   listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      username
+    }
+    nextToken
+  }
+}
+`;
+export const getFriend = `query GetFriend($id: ID!) {
+  getFriend(id: $id) {
+    id
+    userID
+    username
+    activities {
+      nextToken
+    }
+  }
+}
+`;
+export const listFriends = `query ListFriends(
+  $filter: ModelFriendFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listFriends(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      userID
       username
     }
     nextToken

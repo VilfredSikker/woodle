@@ -13,7 +13,25 @@ type User
   id: ID!
   username: String!
   activities: [Activity] @connection(keyName: "byActivity", fields: ["id"])
-  friends: [User]
+  friends: [Friend] @connection(keyName: "byFriend", fields: ["id"])
+}
+
+type Friend
+  @model
+  @key(name: "byFriend", fields: ["userID", "username"])
+  @auth(
+    rules: [
+      {
+        allow: owner
+        ownerField: "owner"
+        operations: [create, update, delete, read]
+      }
+    ]
+  ) {
+  id: ID!
+  userID: ID!
+  username: String!
+  activities: [Activity] @connection(keyName: "byActivity", fields: ["id"])
 }
 
 type Activity
@@ -34,7 +52,7 @@ type Activity
   name: String!
   type: ActivityType
   length: Float
-  calories: Int
+  calories: Float
   duration: Float
   steps: Int
   path: [Coordinate]
