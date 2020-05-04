@@ -6,7 +6,7 @@ import styles from "./activity-list.module.scss"
 
 interface ActivityListProps {
   activities: Activity[]
-  handleDeleteActivity: (id: string) => void
+  handleDeleteActivity?: (id: string) => void
 }
 
 const ActivityList = (props: ActivityListProps) => {
@@ -31,13 +31,21 @@ const ActivityList = (props: ActivityListProps) => {
           index={index}
           open={openActivity === index}
           onContainerClicked={() => handleContainerClicked(index)}
-          onDelete={() => handleDeleteActivity(item.id)}
+          onDelete={
+            handleDeleteActivity
+              ? () => handleDeleteActivity(item.id)
+              : undefined
+          }
         />
       </StyledPaper>
     )
   })
 
-  return <div className={styles.list}>{list}</div>
+  return (
+    <div className={styles.list}>
+      {list.length === 0 ? <h2>No Activities</h2> : list}
+    </div>
+  )
 }
 
 export default ActivityList
