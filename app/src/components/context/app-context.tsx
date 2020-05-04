@@ -25,12 +25,12 @@ const defaultState: ContextValues = {
   jwtToken: "",
   theme: "light",
   lang: "dk",
-  user: { id: "", username: "", friends: null, activities: null }
+  user: { id: "", username: "", friends: null, activities: null },
 }
 
 const initialValues: ContextState = {
   contextState: defaultState,
-  setContextState: () => console.log("Remember to use the provider")
+  setContextState: () => console.log("Remember to use the provider"),
 }
 
 export const AppContext = createContext<ContextState>(initialValues)
@@ -38,9 +38,9 @@ export const AppContext = createContext<ContextState>(initialValues)
 export const AppContextProvider = (props: any) => {
   const [state, setState] = useState<ContextValues>(defaultState)
   const setContextState = (partial: Partial<ContextValues>) => {
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
-      ...partial
+      ...partial,
     }))
   }
 
@@ -48,12 +48,10 @@ export const AppContextProvider = (props: any) => {
     var storageJwt: string | null = ""
 
     if (state.jwtToken === "") {
-      console.log("New storage key")
       storageJwt = getJwtTokenFromStorage()
     }
 
     if (storageJwt != null) {
-      console.log("storageJwt != null")
       setState({ ...state, jwtToken: storageJwt })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

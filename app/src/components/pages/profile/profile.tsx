@@ -271,14 +271,12 @@ const Profile = () => {
     const friendsResult = await API.graphql(
       graphqlOperation(listFriends, { id: filter })
     )
-    console.log("friendsResult: ", friendsResult)
+
     const friends: Friend[] = friendsResult.data.listFriends.items
 
     const filteredFriends = friends.filter((friend: Friend) => friend.id === id)
-    console.log("Filtered friends: ", filteredFriends)
 
     if (filteredFriends.length === 0) {
-      console.log("Adding friend: ", username)
       const input: Friend = {
         id: id,
         username: username,

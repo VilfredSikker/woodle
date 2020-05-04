@@ -49,7 +49,6 @@ const FormikSignIn = (props: any) => {
         // username is a unique name, which is why this is safe
         if (items.length > 0) {
           let user = items[0]
-          console.log("User: ", user)
           setContextState({ user: user })
         } else {
           const input = {
