@@ -17,42 +17,40 @@ interface FriendsListProps {
 
 export const UsersList = (props: UsersListProps) => {
   const { users, onAddUserClicked } = props
-  return (
-    <li>
-      {users.map((user) => (
-        <StyledPaper>
-          <div>
-            <p>{user.username}</p>
-            <p>Total Friends: {user.friends ? user.friends.length : 0} </p>
-            <p>
-              Total Activities: {user.activities ? user.activities.length : 0}{" "}
-            </p>
-          </div>
-          <Button onClick={() => onAddUserClicked(user.id, user.username)}>
-            Add User
-          </Button>
-        </StyledPaper>
-      ))}
+  const list = users.map((user: User, index) => (
+    <li key={index}>
+      <StyledPaper>
+        <div>
+          <p>{user.username}</p>
+          <p>Total Friends: {user.friends ? user.friends.length : 0} </p>
+          <p>
+            Total Activities: {user.activities ? user.activities.length : 0}{" "}
+          </p>
+        </div>
+        <Button onClick={() => onAddUserClicked(user.id, user.username)}>
+          Add User
+        </Button>
+      </StyledPaper>
     </li>
-  )
+  ))
+  return <ul>{list}</ul>
 }
 
 export const FriendsList = (props: FriendsListProps) => {
   const { friends, onRemoveFriendClicked } = props
-  return (
-    <li>
-      {friends.map((friend) => (
-        <StyledPaper>
-          <div>
-            <p>{friend.username}</p>
-            <p>Friends </p>
-            <p>Activities</p>
-          </div>
-          <Button onClick={() => onRemoveFriendClicked(friend.id)}>
-            Remove Friend
-          </Button>
-        </StyledPaper>
-      ))}
+  const list = friends.map((friend: Friend, index) => (
+    <li key={index}>
+      <StyledPaper>
+        <div>
+          <p>{friend.username}</p>
+          <p>Friends </p>
+          <p>Activities</p>
+        </div>
+        <Button onClick={() => onRemoveFriendClicked(friend.id)}>
+          Remove Friend
+        </Button>
+      </StyledPaper>
     </li>
-  )
+  ))
+  return <ul>{list}</ul>
 }

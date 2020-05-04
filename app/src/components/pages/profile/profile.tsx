@@ -71,22 +71,22 @@ const Profile = () => {
     let users: User[] = []
     let activities: Activity[] = []
     let friends: Friend[] = []
+
     await getUsers()
-      .then((result) => (users = result))
+      .then((result: User[]) => (users = result))
       .catch((err) => console.log("getUsers Error: ", err))
 
     await getActivities()
-      .then((result) => {
+      .then((result: Activity[]) => {
         activities = result
         createStats(activities)
       })
       .catch((err) => console.log("getActivites Error: ", err))
 
     await getFriends()
-      .then((result) => (friends = result))
+      .then((result: Friend[]) => (friends = result))
       .catch((err) => console.log("getFriends Error: ", err))
 
-    console.log("Create data: ", users, activities, friends)
     setReformedState({
       ...reformedState,
       users: users,
@@ -106,7 +106,6 @@ const Profile = () => {
     )
     const activitiesResult = result.data.listActivitys.items
     const activities = createActivities(activitiesResult)
-    console.log("Activities: ", activities)
 
     return activities
   }
@@ -114,7 +113,6 @@ const Profile = () => {
   const getUsers = async () => {
     const result = await API.graphql(graphqlOperation(listUsers))
     const usersResult = result.data.listUsers.items
-    console.log("users: ", usersResult)
 
     const users = usersResult.map((item: User) => {
       return {
@@ -138,7 +136,7 @@ const Profile = () => {
       graphqlOperation(listFriends, { id: filter })
     )
     const friends = result.data.listFriends.items
-    console.log("getFriendsResult: ", friends)
+
     return friends
   }
 
@@ -161,22 +159,6 @@ const Profile = () => {
     })
 
     return activities
-  }
-
-  const createFriends = (result: any) => {
-    let items = result.data.listFriends.items
-
-    let friends: Friend[] = items.map((item: Friend) => {
-      let friend: Friend = {
-        id: item.id,
-        username: item.username,
-        userID: item.userID,
-      }
-
-      return friend
-    })
-
-    setReformedState({ ...reformedState, friends: friends })
   }
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -255,24 +237,57 @@ const Profile = () => {
     API.graphql(graphqlOperation(deleteActivity, { input: input }))
 
     getActivities()
+      .then((result: Activity[]) => {
+        setReformedState({ ...reformedState, activities: result })
+        createStats(result)
+      })
+      .catch((err) => console.log("Error when getting activities: ", err))
   }
 
-  const handleAddFriend = (id: string, username: string) => {
-    const input: Friend = {
-      id: id,
-      username: username,
-      userID: user.id,
+  const handleAddFriend = async (id: string, username: string) => {
+    const filter = {
+      userID: {
+        eq: user.id,
+      },
     }
 
-    API.graphql(graphqlOperation(createFriend, { input: input }))
+    const friendsResult = await API.graphql(
+      graphqlOperation(listFriends, { id: filter })
+    )
+    console.log("friendsResult: ", friendsResult)
+    const friends: Friend[] = friendsResult.data.listFriends.items
+
+    if (friends.filter((friend: Friend) => (friend.id = id)))
+      if (friends.length === 0) {
+        console.log("Adding friend: ", username)
+        const input: Friend = {
+          id: id,
+          username: username,
+          userID: user.id,
+        }
+
+        await API.graphql(graphqlOperation(createFriend, { input: input }))
+        getFriends()
+          .then((result: Friend[]) =>
+            setReformedState({ ...reformedState, friends: result })
+          )
+          .catch((err) => console.log("Error when getting friends: ", err))
+      } else {
+        console.log("User is already a friend: ", username)
+      }
   }
 
-  const handleRemoveFriend = (id: string) => {
+  const handleRemoveFriend = async (id: string) => {
     const input = {
       id: id,
     }
 
-    API.graphql(graphqlOperation(deleteFriend, { input: input }))
+    await API.graphql(graphqlOperation(deleteFriend, { input: input }))
+    getFriends()
+      .then((result: Friend[]) =>
+        setReformedState({ ...reformedState, friends: result })
+      )
+      .catch((err) => console.log("Error when getting friends: ", err))
   }
 
   return (
