@@ -190,7 +190,6 @@ const GoogleMaps = () => {
   }
 
   const calculateDistance = (paths: Position[]): number => {
-    var R = 6371e3 // metres
     var distance = 0
     if (paths.length > 2) {
       for (let index = 1; index < paths.length; index++) {
@@ -202,23 +201,34 @@ const GoogleMaps = () => {
         const lon1 = element.lng
         const lon2 = element2.lng
 
-        var φ1 = (lat1 * Math.PI) / 180
-        var φ2 = (lat2 * Math.PI) / 180
-        var Δφ = ((lat2 - lat1) * Math.PI) / 180
-        var Δλ = ((lon2 - lon1) * Math.PI) / 180
+        let meters = measureTwoCoordinates(lat1, lon1, lat2, lon2)
 
-        var a =
-          Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-          Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2)
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-
-        var d = R * c
-        distance = +d
+        distance += meters
       }
     }
 
     // Limit decimals to 2
     return +distance.toFixed(2)
+  }
+
+  function measureTwoCoordinates(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number
+  ) {
+    var R = 6378.137 // Radius of earth in KM
+    var dLat = (lat2 * Math.PI) / 180 - (lat1 * Math.PI) / 180
+    var dLon = (lon2 * Math.PI) / 180 - (lon1 * Math.PI) / 180
+    var a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2)
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+    var d = R * c
+    return d * 1000 // meters
   }
 
   const calculateCalories = (distance: number) => {
