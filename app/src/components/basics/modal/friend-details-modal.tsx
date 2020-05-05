@@ -3,7 +3,7 @@ import { API, graphqlOperation } from "aws-amplify"
 import React, { useEffect, useState } from "react"
 import { getUser } from "../../../graphql/queries"
 import ActivityList from "../activity/activity-list"
-import { Activity } from "./../../../shared-interfaces"
+import { Activity } from "../../../shared-interfaces"
 
 interface FriendDetailsModalProps {
   id: string
