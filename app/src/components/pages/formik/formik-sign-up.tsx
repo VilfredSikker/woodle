@@ -6,6 +6,7 @@ import StyledButton from "../../basics/button/button"
 import InputField from "../../basics/input-field/input-field"
 import LoginLayout from "../../layout/login-layout/login-layout"
 import { ToastsStore } from "react-toasts"
+import styles from "./formik.module.scss"
 
 const FormikSignUp = (props: any) => {
   const formik = useFormik({
@@ -16,6 +17,7 @@ const FormikSignUp = (props: any) => {
     },
     validationSchema: Yup.object({
       username: Yup.string()
+        .min(4, "Must be atleast 4 characters")
         .max(15, "Must be 15 characters or less")
         .required(),
       password: Yup.string()
@@ -24,6 +26,7 @@ const FormikSignUp = (props: any) => {
       email: Yup.string().email("Invalid email address").required(),
     }),
     onSubmit: (values) => {
+      console.log("Submit clicked")
       Auth.signUp({
         username: values.username,
         password: values.password,
@@ -32,9 +35,10 @@ const FormikSignUp = (props: any) => {
         },
       })
         .then(() => {
+          console.log(values)
           props.history.push("/confirm-sign-up")
         })
-        .catch((err) => ToastsStore.error("error with sign up ", err))
+        .catch((err) => ToastsStore.error("error with sign up " + err))
     },
   })
   return (
@@ -49,7 +53,7 @@ const FormikSignUp = (props: any) => {
           value={formik.values.username}
         />
         {formik.touched.username && formik.errors.username ? (
-          <div>{formik.errors.username}</div>
+          <div className={styles.errorMessage}>{formik.errors.username}</div>
         ) : null}
         <InputField
           type="password"
@@ -60,7 +64,7 @@ const FormikSignUp = (props: any) => {
           value={formik.values.password}
         />
         {formik.touched.password && formik.errors.password ? (
-          <div>{formik.errors.password}</div>
+          <div className={styles.errorMessage}>{formik.errors.password}</div>
         ) : null}
         <InputField
           type="text"
@@ -71,7 +75,7 @@ const FormikSignUp = (props: any) => {
           value={formik.values.email}
         />
         {formik.touched.email && formik.errors.email ? (
-          <div>{formik.errors.email}</div>
+          <div className={styles.errorMessage}>{formik.errors.email}</div>
         ) : null}
         <StyledButton type="submit">Sign Up Now</StyledButton>
       </form>

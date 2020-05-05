@@ -15,9 +15,13 @@ const FormikConfirmSignUp = (props: any) => {
     onSubmit: (values) => {
       Auth.confirmSignUp(values.username, values.confirmationCode)
         .then(() => {
-          props.history.push("/app/profile")
+          props.history.push("/login")
         })
-        .catch((err) => ToastsStore.error("Can't sign up: ", err))
+        .catch((err) =>
+          ToastsStore.error(
+            "Make sure to use the correct username and confirmation code"
+          )
+        )
     },
   })
   return (
