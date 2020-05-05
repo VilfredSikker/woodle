@@ -14,6 +14,7 @@ import { Activity } from "../../shared-interfaces"
 import { API, graphqlOperation } from "aws-amplify"
 import * as mutations from "../../graphql/mutations"
 import { ToastsStore } from "react-toasts"
+import scss from "./google-maps.module.scss"
 
 interface RunTracker {
   coordinates?: Position[]
@@ -295,7 +296,7 @@ const GoogleMaps = () => {
         googleMapsApiKey="AIzaSyDEKSGDimrHDb12-2kflJkrzAcRf3MECsQ"
       >
         <GoogleMap
-          id="circle-example"
+          id="google-maps"
           mapContainerStyle={{
             position: "absolute",
             width: "100%",
@@ -311,10 +312,16 @@ const GoogleMaps = () => {
           {runTracker.active && (
             <Polyline options={runPathOptions} path={runTracker.coordinates} />
           )}
-          {runTracker.active ? pausedOverlay : activeOverlay}
           <Circle center={playerPosition} radius={4} options={circleOptions} />
         </GoogleMap>
       </LoadScript>
+      <div className={scss.buttonContainer}>
+        {runTracker.active ? (
+          <StopButton onClick={onStopClicked} />
+        ) : (
+          <PlayButton onClick={onPlayClicked} />
+        )}
+      </div>
     </>
   )
 }
