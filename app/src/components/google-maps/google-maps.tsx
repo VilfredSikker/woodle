@@ -73,13 +73,16 @@ const GoogleMaps = () => {
   }, [])
 
   useEffect(() => {
-    navigator.geolocation.watchPosition(trackPath, errorCallback, {
-      enableHighAccuracy: true,
-    })
+    let trackerId = navigator.geolocation.watchPosition(
+      trackPath,
+      errorCallback,
+      {
+        enableHighAccuracy: true,
+      }
+    )
 
     return () => {
-      let id = navigator.geolocation.watchPosition(success, errorCallback)
-      navigator.geolocation.clearWatch(id)
+      navigator.geolocation.clearWatch(trackerId)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -188,7 +191,7 @@ const GoogleMaps = () => {
       ToastsStore.error("Couldn't save path, might be too short")
     }
 
-    setRunTracker({ ...runTracker, active: false })
+    setRunTracker((prev) => ({ ...prev, active: false }))
   }
 
   const calculateDistance = (paths: Position[]): number => {
