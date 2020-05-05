@@ -1,20 +1,14 @@
-import {
-  Circle,
-  GoogleMap,
-  LoadScript,
-  OverlayView,
-  Polyline,
-} from "@react-google-maps/api"
-import React, { useEffect, useState, useContext } from "react"
+import { Circle, GoogleMap, LoadScript, Polyline } from "@react-google-maps/api"
+import { API, graphqlOperation } from "aws-amplify"
+import React, { useContext, useEffect, useState } from "react"
+import { ToastsStore } from "react-toasts"
+import * as mutations from "../../graphql/mutations"
+import { Activity } from "../../shared-interfaces"
+import { AppContext } from "../context/app-context"
+import scss from "./google-maps.module.scss"
+import MapStyles from "./map-styles"
 import PlayButton from "./play-button"
 import StopButton from "./stop-button"
-import MapStyles from "./map-styles"
-import { AppContext } from "../context/app-context"
-import { Activity } from "../../shared-interfaces"
-import { API, graphqlOperation } from "aws-amplify"
-import * as mutations from "../../graphql/mutations"
-import { ToastsStore } from "react-toasts"
-import scss from "./google-maps.module.scss"
 
 interface RunTracker {
   coordinates?: Position[]
@@ -239,36 +233,6 @@ const GoogleMaps = () => {
     const steps = distance * 1.3
     return Math.ceil(steps)
   }
-
-  const activeOverlay = (
-    <OverlayView
-      position={playerPosition}
-      getPixelPositionOffset={() => ({
-        x: 0,
-        y: 150,
-      })}
-      mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-    >
-      <>
-        <PlayButton onClick={onPlayClicked} />
-      </>
-    </OverlayView>
-  )
-
-  const pausedOverlay = (
-    <OverlayView
-      position={playerPosition}
-      getPixelPositionOffset={() => ({
-        x: 0,
-        y: 150,
-      })}
-      mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-    >
-      <>
-        <StopButton onClick={onStopClicked} />
-      </>
-    </OverlayView>
-  )
 
   const reducePaths = (paths: Position[] | undefined) => {
     var previousPath: Position = { lat: -99999999999, lng: -9999999999999 }
