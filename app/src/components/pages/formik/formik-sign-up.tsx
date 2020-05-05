@@ -26,7 +26,6 @@ const FormikSignUp = (props: any) => {
       email: Yup.string().email("Invalid email address").required(),
     }),
     onSubmit: (values) => {
-      console.log("Submit clicked")
       Auth.signUp({
         username: values.username,
         password: values.password,
@@ -35,7 +34,6 @@ const FormikSignUp = (props: any) => {
         },
       })
         .then(() => {
-          console.log(values)
           props.history.push("/confirm-sign-up")
         })
         .catch((err) => ToastsStore.error("error with sign up " + err))

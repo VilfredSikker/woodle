@@ -7,7 +7,6 @@ export default (WrappedComponent) => (props) => {
   const { contextState } = useContext(AppContext)
   const { jwtToken } = contextState
   if (!isSignedIn(jwtToken)) {
-    console.log("Not logged in: ", jwtToken)
     return (
       <Redirect
         to={{

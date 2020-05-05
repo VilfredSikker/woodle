@@ -84,18 +84,18 @@ const Profile = () => {
 
     await getUsers()
       .then((result: User[]) => (users = result))
-      .catch((err) => console.log("getUsers Error: ", err))
+      .catch((err) => ToastsStore.error("getUsers Error: " + err))
 
     await getActivities()
       .then((result: Activity[]) => {
         activities = result
         createStats(activities)
       })
-      .catch((err) => console.log("getActivites Error: ", err))
+      .catch((err) => ToastsStore.error("getActivites Error: " + err))
 
     await getFriends()
       .then((result: Friend[]) => (friends = result))
-      .catch((err) => console.log("getFriends Error: ", err))
+      .catch((err) => ToastsStore.error("getFriends Error: " + err))
 
     setReformedState({
       ...reformedState,
