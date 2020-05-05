@@ -19,8 +19,12 @@ export interface Activity {
 
 export interface Friend {
   id: string
-  username: string
-  userID: string
+  friendName: string
+}
+
+export interface FriendConnector {
+  friendID: string
+  connectorID: string
 }
 
 export interface Coordinate {

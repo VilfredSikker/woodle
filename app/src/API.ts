@@ -62,18 +62,18 @@ export type DeleteUserInput = {
   id?: string | null,
 };
 
-export type CreateFriendInput = {
+export type CreateFriendConnectorInput = {
   id?: string | null,
-  userID: string,
-  username: string,
+  friendID: string,
+  connectorID: string,
 };
 
-export type ModelFriendConditionInput = {
-  userID?: ModelIDInput | null,
-  username?: ModelStringInput | null,
-  and?: Array< ModelFriendConditionInput | null > | null,
-  or?: Array< ModelFriendConditionInput | null > | null,
-  not?: ModelFriendConditionInput | null,
+export type ModelFriendConnectorConditionInput = {
+  friendID?: ModelIDInput | null,
+  connectorID?: ModelIDInput | null,
+  and?: Array< ModelFriendConnectorConditionInput | null > | null,
+  or?: Array< ModelFriendConnectorConditionInput | null > | null,
+  not?: ModelFriendConnectorConditionInput | null,
 };
 
 export type ModelIDInput = {
@@ -92,10 +92,31 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
+export type UpdateFriendConnectorInput = {
+  id: string,
+  friendID?: string | null,
+  connectorID?: string | null,
+};
+
+export type DeleteFriendConnectorInput = {
+  id?: string | null,
+};
+
+export type CreateFriendInput = {
+  id?: string | null,
+  friendName: string,
+};
+
+export type ModelFriendConditionInput = {
+  friendName?: ModelStringInput | null,
+  and?: Array< ModelFriendConditionInput | null > | null,
+  or?: Array< ModelFriendConditionInput | null > | null,
+  not?: ModelFriendConditionInput | null,
+};
+
 export type UpdateFriendInput = {
   id: string,
-  userID?: string | null,
-  username?: string | null,
+  friendName?: string | null,
 };
 
 export type DeleteFriendInput = {
@@ -106,20 +127,12 @@ export type CreateActivityInput = {
   id?: string | null,
   userID: string,
   name: string,
-  type?: ActivityType | null,
   length?: number | null,
   calories?: number | null,
   duration?: number | null,
   steps?: number | null,
   path?: Array< CoordinateInput | null > | null,
 };
-
-export enum ActivityType {
-  SOLO = "SOLO",
-  GROUP = "GROUP",
-  SPONSORED = "SPONSORED",
-}
-
 
 export type CoordinateInput = {
   lat?: number | null,
@@ -129,7 +142,6 @@ export type CoordinateInput = {
 export type ModelActivityConditionInput = {
   userID?: ModelIDInput | null,
   name?: ModelStringInput | null,
-  type?: ModelActivityTypeInput | null,
   length?: ModelFloatInput | null,
   calories?: ModelFloatInput | null,
   duration?: ModelFloatInput | null,
@@ -137,11 +149,6 @@ export type ModelActivityConditionInput = {
   and?: Array< ModelActivityConditionInput | null > | null,
   or?: Array< ModelActivityConditionInput | null > | null,
   not?: ModelActivityConditionInput | null,
-};
-
-export type ModelActivityTypeInput = {
-  eq?: ActivityType | null,
-  ne?: ActivityType | null,
 };
 
 export type ModelFloatInput = {
@@ -172,7 +179,6 @@ export type UpdateActivityInput = {
   id: string,
   userID?: string | null,
   name?: string | null,
-  type?: ActivityType | null,
   length?: number | null,
   calories?: number | null,
   duration?: number | null,
@@ -194,8 +200,7 @@ export type ModelUserFilterInput = {
 
 export type ModelFriendFilterInput = {
   id?: ModelIDInput | null,
-  userID?: ModelIDInput | null,
-  username?: ModelStringInput | null,
+  friendName?: ModelStringInput | null,
   and?: Array< ModelFriendFilterInput | null > | null,
   or?: Array< ModelFriendFilterInput | null > | null,
   not?: ModelFriendFilterInput | null,
@@ -205,7 +210,6 @@ export type ModelActivityFilterInput = {
   id?: ModelIDInput | null,
   userID?: ModelIDInput | null,
   name?: ModelStringInput | null,
-  type?: ModelActivityTypeInput | null,
   length?: ModelFloatInput | null,
   calories?: ModelFloatInput | null,
   duration?: ModelFloatInput | null,
@@ -227,10 +231,26 @@ export type CreateUserMutation = {
     username: string,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
     friends:  {
-      __typename: "ModelFriendConnection",
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
       nextToken: string | null,
     } | null,
   } | null,
@@ -248,10 +268,26 @@ export type UpdateUserMutation = {
     username: string,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
     friends:  {
-      __typename: "ModelFriendConnection",
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
       nextToken: string | null,
     } | null,
   } | null,
@@ -269,12 +305,148 @@ export type DeleteUserMutation = {
     username: string,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
     friends:  {
-      __typename: "ModelFriendConnection",
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
       nextToken: string | null,
     } | null,
+  } | null,
+};
+
+export type CreateFriendConnectorMutationVariables = {
+  input: CreateFriendConnectorInput,
+  condition?: ModelFriendConnectorConditionInput | null,
+};
+
+export type CreateFriendConnectorMutation = {
+  createFriendConnector:  {
+    __typename: "FriendConnector",
+    id: string,
+    friendID: string,
+    connectorID: string,
+    friend:  {
+      __typename: "Friend",
+      id: string,
+      friendName: string,
+      connectors:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
+    },
+    connector:  {
+      __typename: "User",
+      id: string,
+      username: string,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
+      friends:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
+    },
+  } | null,
+};
+
+export type UpdateFriendConnectorMutationVariables = {
+  input: UpdateFriendConnectorInput,
+  condition?: ModelFriendConnectorConditionInput | null,
+};
+
+export type UpdateFriendConnectorMutation = {
+  updateFriendConnector:  {
+    __typename: "FriendConnector",
+    id: string,
+    friendID: string,
+    connectorID: string,
+    friend:  {
+      __typename: "Friend",
+      id: string,
+      friendName: string,
+      connectors:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
+    },
+    connector:  {
+      __typename: "User",
+      id: string,
+      username: string,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
+      friends:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
+    },
+  } | null,
+};
+
+export type DeleteFriendConnectorMutationVariables = {
+  input: DeleteFriendConnectorInput,
+  condition?: ModelFriendConnectorConditionInput | null,
+};
+
+export type DeleteFriendConnectorMutation = {
+  deleteFriendConnector:  {
+    __typename: "FriendConnector",
+    id: string,
+    friendID: string,
+    connectorID: string,
+    friend:  {
+      __typename: "Friend",
+      id: string,
+      friendName: string,
+      connectors:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
+    },
+    connector:  {
+      __typename: "User",
+      id: string,
+      username: string,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
+      friends:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
+    },
   } | null,
 };
 
@@ -287,10 +459,29 @@ export type CreateFriendMutation = {
   createFriend:  {
     __typename: "Friend",
     id: string,
-    userID: string,
-    username: string,
+    friendName: string,
+    connectors:  {
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
   } | null,
@@ -305,10 +496,29 @@ export type UpdateFriendMutation = {
   updateFriend:  {
     __typename: "Friend",
     id: string,
-    userID: string,
-    username: string,
+    friendName: string,
+    connectors:  {
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
   } | null,
@@ -323,10 +533,29 @@ export type DeleteFriendMutation = {
   deleteFriend:  {
     __typename: "Friend",
     id: string,
-    userID: string,
-    username: string,
+    friendName: string,
+    connectors:  {
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
   } | null,
@@ -343,7 +572,6 @@ export type CreateActivityMutation = {
     id: string,
     userID: string,
     name: string,
-    type: ActivityType | null,
     length: number | null,
     calories: number | null,
     duration: number | null,
@@ -367,7 +595,6 @@ export type UpdateActivityMutation = {
     id: string,
     userID: string,
     name: string,
-    type: ActivityType | null,
     length: number | null,
     calories: number | null,
     duration: number | null,
@@ -391,7 +618,6 @@ export type DeleteActivityMutation = {
     id: string,
     userID: string,
     name: string,
-    type: ActivityType | null,
     length: number | null,
     calories: number | null,
     duration: number | null,
@@ -415,10 +641,26 @@ export type GetUserByNameQuery = {
     username: string,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
     friends:  {
-      __typename: "ModelFriendConnection",
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
       nextToken: string | null,
     } | null,
   } | null,
@@ -435,10 +677,26 @@ export type GetUserQuery = {
     username: string,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
     friends:  {
-      __typename: "ModelFriendConnection",
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
       nextToken: string | null,
     } | null,
   } | null,
@@ -457,6 +715,14 @@ export type ListUsersQuery = {
       __typename: "User",
       id: string,
       username: string,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
+      friends:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -470,10 +736,29 @@ export type GetFriendQuery = {
   getFriend:  {
     __typename: "Friend",
     id: string,
-    userID: string,
-    username: string,
+    friendName: string,
+    connectors:  {
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
   } | null,
@@ -491,8 +776,15 @@ export type ListFriendsQuery = {
     items:  Array< {
       __typename: "Friend",
       id: string,
-      userID: string,
-      username: string,
+      friendName: string,
+      connectors:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -508,7 +800,6 @@ export type GetActivityQuery = {
     id: string,
     userID: string,
     name: string,
-    type: ActivityType | null,
     length: number | null,
     calories: number | null,
     duration: number | null,
@@ -535,11 +826,15 @@ export type ListActivitysQuery = {
       id: string,
       userID: string,
       name: string,
-      type: ActivityType | null,
       length: number | null,
       calories: number | null,
       duration: number | null,
       steps: number | null,
+      path:  Array< {
+        __typename: "Coordinate",
+        lat: number | null,
+        lng: number | null,
+      } | null > | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -556,10 +851,26 @@ export type OnCreateUserSubscription = {
     username: string,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
     friends:  {
-      __typename: "ModelFriendConnection",
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
       nextToken: string | null,
     } | null,
   } | null,
@@ -576,10 +887,26 @@ export type OnUpdateUserSubscription = {
     username: string,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
     friends:  {
-      __typename: "ModelFriendConnection",
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
       nextToken: string | null,
     } | null,
   } | null,
@@ -596,12 +923,133 @@ export type OnDeleteUserSubscription = {
     username: string,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
     friends:  {
-      __typename: "ModelFriendConnection",
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
       nextToken: string | null,
     } | null,
+  } | null,
+};
+
+export type OnCreateFriendConnectorSubscription = {
+  onCreateFriendConnector:  {
+    __typename: "FriendConnector",
+    id: string,
+    friendID: string,
+    connectorID: string,
+    friend:  {
+      __typename: "Friend",
+      id: string,
+      friendName: string,
+      connectors:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
+    },
+    connector:  {
+      __typename: "User",
+      id: string,
+      username: string,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
+      friends:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
+    },
+  } | null,
+};
+
+export type OnUpdateFriendConnectorSubscription = {
+  onUpdateFriendConnector:  {
+    __typename: "FriendConnector",
+    id: string,
+    friendID: string,
+    connectorID: string,
+    friend:  {
+      __typename: "Friend",
+      id: string,
+      friendName: string,
+      connectors:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
+    },
+    connector:  {
+      __typename: "User",
+      id: string,
+      username: string,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
+      friends:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
+    },
+  } | null,
+};
+
+export type OnDeleteFriendConnectorSubscription = {
+  onDeleteFriendConnector:  {
+    __typename: "FriendConnector",
+    id: string,
+    friendID: string,
+    connectorID: string,
+    friend:  {
+      __typename: "Friend",
+      id: string,
+      friendName: string,
+      connectors:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
+    },
+    connector:  {
+      __typename: "User",
+      id: string,
+      username: string,
+      activities:  {
+        __typename: "ModelActivityConnection",
+        nextToken: string | null,
+      } | null,
+      friends:  {
+        __typename: "ModelFriendConnectorConnection",
+        nextToken: string | null,
+      } | null,
+    },
   } | null,
 };
 
@@ -613,10 +1061,29 @@ export type OnCreateFriendSubscription = {
   onCreateFriend:  {
     __typename: "Friend",
     id: string,
-    userID: string,
-    username: string,
+    friendName: string,
+    connectors:  {
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
   } | null,
@@ -630,10 +1097,29 @@ export type OnUpdateFriendSubscription = {
   onUpdateFriend:  {
     __typename: "Friend",
     id: string,
-    userID: string,
-    username: string,
+    friendName: string,
+    connectors:  {
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
   } | null,
@@ -647,10 +1133,29 @@ export type OnDeleteFriendSubscription = {
   onDeleteFriend:  {
     __typename: "Friend",
     id: string,
-    userID: string,
-    username: string,
+    friendName: string,
+    connectors:  {
+      __typename: "ModelFriendConnectorConnection",
+      items:  Array< {
+        __typename: "FriendConnector",
+        id: string,
+        friendID: string,
+        connectorID: string,
+      } | null > | null,
+      nextToken: string | null,
+    } | null,
     activities:  {
       __typename: "ModelActivityConnection",
+      items:  Array< {
+        __typename: "Activity",
+        id: string,
+        userID: string,
+        name: string,
+        length: number | null,
+        calories: number | null,
+        duration: number | null,
+        steps: number | null,
+      } | null > | null,
       nextToken: string | null,
     } | null,
   } | null,
@@ -666,7 +1171,6 @@ export type OnCreateActivitySubscription = {
     id: string,
     userID: string,
     name: string,
-    type: ActivityType | null,
     length: number | null,
     calories: number | null,
     duration: number | null,
@@ -689,7 +1193,6 @@ export type OnUpdateActivitySubscription = {
     id: string,
     userID: string,
     name: string,
-    type: ActivityType | null,
     length: number | null,
     calories: number | null,
     duration: number | null,
@@ -712,7 +1215,6 @@ export type OnDeleteActivitySubscription = {
     id: string,
     userID: string,
     name: string,
-    type: ActivityType | null,
     length: number | null,
     calories: number | null,
     duration: number | null,

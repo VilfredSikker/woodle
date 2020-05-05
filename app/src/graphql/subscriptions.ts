@@ -6,9 +6,23 @@ export const onCreateUser = `subscription OnCreateUser($owner: String!) {
     id
     username
     activities {
+      items {
+        id
+        userID
+        name
+        length
+        calories
+        duration
+        steps
+      }
       nextToken
     }
     friends {
+      items {
+        id
+        friendID
+        connectorID
+      }
       nextToken
     }
   }
@@ -19,9 +33,23 @@ export const onUpdateUser = `subscription OnUpdateUser($owner: String!) {
     id
     username
     activities {
+      items {
+        id
+        userID
+        name
+        length
+        calories
+        duration
+        steps
+      }
       nextToken
     }
     friends {
+      items {
+        id
+        friendID
+        connectorID
+      }
       nextToken
     }
   }
@@ -32,10 +60,108 @@ export const onDeleteUser = `subscription OnDeleteUser($owner: String!) {
     id
     username
     activities {
+      items {
+        id
+        userID
+        name
+        length
+        calories
+        duration
+        steps
+      }
       nextToken
     }
     friends {
+      items {
+        id
+        friendID
+        connectorID
+      }
       nextToken
+    }
+  }
+}
+`;
+export const onCreateFriendConnector = `subscription OnCreateFriendConnector {
+  onCreateFriendConnector {
+    id
+    friendID
+    connectorID
+    friend {
+      id
+      friendName
+      connectors {
+        nextToken
+      }
+      activities {
+        nextToken
+      }
+    }
+    connector {
+      id
+      username
+      activities {
+        nextToken
+      }
+      friends {
+        nextToken
+      }
+    }
+  }
+}
+`;
+export const onUpdateFriendConnector = `subscription OnUpdateFriendConnector {
+  onUpdateFriendConnector {
+    id
+    friendID
+    connectorID
+    friend {
+      id
+      friendName
+      connectors {
+        nextToken
+      }
+      activities {
+        nextToken
+      }
+    }
+    connector {
+      id
+      username
+      activities {
+        nextToken
+      }
+      friends {
+        nextToken
+      }
+    }
+  }
+}
+`;
+export const onDeleteFriendConnector = `subscription OnDeleteFriendConnector {
+  onDeleteFriendConnector {
+    id
+    friendID
+    connectorID
+    friend {
+      id
+      friendName
+      connectors {
+        nextToken
+      }
+      activities {
+        nextToken
+      }
+    }
+    connector {
+      id
+      username
+      activities {
+        nextToken
+      }
+      friends {
+        nextToken
+      }
     }
   }
 }
@@ -43,9 +169,25 @@ export const onDeleteUser = `subscription OnDeleteUser($owner: String!) {
 export const onCreateFriend = `subscription OnCreateFriend($owner: String!) {
   onCreateFriend(owner: $owner) {
     id
-    userID
-    username
+    friendName
+    connectors {
+      items {
+        id
+        friendID
+        connectorID
+      }
+      nextToken
+    }
     activities {
+      items {
+        id
+        userID
+        name
+        length
+        calories
+        duration
+        steps
+      }
       nextToken
     }
   }
@@ -54,9 +196,25 @@ export const onCreateFriend = `subscription OnCreateFriend($owner: String!) {
 export const onUpdateFriend = `subscription OnUpdateFriend($owner: String!) {
   onUpdateFriend(owner: $owner) {
     id
-    userID
-    username
+    friendName
+    connectors {
+      items {
+        id
+        friendID
+        connectorID
+      }
+      nextToken
+    }
     activities {
+      items {
+        id
+        userID
+        name
+        length
+        calories
+        duration
+        steps
+      }
       nextToken
     }
   }
@@ -65,9 +223,25 @@ export const onUpdateFriend = `subscription OnUpdateFriend($owner: String!) {
 export const onDeleteFriend = `subscription OnDeleteFriend($owner: String!) {
   onDeleteFriend(owner: $owner) {
     id
-    userID
-    username
+    friendName
+    connectors {
+      items {
+        id
+        friendID
+        connectorID
+      }
+      nextToken
+    }
     activities {
+      items {
+        id
+        userID
+        name
+        length
+        calories
+        duration
+        steps
+      }
       nextToken
     }
   }
@@ -78,7 +252,6 @@ export const onCreateActivity = `subscription OnCreateActivity($owner: String!) 
     id
     userID
     name
-    type
     length
     calories
     duration
@@ -95,7 +268,6 @@ export const onUpdateActivity = `subscription OnUpdateActivity($owner: String!) 
     id
     userID
     name
-    type
     length
     calories
     duration
@@ -112,7 +284,6 @@ export const onDeleteActivity = `subscription OnDeleteActivity($owner: String!) 
     id
     userID
     name
-    type
     length
     calories
     duration

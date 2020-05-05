@@ -13,12 +13,24 @@ type User
   id: ID!
   username: String!
   activities: [Activity] @connection(keyName: "byActivity", fields: ["id"])
-  friends: [Friend] @connection(keyName: "byFriend", fields: ["id"])
+  friends: [FriendConnector] @connection(keyName: "byConnector", fields: ["id"])
+}
+
+# Create a join model and disable queries as you don't need them
+# and can query through User.friends and connector.users
+type FriendConnector
+  @model(queries: null)
+  @key(name: "byFriend", fields: ["friendID", "connectorID"])
+  @key(name: "byConnector", fields: ["connectorID", "friendID"]) {
+  id: ID!
+  friendID: ID!
+  connectorID: ID!
+  friend: Friend! @connection(fields: ["friendID"])
+  connector: User! @connection(fields: ["connectorID"])
 }
 
 type Friend
   @model
-  @key(name: "byFriend", fields: ["userID", "username"])
   @auth(
     rules: [
       {
@@ -29,8 +41,8 @@ type Friend
     ]
   ) {
   id: ID!
-  userID: ID!
-  username: String!
+  friendName: String!
+  connectors: [FriendConnector] @connection(keyName: "byFriend", fields: ["id"])
   activities: [Activity] @connection(keyName: "byActivity", fields: ["id"])
 }
 
@@ -50,18 +62,11 @@ type Activity
   id: ID!
   userID: ID!
   name: String!
-  type: ActivityType
   length: Float
   calories: Float
   duration: Float
   steps: Int
   path: [Coordinate]
-}
-
-enum ActivityType {
-  SOLO
-  GROUP
-  SPONSORED
 }
 
 type Coordinate {

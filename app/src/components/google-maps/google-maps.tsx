@@ -179,11 +179,11 @@ const GoogleMaps = () => {
       path: reducedPaths,
     }
 
-    if (reducePaths.length > 0) {
+    if (reducePaths.length > 0 && runDuration > 10) {
       API.graphql(graphqlOperation(mutations.createActivity, { input: input }))
       ToastsStore.success("Saved Path")
     } else {
-      ToastsStore.error("Couldn't save path, might be too short")
+      ToastsStore.error("Run too short, minimum 10 seconds")
     }
 
     setRunTracker((prev) => ({ ...prev, active: false }))

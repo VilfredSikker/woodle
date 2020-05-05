@@ -80,8 +80,6 @@ const Navbar = () => {
                 <MenuItem onClick={handleCloseBurger}>
                   <Link to="/app/profile">Profile</Link>
                 </MenuItem>
-                <MenuItem onClick={handleCloseBurger}>My account</MenuItem>
-                <MenuItem onClick={handleCloseBurger}>Logout</MenuItem>
               </MenuList>
             </ClickAwayListener>
           </Paper>

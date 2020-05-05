@@ -60,6 +60,16 @@ const FormikSignIn = (props: any) => {
             .then((result: any) => {
               let newUser = result.data.createUser
               setContextState({ user: newUser })
+
+              const createFriendInput = {
+                id: newUser.id,
+                friendName: newUser.username,
+              }
+              API.graphql(
+                graphqlOperation(mutations.createFriend, {
+                  input: createFriendInput,
+                })
+              )
             })
             .catch((e: any) => ToastsStore.error("Couldn't create user"))
         }

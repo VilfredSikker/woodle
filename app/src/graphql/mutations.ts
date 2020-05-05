@@ -8,12 +8,6 @@ export const createUser = `mutation CreateUser(
   createUser(input: $input, condition: $condition) {
     id
     username
-    activities {
-      nextToken
-    }
-    friends {
-      nextToken
-    }
   }
 }
 `;
@@ -25,9 +19,23 @@ export const updateUser = `mutation UpdateUser(
     id
     username
     activities {
+      items {
+        id
+        userID
+        name
+        length
+        calories
+        duration
+        steps
+      }
       nextToken
     }
     friends {
+      items {
+        id
+        friendID
+        connectorID
+      }
       nextToken
     }
   }
@@ -41,10 +49,117 @@ export const deleteUser = `mutation DeleteUser(
     id
     username
     activities {
+      items {
+        id
+        userID
+        name
+        length
+        calories
+        duration
+        steps
+      }
       nextToken
     }
     friends {
+      items {
+        id
+        friendID
+        connectorID
+      }
       nextToken
+    }
+  }
+}
+`;
+export const createFriendConnector = `mutation CreateFriendConnector(
+  $input: CreateFriendConnectorInput!
+  $condition: ModelFriendConnectorConditionInput
+) {
+  createFriendConnector(input: $input, condition: $condition) {
+    id
+    friendID
+    connectorID
+    friend {
+      id
+      friendName
+      connectors {
+        nextToken
+      }
+      activities {
+        nextToken
+      }
+    }
+    connector {
+      id
+      username
+      activities {
+        nextToken
+      }
+      friends {
+        nextToken
+      }
+    }
+  }
+}
+`;
+export const updateFriendConnector = `mutation UpdateFriendConnector(
+  $input: UpdateFriendConnectorInput!
+  $condition: ModelFriendConnectorConditionInput
+) {
+  updateFriendConnector(input: $input, condition: $condition) {
+    id
+    friendID
+    connectorID
+    friend {
+      id
+      friendName
+      connectors {
+        nextToken
+      }
+      activities {
+        nextToken
+      }
+    }
+    connector {
+      id
+      username
+      activities {
+        nextToken
+      }
+      friends {
+        nextToken
+      }
+    }
+  }
+}
+`;
+export const deleteFriendConnector = `mutation DeleteFriendConnector(
+  $input: DeleteFriendConnectorInput!
+  $condition: ModelFriendConnectorConditionInput
+) {
+  deleteFriendConnector(input: $input, condition: $condition) {
+    id
+    friendID
+    connectorID
+    friend {
+      id
+      friendName
+      connectors {
+        nextToken
+      }
+      activities {
+        nextToken
+      }
+    }
+    connector {
+      id
+      username
+      activities {
+        nextToken
+      }
+      friends {
+        nextToken
+      }
     }
   }
 }
@@ -55,9 +170,25 @@ export const createFriend = `mutation CreateFriend(
 ) {
   createFriend(input: $input, condition: $condition) {
     id
-    userID
-    username
+    friendName
+    connectors {
+      items {
+        id
+        friendID
+        connectorID
+      }
+      nextToken
+    }
     activities {
+      items {
+        id
+        userID
+        name
+        length
+        calories
+        duration
+        steps
+      }
       nextToken
     }
   }
@@ -69,9 +200,25 @@ export const updateFriend = `mutation UpdateFriend(
 ) {
   updateFriend(input: $input, condition: $condition) {
     id
-    userID
-    username
+    friendName
+    connectors {
+      items {
+        id
+        friendID
+        connectorID
+      }
+      nextToken
+    }
     activities {
+      items {
+        id
+        userID
+        name
+        length
+        calories
+        duration
+        steps
+      }
       nextToken
     }
   }
@@ -83,9 +230,25 @@ export const deleteFriend = `mutation DeleteFriend(
 ) {
   deleteFriend(input: $input, condition: $condition) {
     id
-    userID
-    username
+    friendName
+    connectors {
+      items {
+        id
+        friendID
+        connectorID
+      }
+      nextToken
+    }
     activities {
+      items {
+        id
+        userID
+        name
+        length
+        calories
+        duration
+        steps
+      }
       nextToken
     }
   }
@@ -99,7 +262,6 @@ export const createActivity = `mutation CreateActivity(
     id
     userID
     name
-    type
     length
     calories
     duration
@@ -119,7 +281,6 @@ export const updateActivity = `mutation UpdateActivity(
     id
     userID
     name
-    type
     length
     calories
     duration
@@ -139,7 +300,6 @@ export const deleteActivity = `mutation DeleteActivity(
     id
     userID
     name
-    type
     length
     calories
     duration

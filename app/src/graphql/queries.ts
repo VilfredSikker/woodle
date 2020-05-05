@@ -6,9 +6,23 @@ export const getUserByName = `query GetUserByName($username: String!) {
     id
     username
     activities {
+      items {
+        id
+        userID
+        name
+        length
+        calories
+        duration
+        steps
+      }
       nextToken
     }
     friends {
+      items {
+        id
+        friendID
+        connectorID
+      }
       nextToken
     }
   }
@@ -23,23 +37,24 @@ export const getUser = `query GetUser($id: ID!) {
         id
         userID
         name
-        type
         length
         calories
         duration
         steps
-        path {
-          lat
-          lng
-        }
       }
+      nextToken
     }
     friends {
       items {
         id
-        username
-        userID
+        friendID
+        connectorID
+        friend {
+          id
+          friendName
+        }
       }
+      nextToken
     }
   }
 }
@@ -61,9 +76,25 @@ export const listUsers = `query ListUsers(
 export const getFriend = `query GetFriend($id: ID!) {
   getFriend(id: $id) {
     id
-    userID
-    username
+    friendName
+    connectors {
+      items {
+        id
+        friendID
+        connectorID
+      }
+      nextToken
+    }
     activities {
+      items {
+        id
+        userID
+        name
+        length
+        calories
+        duration
+        steps
+      }
       nextToken
     }
   }
@@ -77,8 +108,13 @@ export const listFriends = `query ListFriends(
   listFriends(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      userID
-      username
+      friendName
+      connectors {
+        nextToken
+      }
+      activities {
+        nextToken
+      }
     }
     nextToken
   }
@@ -89,7 +125,6 @@ export const getActivity = `query GetActivity($id: ID!) {
     id
     userID
     name
-    type
     length
     calories
     duration
@@ -111,12 +146,11 @@ export const listActivitys = `query ListActivitys(
       id
       userID
       name
-      type
       length
       calories
       duration
       steps
-      path { 
+      path {
         lat
         lng
       }

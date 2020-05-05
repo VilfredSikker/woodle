@@ -41,7 +41,7 @@ export const FriendsList = (props: FriendsListProps) => {
     <li key={index}>
       <StyledPaper>
         <div>
-          <p>{friend.username}</p>
+          <p>{friend.friendName}</p>
           <Button
             color="primary"
             onClick={() => onFriendDetailsClicked(friend.id)}

@@ -1,18 +1,24 @@
 import { Tab, Tabs } from "@material-ui/core"
 import Amplify, { API, graphqlOperation } from "aws-amplify"
 import React, { useContext, useEffect, useState } from "react"
+import { ToastsStore } from "react-toasts"
 import aws_exports from "../../../aws-exports"
 import {
-  createFriend,
+  createFriendConnector,
   deleteActivity,
   deleteFriend,
 } from "../../../graphql/mutations"
-import { listActivitys, listFriends, listUsers } from "../../../graphql/queries"
+import { getUser, listActivitys, listUsers } from "../../../graphql/queries"
 import duration from "../../../icons/duration.svg"
 import flame from "../../../icons/flame.svg"
 import length from "../../../icons/length.svg"
 import steps from "../../../icons/steps.svg"
-import { Activity, Friend, User } from "../../../shared-interfaces"
+import {
+  Activity,
+  Friend,
+  FriendConnector,
+  User,
+} from "../../../shared-interfaces"
 import ActivityList from "../../basics/activity/activity-list"
 import { FriendsList, UsersList } from "../../basics/friends/friends"
 import FriendDetailsModal from "../../basics/modal/friend-details-modal"
@@ -20,7 +26,6 @@ import { AppContext } from "../../context/app-context"
 import StyledCard from "./../../basics/card/card"
 import StyledPaper from "./../../basics/paper/paper"
 import styles from "./profile.module.scss"
-import { ToastsStore } from "react-toasts"
 
 Amplify.configure(aws_exports)
 
@@ -130,7 +135,7 @@ const Profile = () => {
       graphqlOperation(listUsers, { filter: filter })
     )
     const usersResult = result.data.listUsers.items
-
+    console.log("UsersResult: ", usersResult)
     const users = usersResult.map((item: User) => {
       return {
         id: item.id,
@@ -144,15 +149,8 @@ const Profile = () => {
   }
 
   const getFriends = async () => {
-    const filter = {
-      userID: {
-        eq: user.id,
-      },
-    }
-    const result = await API.graphql(
-      graphqlOperation(listFriends, { id: filter })
-    )
-    const friends = result.data.listFriends.items
+    const result = await API.graphql(graphqlOperation(getUser, { id: user.id }))
+    const friends = result.data.getUser.friends.items
 
     return friends
   }
@@ -264,28 +262,23 @@ const Profile = () => {
   }
 
   const handleAddFriend = async (id: string, username: string) => {
-    const filter = {
-      userID: {
-        eq: user.id,
-      },
-    }
-
     const friendsResult = await API.graphql(
-      graphqlOperation(listFriends, { id: filter })
+      graphqlOperation(getUser, { id: user.id })
     )
 
-    const friends: Friend[] = friendsResult.data.listFriends.items
+    const friends: Friend[] = friendsResult.data.getUser.friends.items
 
     const filteredFriends = friends.filter((friend: Friend) => friend.id === id)
 
     if (filteredFriends.length === 0) {
-      const input: Friend = {
-        id: id,
-        username: username,
-        userID: user.id,
+      const input: FriendConnector = {
+        friendID: id,
+        connectorID: user.id,
       }
 
-      await API.graphql(graphqlOperation(createFriend, { input: input }))
+      await API.graphql(
+        graphqlOperation(createFriendConnector, { input: input })
+      )
       getFriends()
         .then((result: Friend[]) => {
           setReformedState({ ...reformedState, friends: result })
@@ -303,6 +296,7 @@ const Profile = () => {
     }
 
     await API.graphql(graphqlOperation(deleteFriend, { input: input }))
+
     getFriends()
       .then((result: Friend[]) => {
         setReformedState({ ...reformedState, friends: result })
@@ -318,6 +312,9 @@ const Profile = () => {
   return (
     <>
       <StyledPaper position="sticky" color="default">
+        <div className={styles.profileName}>
+          <h1>{user.username}</h1>
+        </div>
         <Tabs
           value={tabValue}
           onChange={handleTabChange}
@@ -326,8 +323,8 @@ const Profile = () => {
           className={styles.statsTabs}
         >
           <Tab label="Stats" />
-          <Tab label="Activities" />
-          <Tab label="Friends" />
+          <Tab label={"Activities: " + reformedState.activities.length} />
+          <Tab label={"Friends: " + reformedState.friends.length} />
           <Tab label="All Users" />
         </Tabs>
       </StyledPaper>
