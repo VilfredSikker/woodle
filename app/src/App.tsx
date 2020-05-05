@@ -10,7 +10,6 @@ import FormikSignUp from "./components/pages/formik/formik-sign-up"
 import requireAuth from "./components/hoc/authenticate-route"
 import Layout from "./components/layout/layout"
 import Profile from "./components/pages/profile/profile"
-import Welcome from "./components/pages/welcome"
 import GoogleMaps from "./components/google-maps/google-maps"
 
 Amplify.configure(aws_exports)
@@ -20,7 +19,7 @@ const App: React.FC = () => {
     <Router>
       <AppContextProvider>
         <Layout>
-          <Route path="/" exact component={Welcome} />
+          <Route path="/" exact component={FormikSignIn} />
           <Route path="/login" exact component={FormikSignIn} />
           <Route path="/sign-up" exact component={FormikSignUp} />
           <Route
