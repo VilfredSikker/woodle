@@ -6,7 +6,6 @@ import aws_exports from "../../../aws-exports"
 import {
   createFriendConnector,
   deleteActivity,
-  deleteFriend,
   deleteFriendConnector,
 } from "../../../graphql/mutations"
 import { getUser, listActivitys, listUsers } from "../../../graphql/queries"
@@ -136,7 +135,6 @@ const Profile = () => {
       graphqlOperation(listUsers, { filter: filter })
     )
     const usersResult = result.data.listUsers.items
-    console.log("UsersResult: ", usersResult)
     const users = usersResult.map((item: User) => {
       return {
         id: item.id,
@@ -161,7 +159,7 @@ const Profile = () => {
       }
       return friend
     })
-    console.log("Friends: ", friends)
+
     return friends
   }
 
@@ -281,7 +279,6 @@ const Profile = () => {
         friendID: id,
         connectorID: user.id,
       }
-      console.log("friendConnectorInput: ", input)
 
       await API.graphql(
         graphqlOperation(createFriendConnector, { input: input })
