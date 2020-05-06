@@ -272,7 +272,9 @@ const Profile = () => {
   const handleAddFriend = async (id: string, username: string) => {
     const friends: Friend[] = reformedState.friends
 
-    const filteredFriends = friends.filter((friend: Friend) => friend.id === id)
+    const filteredFriends = friends.filter(
+      (friend: Friend) => friend.friendID === id
+    )
 
     if (filteredFriends.length === 0) {
       const input: FriendConnector = {
