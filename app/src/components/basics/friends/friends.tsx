@@ -44,7 +44,7 @@ export const FriendsList = (props: FriendsListProps) => {
           <p>{friend.friendName}</p>
           <Button
             color="primary"
-            onClick={() => onFriendDetailsClicked(friend.id)}
+            onClick={() => onFriendDetailsClicked(friend.friendID)}
           >
             See Activities
           </Button>

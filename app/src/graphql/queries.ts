@@ -41,6 +41,10 @@ export const getUser = `query GetUser($id: ID!) {
         calories
         duration
         steps
+        path {
+          lat
+          lng
+        }
       }
       nextToken
     }

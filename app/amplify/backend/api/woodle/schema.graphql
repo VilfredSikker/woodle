@@ -20,6 +20,7 @@ type User
 # and can query through User.friends and connector.users
 type FriendConnector
   @model(queries: null)
+  @auth(rules: [{ allow: private, operations: [read] }])
   @key(name: "byFriend", fields: ["friendID", "connectorID"])
   @key(name: "byConnector", fields: ["connectorID", "friendID"]) {
   id: ID!
@@ -38,6 +39,7 @@ type Friend
         ownerField: "owner"
         operations: [create, update, delete, read]
       }
+      { allow: private, operations: [read] }
     ]
   ) {
   id: ID!

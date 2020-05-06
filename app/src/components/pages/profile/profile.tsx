@@ -150,20 +150,15 @@ const Profile = () => {
   }
 
   const getFriends = async () => {
-    console.log("User id: ", user.id)
     const result = await API.graphql(graphqlOperation(getUser, { id: user.id }))
-    console.log("result: ", result)
     const friendsResult = result.data.getUser.friends.items
-    console.log("friendResult: ", friendsResult)
     const friends = friendsResult.map((item: any) => {
-      console.log("item: ", item)
       let friend: Friend = {
         id: item.id,
         friendID: item.friend.id,
         friendName: item.friend.friendName,
-        activities: item.activities,
+        activities: item.activities ? item.activities.items : [],
       }
-      console.log("Friend: ", friend)
       return friend
     })
     console.log("Friends: ", friends)
