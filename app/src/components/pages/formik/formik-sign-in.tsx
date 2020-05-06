@@ -43,18 +43,15 @@ const FormikSignIn = (props: any) => {
       },
     }
 
-    console.log("fetching users")
     await API.graphql(graphqlOperation(queries.listUsers, { filter: filter }))
       .then((result: any) => {
         let items = result.data.listUsers.items
 
         // username is a unique name, which is why this is safe
         if (items.length > 0) {
-          console.log("Found user")
           let user = items[0]
           setContextState({ user: user })
         } else {
-          console.log("Creating User")
           const input = {
             username: username,
           }
