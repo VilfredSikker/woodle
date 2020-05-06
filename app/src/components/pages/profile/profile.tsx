@@ -7,6 +7,7 @@ import {
   createFriendConnector,
   deleteActivity,
   deleteFriend,
+  deleteFriendConnector,
 } from "../../../graphql/mutations"
 import { getUser, listActivitys, listUsers } from "../../../graphql/queries"
 import duration from "../../../icons/duration.svg"
@@ -149,9 +150,23 @@ const Profile = () => {
   }
 
   const getFriends = async () => {
+    console.log("User id: ", user.id)
     const result = await API.graphql(graphqlOperation(getUser, { id: user.id }))
-    const friends = result.data.getUser.friends.items
-
+    console.log("result: ", result)
+    const friendsResult = result.data.getUser.friends.items
+    console.log("friendResult: ", friendsResult)
+    const friends = friendsResult.map((item: any) => {
+      console.log("item: ", item)
+      let friend: Friend = {
+        id: item.id,
+        friendID: item.friend.id,
+        friendName: item.friend.friendName,
+        activities: item.activities,
+      }
+      console.log("Friend: ", friend)
+      return friend
+    })
+    console.log("Friends: ", friends)
     return friends
   }
 
@@ -245,12 +260,12 @@ const Profile = () => {
     </div>
   )
 
-  const handleDeleteActivity = (activityID: string) => {
+  const handleDeleteActivity = async (activityID: string) => {
     const input = {
       id: activityID,
     }
 
-    API.graphql(graphqlOperation(deleteActivity, { input: input }))
+    await API.graphql(graphqlOperation(deleteActivity, { input: input }))
     ToastsStore.success("Removed activity")
 
     getActivities()
@@ -262,11 +277,7 @@ const Profile = () => {
   }
 
   const handleAddFriend = async (id: string, username: string) => {
-    const friendsResult = await API.graphql(
-      graphqlOperation(getUser, { id: user.id })
-    )
-
-    const friends: Friend[] = friendsResult.data.getUser.friends.items
+    const friends: Friend[] = reformedState.friends
 
     const filteredFriends = friends.filter((friend: Friend) => friend.id === id)
 
@@ -275,6 +286,7 @@ const Profile = () => {
         friendID: id,
         connectorID: user.id,
       }
+      console.log("friendConnectorInput: ", input)
 
       await API.graphql(
         graphqlOperation(createFriendConnector, { input: input })
@@ -295,7 +307,7 @@ const Profile = () => {
       id: id,
     }
 
-    await API.graphql(graphqlOperation(deleteFriend, { input: input }))
+    await API.graphql(graphqlOperation(deleteFriendConnector, { input: input }))
 
     getFriends()
       .then((result: Friend[]) => {

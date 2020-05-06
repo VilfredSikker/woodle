@@ -19,7 +19,9 @@ export interface Activity {
 
 export interface Friend {
   id: string
+  friendID: string
   friendName: string
+  activities: Activity[]
 }
 
 export interface FriendConnector {
