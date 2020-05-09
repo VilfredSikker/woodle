@@ -25,16 +25,16 @@ const FormikSignIn = () => {
         username: values.username,
         password: values.password,
       })
-        .then((e) => {
+        .then(() => {
           return addUserToDB(values.username)
         })
-        .then((e) => {
+        .then(() => {
           return saveJwtOnLogin()
         })
-        .then((e) => {
+        .then(() => {
           history.push("/app/map")
         })
-        .catch((err) => ToastsStore.error("Error with sign in, try again"))
+        .catch(() => ToastsStore.error("Error with sign in, try again"))
     },
   })
 
@@ -73,10 +73,10 @@ const FormikSignIn = () => {
                 })
               )
             })
-            .catch((e: any) => ToastsStore.error("Couldn't create user"))
+            .catch(() => ToastsStore.error("Couldn't create user"))
         }
       })
-      .catch((e: any) => {
+      .catch(() => {
         ToastsStore.error("Couldn't login")
         history.push("/login")
       })
