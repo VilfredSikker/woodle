@@ -9,8 +9,10 @@ import InputField from "../../basics/input-field/input-field"
 import { AppContext } from "../../context/app-context"
 import LoginLayout from "../../layout/login-layout/login-layout"
 import { ToastsStore } from "react-toasts"
+import { useHistory } from "react-router-dom"
 
 const FormikSignIn = (props: any) => {
+  const history = useHistory()
   const { setContextState } = useContext(AppContext)
 
   const formik = useFormik({
@@ -30,7 +32,7 @@ const FormikSignIn = (props: any) => {
           return saveJwtOnLogin()
         })
         .then((e) => {
-          props.history.push("/app/map")
+          history.push("/app/map")
         })
         .catch((err) => ToastsStore.error("Error with sign in, try again"))
     },
@@ -76,7 +78,7 @@ const FormikSignIn = (props: any) => {
       })
       .catch((e: any) => {
         ToastsStore.error("Couldn't login")
-        props.history.push("/login")
+        history.push("/login")
       })
   }
 

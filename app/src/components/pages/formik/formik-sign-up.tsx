@@ -7,8 +7,10 @@ import InputField from "../../basics/input-field/input-field"
 import LoginLayout from "../../layout/login-layout/login-layout"
 import { ToastsStore } from "react-toasts"
 import styles from "./formik.module.scss"
+import { useHistory } from "react-router-dom"
 
-const FormikSignUp = (props: any) => {
+const FormikSignUp = () => {
+  const history = useHistory()
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -34,7 +36,7 @@ const FormikSignUp = (props: any) => {
         },
       })
         .then(() => {
-          props.history.push("/confirm-sign-up")
+          history.push("/confirm-sign-up")
         })
         .catch((err) => ToastsStore.error("error with sign up " + err))
     },

@@ -62,12 +62,6 @@ const GoogleMaps = () => {
   })
 
   useEffect(() => {
-    initiateMap()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
     let trackerId = navigator.geolocation.watchPosition(
       trackPath,
       errorCallback,
@@ -82,18 +76,6 @@ const GoogleMaps = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [runTracker.active])
-
-  function initiateMap() {
-    currentPosition()
-  }
-
-  const currentPosition = () => {
-    if (!navigator.geolocation) {
-      alert("geolocation is not supported in this browser")
-    } else {
-      navigator.geolocation.getCurrentPosition(success, errorCallback)
-    }
-  }
 
   function trackPath(position: any) {
     var latitude = position.coords.latitude
@@ -110,18 +92,6 @@ const GoogleMaps = () => {
 
       coords = reducePaths(coords)
       setRunTracker({ ...runTracker, coordinates: coords })
-    }
-
-    setPlayerPosition(myPosition)
-  }
-
-  function success(position: any) {
-    var latitude = position.coords.latitude
-    var longitude = position.coords.longitude
-
-    const myPosition = {
-      lat: latitude,
-      lng: longitude,
     }
 
     setPlayerPosition(myPosition)

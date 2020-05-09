@@ -18,11 +18,14 @@ const MyActivity = (props: ActivityProps) => {
     <div>
       <div>
         <p onClick={onContainerClicked}>{activity.name}</p>
-        <p>Length: {activity.length !== undefined ? activity.length : 0}</p>
         <p>
-          Duration: {activity.duration !== undefined ? activity.duration : 0}
+          Length: {activity.length !== undefined ? activity.length : 0} meters
         </p>
-        <p>Steps: {activity.steps !== undefined ? activity.steps : 0}</p>
+        <p>
+          Duration: {activity.duration !== undefined ? activity.duration : 0}{" "}
+          seconds
+        </p>
+        <p>Steps: {activity.steps !== undefined ? activity.steps : 0} </p>
         <p>
           Calories: {activity.calories !== undefined ? activity.calories : 0}
         </p>

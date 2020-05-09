@@ -5,8 +5,10 @@ import StyledButton from "../../basics/button/button"
 import InputField from "../../basics/input-field/input-field"
 import LoginLayout from "../../layout/login-layout/login-layout"
 import { ToastsStore } from "react-toasts"
+import { useHistory } from "react-router-dom"
 
-const FormikConfirmSignUp = (props: any) => {
+const FormikConfirmSignUp = () => {
+  const history = useHistory()
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -15,7 +17,7 @@ const FormikConfirmSignUp = (props: any) => {
     onSubmit: (values) => {
       Auth.confirmSignUp(values.username, values.confirmationCode)
         .then(() => {
-          props.history.push("/login")
+          history.push("/login")
         })
         .catch((err) =>
           ToastsStore.error(
