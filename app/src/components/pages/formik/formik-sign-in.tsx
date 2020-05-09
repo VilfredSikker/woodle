@@ -11,7 +11,7 @@ import LoginLayout from "../../layout/login-layout/login-layout"
 import { ToastsStore } from "react-toasts"
 import { useHistory } from "react-router-dom"
 
-const FormikSignIn = (props: any) => {
+const FormikSignIn = () => {
   const history = useHistory()
   const { setContextState } = useContext(AppContext)
 
