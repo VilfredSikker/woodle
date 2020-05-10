@@ -182,23 +182,26 @@ const GoogleMaps = () => {
   }
 
   function measureTwoCoordinates(
-    lat1: number,
-    lon1: number,
-    lat2: number,
-    lon2: number
+    latitude1: number,
+    longitude1: number,
+    latitude2: number,
+    longitude2: number
   ) {
-    var R = 6378.137 // Radius of earth in KM
-    var dLat = (lat2 * Math.PI) / 180 - (lat1 * Math.PI) / 180
-    var dLon = (lon2 * Math.PI) / 180 - (lon1 * Math.PI) / 180
-    var a =
+    const R = 6371e3 // metres
+    // latitude and longitude in radians
+    const lat1 = (latitude1 * Math.PI) / 180
+    const lat2 = (latitude2 * Math.PI) / 180
+    const dLat = ((lat2 - lat1) * Math.PI) / 180
+    const dLng = ((longitude2 - longitude1) * Math.PI) / 180
+
+    const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2)
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-    var d = R * c
-    return d * 1000 // meters
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) * Math.sin(dLng / 2)
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+    const d = R * c // in metres
+    return d
   }
 
   const calculateCalories = (distance: number) => {
